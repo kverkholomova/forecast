@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   video_player: ^2.1.15
   google_fonts: ^3.0.1
+  geolocator: ^9.0.1
+
 
 dev_dependencies:
   flutter_test:

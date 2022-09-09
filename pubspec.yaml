@@ -37,6 +37,8 @@ dependencies:
   video_player: ^2.1.15
   google_fonts: ^3.0.1
   geolocator: ^9.0.1
+  http: ^0.13.5
+  location: ^4.4.0
 
 
 dev_dependencies:

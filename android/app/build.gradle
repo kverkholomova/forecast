@@ -27,7 +27,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
 //    android:usesCleartextTraffic="true"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -44,6 +44,7 @@ android {
     }
 
     defaultConfig {
+        multiDexEnabled true
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.forecast"
         // You can update the following values to match your application needs.
@@ -63,10 +64,17 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.android.gms:play-services-places:11.8.0'
+        force 'com.google.android.gms:play-services-location:11.8.0'
+    }
+}
 flutter {
     source '../..'
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
 }

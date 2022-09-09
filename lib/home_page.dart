@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forecast/models/weather_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 
@@ -13,15 +14,22 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late VideoPlayerController _controller;
 
+  late Future<Weather> futureWeather;
   @override
   void initState() {
     super.initState();
+
+    futureWeather = fetchWeather();
     _controller = VideoPlayerController.asset("assets/rain.mp4")
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
+        setState(() {
+          serviceEn();
+          permissGranted();
+          // getCurrentLocation();
+        });
       });
   }
 
@@ -66,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
+
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Align(
@@ -129,12 +138,39 @@ class _MyHomePageState extends State<MyHomePage> {
                 top: MediaQuery.of(context).size.height * 0.17,
               ),
               child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Text("Slupsk", style: GoogleFonts.roboto(
-                    fontSize: 28,
-                    color: Colors.black45,
-                  ),)),
+                alignment: Alignment.topCenter,
+                child: FutureBuilder<Weather>(
+                  future: futureWeather,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      print(snapshot.data!.city);
+                      return Text((snapshot.data!.city).toString(),style: GoogleFonts.roboto(
+                        fontSize: 28,
+                        color: Colors.black45,
+                      ), );
+
+                    } else if (snapshot.hasError) {
+                      print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                      return Text('${snapshot.error}');
+                    }
+
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                ),
+              ),
             ),
+            // Padding(
+            //   padding: EdgeInsets.only(
+            //     top: MediaQuery.of(context).size.height * 0.17,
+            //   ),
+            //   child: Align(
+            //       alignment: Alignment.topCenter,
+            //       child: Text("Slupsk", style: GoogleFonts.roboto(
+            //         fontSize: 28,
+            //         color: Colors.black45,
+            //       ),)),
+            // ),
             Padding(
               padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.55,

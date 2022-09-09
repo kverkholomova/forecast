@@ -35,8 +35,6 @@ Future<void> permissGranted() async{
 
 Future<Weather> fetchWeather() async {
     var currentLocation = await location.getLocation();
-    print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-    print(currentLocation.longitude);
 
   final response = await http
       .get(Uri.parse('http://api.openweathermap.org/data/2.5/weather?lat=${currentLocation.latitude}&lon=${currentLocation.longitude}&appid=43ec70748cae1130be4146090de59761&units=metric'));
@@ -59,14 +57,27 @@ Future<Weather> fetchWeather() async {
 
 class Weather {
   final String? city;
+  final double? temperature;
+  final String? description;
+  // final double? humidity;
+  // final double? wind_speed;
 
-  const Weather({
+
+  Weather({
+    required this.description,
+    // required this.humidity,
+    // required this.wind_speed,
     required this.city,
+    required this.temperature,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
       city: json['name'],
+      temperature: json['main']['temp'],
+      description: json['description'],
+      // humidity: json['main']['humidity'],
+      // wind_speed: json['wind']['speed'],
     );
   }
 }

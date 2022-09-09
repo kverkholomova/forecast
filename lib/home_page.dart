@@ -33,19 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Pointing the video controller to our local asset.
-  //   _controller = VideoPlayerController.asset("assets/coffee.mp4")
-  //     ..initialize().then((_) {
-  //       // Once the video has been loaded we play the video and set looping to true.
-  //       _controller.play();
-  //       _controller.setLooping(true);
-  //       // Ensure the first frame is shown after the video is initialized.
-  //       setState(() {});
-  //     });
-  // }
 
   @override
   void dispose() {
@@ -79,31 +66,87 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Align(
                 alignment: Alignment.topLeft,
-                child: Text(
-                  "18\u2103",
-                  style: GoogleFonts.openSans(
-                    fontSize: 64,
-                    color: Colors.indigoAccent,
+                child: FutureBuilder<Weather>(
+                  future: futureWeather,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      print(snapshot.data!.temperature);
+                      return Text("${snapshot.data!.temperature!.toInt()}\u2103",
+                        style: GoogleFonts.openSans(
+                          fontSize: 64,
+                          color: Colors.indigoAccent,
+                        ),);
+
+                    } else if (snapshot.hasError) {
+                      print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                      return Text('${snapshot.error}');
+                    }
+
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                ),
+              ),
+            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 10),
+            //   child: Align(
+            //     alignment: Alignment.topLeft,
+            //     child: Text(
+            //       "18\u2103",
+            //       style: GoogleFonts.openSans(
+            //         fontSize: 64,
+            //         color: Colors.indigoAccent,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.12,
+              // left: MediaQuery.of(context).size.height * 0.021,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: FutureBuilder<Weather>(
+                    future: futureWeather,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+
+                        return Text("${snapshot.data!.description}",
+                          style: GoogleFonts.openSans(
+                            fontSize: 64,
+                            color: Colors.indigoAccent,
+                          ),);
+
+                      } else if (snapshot.hasError) {
+                        print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                        return Text('${snapshot.error}');
+                      }
+
+                      // By default, show a loading spinner.
+                      return const CircularProgressIndicator();
+                    },
                   ),
                 ),
               ),
             ),
-            Positioned(
-                top: MediaQuery.of(context).size.height * 0.12,
-                // left: MediaQuery.of(context).size.height * 0.021,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Rainy day",
-                      style: GoogleFonts.roboto(
-                        fontSize: 18,
-                        color: Colors.black45,
-                      ),
-                    ),
-                  ),
-                )),
+            // Positioned(
+            //     top: MediaQuery.of(context).size.height * 0.12,
+            //     // left: MediaQuery.of(context).size.height * 0.021,
+            //     child: Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 15),
+            //       child: Align(
+            //         alignment: Alignment.topLeft,
+            //         child: Text(
+            //           "Rainy day",
+            //           style: GoogleFonts.roboto(
+            //             fontSize: 18,
+            //             color: Colors.black45,
+            //           ),
+            //         ),
+            //       ),
+            //     )),
             Padding(
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.035,

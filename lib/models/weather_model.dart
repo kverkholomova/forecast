@@ -78,6 +78,7 @@ class Weather {
       description: json['description'],
       // humidity: json['main']['humidity'],
       // wind_speed: json['wind']['speed'],
+//hgfhgfhgcgcgfdgf
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:forecast/models/weather_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 
-import 'api/weather_api.dart';
+import 'api/weather_daily_api.dart';
 import 'utils/location_functionality.dart';
 
 class MyHomePage extends StatefulWidget {

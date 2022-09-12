@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:forecast/models/weather_list.dart';
 import 'package:location/location.dart';
 
 class Weather {

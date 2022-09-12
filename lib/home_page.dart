@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forecast/models/weather_list.dart';
+
 import 'package:forecast/models/weather_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
@@ -17,6 +17,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late VideoPlayerController _controller;
 
+  late VideoPlayerController _controller1;
   late Future<Weather> futureWeather;
 
   @override
@@ -24,17 +25,23 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     futureWeather = fetchWeather();
-    _controller = VideoPlayerController.asset("assets/rain.mp4")
+    _controller = VideoPlayerController.asset("assets/windy_cloud.mp4")
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
+      });
+        _controller1 = VideoPlayerController.asset("assets/rain.mp4")
+          ..initialize().then((_) {
+            _controller.play();
+            _controller.setLooping(true);
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          });
+
         setState(() {
           serviceEn();
           permissGranted();
           // getCurrentLocation();
         });
-      });
   }
 
   @override
@@ -64,7 +71,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 1,
                   height: MediaQuery.of(context).size.width * 1,
-                  child: VideoPlayer(_controller),
+                  child: FutureBuilder<Weather>(
+                    future: futureWeather,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+                        print(snapshot.data!.description[0]["description"]);
+                        return VideoPlayer(snapshot.data!.description[0]["description"]=="clear sky"?_controller:_controller1);
+
+                      } else if (snapshot.hasError) {
+                        print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                        return Text('${snapshot.error}');
+                      }
+
+                      // By default, show a loading spinner.
+                      return const CircularProgressIndicator();
+                    },
+                  ),
+
+
+
                 ),
               ),
             ),

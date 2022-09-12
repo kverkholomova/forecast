@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import '../models/weather_daily_model.dart';
 import '../utils/location_functionality.dart';
-import '../models/weather_model.dart';
+
 import 'package:http/http.dart' as http;
 
 Future<Weather> fetchWeather() async {

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:forecast/api/weather_week_api.dart';
 
-import 'package:forecast/models/weather_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 
 import 'api/weather_daily_api.dart';
+import 'models/weather_daily_model.dart';
+import 'models/weather_week_model.dart';
 import 'utils/location_functionality.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -19,11 +21,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late VideoPlayerController _controller1;
   late Future<Weather> futureWeather;
+  late Future<WeatherWeek> futureWeatherWeek;
 
   @override
   void initState() {
     super.initState();
 
+    futureWeatherWeek = fetchWeatherForWeek();
     futureWeather = fetchWeather();
     _controller = VideoPlayerController.asset("assets/windy_cloud.mp4")
       ..initialize().then((_) {
@@ -85,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       }
 
                       // By default, show a loading spinner.
-                      return const CircularProgressIndicator();
+                      return Container();
                     },
                   ),
 
@@ -348,13 +352,33 @@ class _MyHomePageState extends State<MyHomePage> {
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Text(
-                            "09.09",
-                            style: GoogleFonts.roboto(
-                              fontSize: 12,
-                              color: Colors.black45,
-                            ),
+                          FutureBuilder<WeatherWeek>(
+                            future: futureWeatherWeek,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+                                print(snapshot.data!.data);
+                                return Text(
+                                  "Date",
+                                  style: GoogleFonts.openSans(
+                                    fontSize: 64,
+                                    color: Colors.indigoAccent,
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                                return Text('${snapshot.error}');
+                              }
+                              return const CircularProgressIndicator();
+                            },
                           ),
+                          // Text(
+                          //   "09.09",
+                          //   style: GoogleFonts.roboto(
+                          //     fontSize: 12,
+                          //     color: Colors.black45,
+                          //   ),
+                          // ),
                           Icon(
                             Icons.sunny,
                             color: Colors.black45,

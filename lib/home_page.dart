@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:forecast/models/weather_list.dart';
 import 'package:forecast/models/weather_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 
+import 'api/weather_api.dart';
+import 'utils/location_functionality.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -15,6 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late VideoPlayerController _controller;
 
   late Future<Weather> futureWeather;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
   }
 
-
   @override
   void dispose() {
     super.dispose();
@@ -45,11 +48,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding:  EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1, bottom: MediaQuery.of(context).size.height * 0.02,),
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).size.height * 0.1,
+          bottom: MediaQuery.of(context).size.height * 0.02,
+        ),
         child: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.17),
+              padding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height * 0.17),
               child: FittedBox(
                 // If your background video doesn't look right, try changing the BoxFit property.
                 // BoxFit.fill created the look I was going for.
@@ -71,12 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       print(snapshot.data!.temperature);
-                      return Text("${snapshot.data!.temperature!.toInt()}\u2103",
+                      return Text(
+                        "${snapshot.data!.temperature!.toInt()}\u2103",
                         style: GoogleFonts.openSans(
                           fontSize: 64,
                           color: Colors.indigoAccent,
-                        ),);
-
+                        ),
+                      );
                     } else if (snapshot.hasError) {
                       print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
                       return Text('${snapshot.error}');
@@ -112,12 +120,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     future: futureWeather,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-
-                        return Text("${snapshot.data!.description}",
-                          style: GoogleFonts.openSans(
-                            fontSize: 64,
-                            color: Colors.indigoAccent,
-                          ),);
+                        print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+                        print(snapshot.data!.description[0]["description"]);
+                        return Text("${snapshot.data!.description[0]["description"]}",
+                            style: GoogleFonts.roboto(
+                                          fontSize: 18,
+                                          color: Colors.black45,
+                                        ),);
 
                       } else if (snapshot.hasError) {
                         print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
@@ -153,29 +162,87 @@ class _MyHomePageState extends State<MyHomePage> {
                   right: MediaQuery.of(context).size.height * 0.021),
               child: Align(
                 alignment: Alignment.topRight,
-                child: Text(
-                  "50%",
-                  style: GoogleFonts.roboto(
-                    fontSize: 24,
-                    color: Colors.black45,
-                  ),
+                child: FutureBuilder<Weather>(
+                  future: futureWeather,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      print(snapshot.data!.temperature);
+                      return Text(
+                        "${snapshot.data!.humidity}%",
+                          style: GoogleFonts.roboto(
+                                    fontSize: 24,
+                                    color: Colors.black45,
+                                  ),
+                      );
+                    } else if (snapshot.hasError) {
+                      print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                      return Text('${snapshot.error}');
+                    }
+
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
                 ),
               ),
             ),
+            // Padding(
+            //   padding: EdgeInsets.only(
+            //       top: MediaQuery.of(context).size.height * 0.035,
+            //       right: MediaQuery.of(context).size.height * 0.021),
+            //   child: Align(
+            //     alignment: Alignment.topRight,
+            //     child: Text(
+            //       "50%",
+            //       style: GoogleFonts.roboto(
+            //         fontSize: 24,
+            //         color: Colors.black45,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.07,
-                    right: MediaQuery.of(context).size.height * 0.021),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Text(
-                    "9 km/h",
-                    style: GoogleFonts.roboto(
-                      fontSize: 18,
-                      color: Colors.black45,
-                    ),
-                  ),
-                )),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.07,
+                  right: MediaQuery.of(context).size.height * 0.021),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: FutureBuilder<Weather>(
+                  future: futureWeather,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      print(snapshot.data!.temperature);
+                      return Text(
+                        "${snapshot.data!.wind_speed!.toInt()} km/h",
+                        style: GoogleFonts.roboto(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                      return Text('${snapshot.error}');
+                    }
+
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
+                ),
+              ),
+            ),
+            // Padding(
+            //     padding: EdgeInsets.only(
+            //         top: MediaQuery.of(context).size.height * 0.07,
+            //         right: MediaQuery.of(context).size.height * 0.021),
+            //     child: Align(
+            //       alignment: Alignment.topRight,
+            //       child: Text(
+            //         "9 km/h",
+            //         style: GoogleFonts.roboto(
+            //           fontSize: 18,
+            //           color: Colors.black45,
+            //         ),
+            //       ),
+            //     )),
             Padding(
               padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.17,
@@ -187,11 +254,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       print(snapshot.data!.city);
-                      return Text((snapshot.data!.city).toString(),style: GoogleFonts.roboto(
-                        fontSize: 28,
-                        color: Colors.black45,
-                      ), );
-
+                      return Text(
+                        (snapshot.data!.city).toString(),
+                        style: GoogleFonts.roboto(
+                          fontSize: 28,
+                          color: Colors.black45,
+                        ),
+                      );
                     } else if (snapshot.hasError) {
                       print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
                       return Text('${snapshot.error}');
@@ -220,10 +289,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: Align(
                   alignment: Alignment.topCenter,
-                  child: Text("Wednesday", style: GoogleFonts.roboto(
-                    fontSize: 28,
-                    color: Colors.black45,
-                  ),)),
+                  child: Text(
+                    "Wednesday",
+                    style: GoogleFonts.roboto(
+                      fontSize: 28,
+                      color: Colors.black45,
+                    ),
+                  )),
             ),
             Padding(
               padding: EdgeInsets.only(
@@ -231,16 +303,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: Align(
                   alignment: Alignment.topCenter,
-                  child: Text("08.09.2022", style: GoogleFonts.roboto(
-                    fontSize: 14,
-                    color: Colors.black45,
-                  ),)),
+                  child: Text(
+                    "08.09.2022",
+                    style: GoogleFonts.roboto(
+                      fontSize: 14,
+                      color: Colors.black45,
+                    ),
+                  )),
             ),
             Padding(
               padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.7),
+                  top: MediaQuery.of(context).size.height * 0.7),
               child: SingleChildScrollView(
-
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
@@ -248,40 +322,32 @@ class _MyHomePageState extends State<MyHomePage> {
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Text("09.09", style: GoogleFonts.roboto(
-                            fontSize: 12,
+                          Text(
+                            "09.09",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Icon(
+                            Icons.sunny,
                             color: Colors.black45,
-                          ),),
-                          Icon(Icons.sunny, color: Colors.black45, size: 40,),
-                          Text("Thursday", style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),),
-                          Text("18\u2103", style: GoogleFonts.fredoka(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),)
-                        ],
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        children: [
-                          Text("09.09", style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),),
-                          Icon(Icons.sunny, color: Colors.black45, size: 40,),
-                          Text("Thursday", style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),),
-                          Text("18\u2103", style: GoogleFonts.fredoka(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),)
+                            size: 40,
+                          ),
+                          Text(
+                            "Thursday",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Text(
+                            "18\u2103",
+                            style: GoogleFonts.fredoka(
+                              fontSize: 18,
+                              color: Colors.black45,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -289,19 +355,32 @@ class _MyHomePageState extends State<MyHomePage> {
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Text("09.09", style: GoogleFonts.roboto(
-                            fontSize: 12,
+                          Text(
+                            "09.09",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Icon(
+                            Icons.sunny,
                             color: Colors.black45,
-                          ),),
-                          Icon(Icons.sunny, color: Colors.black45, size: 40,),
-                          Text("Thursday", style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),),
-                          Text("18\u2103", style: GoogleFonts.fredoka(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),)
+                            size: 40,
+                          ),
+                          Text(
+                            "Thursday",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Text(
+                            "18\u2103",
+                            style: GoogleFonts.fredoka(
+                              fontSize: 18,
+                              color: Colors.black45,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -309,40 +388,98 @@ class _MyHomePageState extends State<MyHomePage> {
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Text("09.09", style: GoogleFonts.roboto(
-                            fontSize: 12,
+                          Text(
+                            "09.09",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Icon(
+                            Icons.sunny,
                             color: Colors.black45,
-                          ),),
-                          Icon(Icons.sunny, color: Colors.black45, size: 40,),
-                          Text("Thursday", style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),),
-                          Text("18\u2103", style: GoogleFonts.fredoka(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),)
+                            size: 40,
+                          ),
+                          Text(
+                            "Thursday",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Text(
+                            "18\u2103",
+                            style: GoogleFonts.fredoka(
+                              fontSize: 18,
+                              color: Colors.black45,
+                            ),
+                          )
                         ],
                       ),
                     ),
-
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Text("09.09", style: GoogleFonts.roboto(
-                            fontSize: 12,
+                          Text(
+                            "09.09",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Icon(
+                            Icons.sunny,
                             color: Colors.black45,
-                          ),),
-                          Icon(Icons.sunny, color: Colors.black45, size: 40,),
-                          Text("Thursday", style: GoogleFonts.roboto(
-                            fontSize: 12,
+                            size: 40,
+                          ),
+                          Text(
+                            "Thursday",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Text(
+                            "18\u2103",
+                            style: GoogleFonts.fredoka(
+                              fontSize: 18,
+                              color: Colors.black45,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          Text(
+                            "09.09",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Icon(
+                            Icons.sunny,
                             color: Colors.black45,
-                          ),),
-                          Text("18\u2103", style: GoogleFonts.fredoka(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),)
+                            size: 40,
+                          ),
+                          Text(
+                            "Thursday",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12,
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Text(
+                            "18\u2103",
+                            style: GoogleFonts.fredoka(
+                              fontSize: 18,
+                              color: Colors.black45,
+                            ),
+                          )
                         ],
                       ),
                     ),

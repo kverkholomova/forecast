@@ -16,7 +16,9 @@ Future<Weather> fetchWeather() async {
     // If the server did return a 200 OK response,
     // then parse the JSON.
 
-    return Weather.fromJson(jsonDecode(response.body));
+    print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZz");
+    print(response.body);
+    return Future.delayed(Duration(seconds: 2), () => Weather.fromJson(jsonDecode(response.body)));
 
   }
   else {

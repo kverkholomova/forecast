@@ -5,12 +5,12 @@ import '../utils/location_functionality.dart';
 import '../models/weather_daily_model.dart';
 import 'package:http/http.dart' as http;
 
-Future<WeatherWeek> fetchWeatherForWeek() async {
+Future<Weather5Days> fetchWeatherForWeek() async {
   var currentLocation_data = await location.getLocation();
 
   print("WWWWWWWWWWWWWWWWWWWWWWWWork");
   final response = await http
-      .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocation_data.latitude}&lon=${currentLocation_data.longitude}&appid=43ec70748cae1130be4146090de59761'));
+      .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocation_data.latitude}&lon=${currentLocation_data.longitude}&cnt=8&appid=43ec70748cae1130be4146090de59761&units=metric'));
 
 
   if (response.statusCode == 200) {
@@ -18,8 +18,9 @@ Future<WeatherWeek> fetchWeatherForWeek() async {
     // then parse the JSON.
 
     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    print(response.statusCode);
-    return WeatherWeek.fromJson(jsonDecode(response.body));
+    print(response.body);
+
+    return Weather5Days.fromJson(jsonDecode(response.body));
 
   }
   else {

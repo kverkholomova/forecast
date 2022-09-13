@@ -21,7 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late VideoPlayerController _controller;
 
   late VideoPlayerController _controller1;
-  late Future<Weather> futureWeather;
+  // late Future<Weather> futureWeather;
   late Future<Weather5Days> futureWeatherWeek;
 
   @override
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         setState(() {
           futureWeatherWeek = fetchWeatherForWeek();
-        futureWeather = fetchWeather();
+        // futureWeather = fetchWeather();
           serviceEn();
           permissGranted();
           // fetchWeatherForWeek();
@@ -69,70 +69,70 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         child: Stack(
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.17),
-              child: FittedBox(
-                // If your background video doesn't look right, try changing the BoxFit property.
-                // BoxFit.fill created the look I was going for.
-                fit: BoxFit.fill,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 1,
-                  height: MediaQuery.of(context).size.width * 1,
-                  child: FutureBuilder<Weather>(
-                    future: futureWeather,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-                        print(snapshot.data!.description[0]["description"]);
-                        // return VideoPlayer(snapshot.data!.description[0]["description"]== "clear sky"?_controller:_controller1);
+            // Padding(
+            //   padding: EdgeInsets.symmetric(
+            //       vertical: MediaQuery.of(context).size.height * 0.17),
+            //   child: FittedBox(
+            //     // If your background video doesn't look right, try changing the BoxFit property.
+            //     // BoxFit.fill created the look I was going for.
+            //     fit: BoxFit.fill,
+            //     child: SizedBox(
+            //       width: MediaQuery.of(context).size.width * 1,
+            //       height: MediaQuery.of(context).size.width * 1,
+            //       child: FutureBuilder<Weather>(
+            //         future: futureWeather,
+            //         builder: (context, snapshot) {
+            //           if (snapshot.hasData) {
+            //             print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+            //             print(snapshot.data!.description[0]["description"]);
+            //             // return VideoPlayer(snapshot.data!.description[0]["description"]== "clear sky"?_controller:_controller1);
+            //
+            //             return VideoPlayer(_controller);
+            //           } else if (snapshot.hasError) {
+            //             print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+            //             return Text('${snapshot.error}');
+            //           }
+            //
+            //           // By default, show a loading spinner.
+            //           return Container();
+            //         },
+            //       ),
+            //
+            //
+            //
+            //     ),
+            //   ),
+            // ),
 
-                        return VideoPlayer(_controller);
-                      } else if (snapshot.hasError) {
-                        print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-                        return Text('${snapshot.error}');
-                      }
-
-                      // By default, show a loading spinner.
-                      return Container();
-                    },
-                  ),
-
-
-
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: FutureBuilder<Weather>(
-                  future: futureWeather,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      // print(snapshot.data!.temperature);
-                      return Text(
-                        "${snapshot.data!.temperature!.toInt()}\u2103",
-                        style: GoogleFonts.openSans(
-                          fontSize: 64,
-                          color: Colors.indigoAccent,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-                      return Text('${snapshot.error}');
-                    }
-
-                    print("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
-                    // print("${snapshot.data!.tomorrow}\u2103");
-                    // By default, show a loading spinner.
-                    return const CircularProgressIndicator();
-                  },
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 10),
+            //   child: Align(
+            //     alignment: Alignment.topLeft,
+            //     child: FutureBuilder<Weather>(
+            //       future: futureWeather,
+            //       builder: (context, snapshot) {
+            //         if (snapshot.hasData) {
+            //           // print(snapshot.data!.temperature);
+            //           return Text(
+            //             "${snapshot.data!.temperature!.toInt()}\u2103",
+            //             style: GoogleFonts.openSans(
+            //               fontSize: 64,
+            //               color: Colors.indigoAccent,
+            //             ),
+            //           );
+            //         } else if (snapshot.hasError) {
+            //           print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+            //           return Text('${snapshot.error}');
+            //         }
+            //
+            //         print("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
+            //         // print("${snapshot.data!.tomorrow}\u2103");
+            //         // By default, show a loading spinner.
+            //         return const CircularProgressIndicator();
+            //       },
+            //     ),
+            //   ),
+            // ),
             // Padding(
             //   padding: EdgeInsets.symmetric(horizontal: 10),
             //   child: Align(
@@ -146,37 +146,37 @@ class _MyHomePageState extends State<MyHomePage> {
             //     ),
             //   ),
             // ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.12,
-              // left: MediaQuery.of(context).size.height * 0.021,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: FutureBuilder<Weather>(
-                    future: futureWeather,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-                        print(snapshot.data!.description[0]["description"]);
-                        return Text("${snapshot.data!.description[0]["description"]}",
-                            style: GoogleFonts.roboto(
-                                          fontSize: 18,
-                                          color: Colors.black45,
-                                        ),);
-
-                      } else if (snapshot.hasError) {
-                        print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-                        return Text('${snapshot.error}');
-                      }
-
-                      // By default, show a loading spinner.
-                      return const CircularProgressIndicator();
-                    },
-                  ),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   top: MediaQuery.of(context).size.height * 0.12,
+            //   // left: MediaQuery.of(context).size.height * 0.021,
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 15),
+            //     child: Align(
+            //       alignment: Alignment.topLeft,
+            //       child: FutureBuilder<Weather>(
+            //         future: futureWeather,
+            //         builder: (context, snapshot) {
+            //           if (snapshot.hasData) {
+            //             print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+            //             print(snapshot.data!.description[0]["description"]);
+            //             return Text("${snapshot.data!.description[0]["description"]}",
+            //                 style: GoogleFonts.roboto(
+            //                               fontSize: 18,
+            //                               color: Colors.black45,
+            //                             ),);
+            //
+            //           } else if (snapshot.hasError) {
+            //             print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+            //             return Text('${snapshot.error}');
+            //           }
+            //
+            //           // By default, show a loading spinner.
+            //           return const CircularProgressIndicator();
+            //         },
+            //       ),
+            //     ),
+            //   ),
+            // ),
             // Positioned(
             //     top: MediaQuery.of(context).size.height * 0.12,
             //     // left: MediaQuery.of(context).size.height * 0.021,
@@ -193,35 +193,35 @@ class _MyHomePageState extends State<MyHomePage> {
             //         ),
             //       ),
             //     )),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.035,
-                  right: MediaQuery.of(context).size.height * 0.021),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: FutureBuilder<Weather>(
-                  future: futureWeather,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      print(snapshot.data!.temperature);
-                      return Text(
-                        "${snapshot.data!.humidity}%",
-                          style: GoogleFonts.roboto(
-                                    fontSize: 24,
-                                    color: Colors.black45,
-                                  ),
-                      );
-                    } else if (snapshot.hasError) {
-                      print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-                      return Text('${snapshot.error}');
-                    }
-
-                    // By default, show a loading spinner.
-                    return const CircularProgressIndicator();
-                  },
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(
+            //       top: MediaQuery.of(context).size.height * 0.035,
+            //       right: MediaQuery.of(context).size.height * 0.021),
+            //   child: Align(
+            //     alignment: Alignment.topRight,
+            //     child: FutureBuilder<Weather>(
+            //       future: futureWeather,
+            //       builder: (context, snapshot) {
+            //         if (snapshot.hasData) {
+            //           print(snapshot.data!.temperature);
+            //           return Text(
+            //             "${snapshot.data!.humidity}%",
+            //               style: GoogleFonts.roboto(
+            //                         fontSize: 24,
+            //                         color: Colors.black45,
+            //                       ),
+            //           );
+            //         } else if (snapshot.hasError) {
+            //           print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+            //           return Text('${snapshot.error}');
+            //         }
+            //
+            //         // By default, show a loading spinner.
+            //         return const CircularProgressIndicator();
+            //       },
+            //     ),
+            //   ),
+            // ),
             // Padding(
             //   padding: EdgeInsets.only(
             //       top: MediaQuery.of(context).size.height * 0.035,
@@ -237,35 +237,35 @@ class _MyHomePageState extends State<MyHomePage> {
             //     ),
             //   ),
             // ),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.07,
-                  right: MediaQuery.of(context).size.height * 0.021),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: FutureBuilder<Weather>(
-                  future: futureWeather,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      print(snapshot.data!.temperature);
-                      return Text(
-                        "${snapshot.data!.wind_speed!.toInt()} km/h",
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-                      return Text('${snapshot.error}');
-                    }
-
-                    // By default, show a loading spinner.
-                    return const CircularProgressIndicator();
-                  },
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(
+            //       top: MediaQuery.of(context).size.height * 0.07,
+            //       right: MediaQuery.of(context).size.height * 0.021),
+            //   child: Align(
+            //     alignment: Alignment.topRight,
+            //     child: FutureBuilder<Weather>(
+            //       future: futureWeather,
+            //       builder: (context, snapshot) {
+            //         if (snapshot.hasData) {
+            //           print(snapshot.data!.temperature);
+            //           return Text(
+            //             "${snapshot.data!.wind_speed!.toInt()} km/h",
+            //             style: GoogleFonts.roboto(
+            //               fontSize: 18,
+            //               color: Colors.black45,
+            //             ),
+            //           );
+            //         } else if (snapshot.hasError) {
+            //           print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+            //           return Text('${snapshot.error}');
+            //         }
+            //
+            //         // By default, show a loading spinner.
+            //         return const CircularProgressIndicator();
+            //       },
+            //     ),
+            //   ),
+            // ),
             // Padding(
             //     padding: EdgeInsets.only(
             //         top: MediaQuery.of(context).size.height * 0.07,
@@ -286,13 +286,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: Align(
                 alignment: Alignment.topCenter,
-                child: FutureBuilder<Weather>(
-                  future: futureWeather,
+                child: FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      print(snapshot.data!.city);
+
                       return Text(
-                        (snapshot.data!.city).toString(),
+                        (snapshot.data!.city!.name).toString(),
                         style: GoogleFonts.roboto(
                           fontSize: 28,
                           color: Colors.black45,
@@ -302,7 +302,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
                       return Text('${snapshot.error}');
                     }
+                    print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPCCCCCCCCCCCCCCCCCCCCCCc");
 
+                    print(snapshot.data!.city);
                     // By default, show a loading spinner.
                     return const CircularProgressIndicator();
                   },

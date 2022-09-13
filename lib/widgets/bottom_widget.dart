@@ -23,28 +23,30 @@ class BottomWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
-                  FutureBuilder<Weather5Days>(
-                    future: fetchWeatherForWeek(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        // print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                        // print(snapshot.data?.date);
-                        var tom = snapshot.data?.city!.name;
-                        return Text(
-                          "${snapshot.data?.city!.name}",
-                            style: GoogleFonts.roboto(
-                                  fontSize: 12,
-                                  color: Colors.black45,
-                                ),
-                        );
-                      } else if (snapshot.hasError) {
-                        print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
-                        return Text('${snapshot.error}${snapshot.data?.list}');
-                      }
-                      print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                      print(snapshot.data!.city!.name);
-                      return const CircularProgressIndicator();
-                    },
+                  Expanded(
+                    child: FutureBuilder<Weather5Days>(
+                      future: fetchWeatherForWeek(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          // print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+                          // print(snapshot.data?.date);
+                          var tom = snapshot.data?.city!.name;
+                          return Text(
+                            "${snapshot.data?.city!.name}",
+                              style: GoogleFonts.roboto(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                  ),
+                          );
+                        } else if (snapshot.hasError) {
+                          print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
+                          return Text('${snapshot.error}${snapshot.data?.list}');
+                        }
+                        print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+                        print(snapshot.data!.city!.name);
+                        return const CircularProgressIndicator();
+                      },
+                    ),
                   ),
                   // Text(
                   //   "09.09",

@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 
 import 'api/weather_daily_api.dart';
-import 'models/bottom_widget.dart';
+import 'widgets/bottom_widget.dart';
 import 'models/weather_daily_model.dart';
 import 'models/weather_week_model.dart';
 import 'utils/location_functionality.dart';

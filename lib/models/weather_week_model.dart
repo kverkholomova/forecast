@@ -2,20 +2,17 @@ class Weather5Days {
   String? cod;
   int? message;
   int? cnt;
-  List<CommonList>? list;
+  List? common_list;
   City? city;
-  Weather5Days({this.cod, this.message, this.cnt, this.list, this.city});
+  Weather5Days({this.cod, this.message, this.cnt, this.common_list, this.city});
 
   Weather5Days.fromJson(Map<String, dynamic> json) {
     cod = json['cod'];
     message = json['message'];
     cnt = json['cnt'];
-    if (json['list'] != null) {
-      list = <CommonList>[];
-      json['list'].forEach((v) {
-        list!.add(new CommonList.fromJson(v));
-      });
-    }
+
+      common_list =
+      json['list'];
     city = json['city'] != null ? new City.fromJson(json['city']) : null;
   }
 
@@ -24,11 +21,11 @@ class Weather5Days {
 class CommonList {
   int? dt;
   Main? main;
-  List<WeatherWeek>? weather;
+  List? weather;
   Clouds? clouds;
   Wind? wind;
   int? visibility;
-  double? pop;
+  // double? pop;
   Sys? sys;
   String? dtTxt;
   // Rain? rain;
@@ -40,7 +37,7 @@ class CommonList {
         this.clouds,
         this.wind,
         this.visibility,
-        this.pop,
+        // this.pop,
         this.sys,
         this.dtTxt,
         // this.rain
@@ -49,17 +46,14 @@ class CommonList {
   CommonList.fromJson(Map<String, dynamic> json) {
     dt = json['dt'];
     main = json['main'] != null ? new Main.fromJson(json['main']) : null;
-    if (json['weather'] != null) {
-      weather = <WeatherWeek>[];
-      json['weather'].forEach((v) {
-        weather!.add(new WeatherWeek.fromJson(v));
-      });
-    }
+
+      weather = json['weather'];
+
     clouds =
     json['clouds'] != null ? new Clouds.fromJson(json['clouds']) : null;
     wind = json['wind'] != null ? new Wind.fromJson(json['wind']) : null;
     visibility = json['visibility'];
-    pop = json['pop'];
+    // pop = json['pop'];
     sys = json['sys'] != null ? new Sys.fromJson(json['sys']) : null;
     dtTxt = json['dt_txt'];
     // rain = json['rain'] != null ? new Rain.fromJson(json['rain']) : null;

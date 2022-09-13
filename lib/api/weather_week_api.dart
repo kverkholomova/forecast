@@ -10,7 +10,7 @@ Future<Weather5Days> fetchWeatherForWeek() async {
 
   print("WWWWWWWWWWWWWWWWWWWWWWWWork");
   final response = await http
-      .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocation_data.latitude}&lon=${currentLocation_data.longitude}&cnt=1&appid=43ec70748cae1130be4146090de59761&units=metric'));
+      .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocation_data.latitude}&lon=${currentLocation_data.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
 
 
   if (response.statusCode == 200) {

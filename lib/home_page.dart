@@ -21,35 +21,35 @@ class _MyHomePageState extends State<MyHomePage> {
   late VideoPlayerController _controller;
 
   late VideoPlayerController _controller1;
-  // late Future<Weather> futureWeather;
-  late Future<Weather5Days> futureWeatherWeek;
+
+  late Future<WeatherToday> futureWeather;
+  // late Future<Weather5Days> futureWeatherWeek;
 
   @override
   void initState() {
     super.initState();
 
-
-
+    futureWeather = fetchWeather();
+    // futureWeatherWeek = fetchWeatherForWeek();
     _controller = VideoPlayerController.asset("assets/windy_cloud.mp4")
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
       });
-        _controller1 = VideoPlayerController.asset("assets/rain.mp4")
-          ..initialize().then((_) {
-            _controller.play();
-            _controller.setLooping(true);
+    _controller1 = VideoPlayerController.asset("assets/rain.mp4")
+      ..initialize().then((_) {
+        _controller.play();
+        _controller.setLooping(true);
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-          });
+      });
 
-        setState(() {
-          futureWeatherWeek = fetchWeatherForWeek();
-        // futureWeather = fetchWeather();
-          serviceEn();
-          permissGranted();
-          // fetchWeatherForWeek();
-          // getCurrentLocation();
-        });
+    setState(() {
+      // futureWeather = fetchWeather();
+      serviceEn();
+      permissGranted();
+      // fetchWeatherForWeek();
+      // getCurrentLocation();
+    });
   }
 
   @override
@@ -238,18 +238,46 @@ class _MyHomePageState extends State<MyHomePage> {
             //   ),
             // ),
             // Padding(
+            //   padding: const EdgeInsets.only(top: 150),
+            //   child: FutureBuilder<WeatherToday>(
+            //     future: futureWeather,
+            //     builder: (context, snapshot) {
+            //       if (snapshot.hasData) {
+            //         print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBb");
+            //         print(snapshot.data?.name);
+            //         var tom =snapshot.data?.name;
+            //             // "${snapshot.data?.common_list?[8]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[8]["dt_txt"].toString().substring(8, 11)}";
+            //         return Text(
+            //           "$tom",
+            //           style: GoogleFonts.roboto(
+            //             fontSize: 12,
+            //             color: Colors.black45,
+            //           ),
+            //         );
+            //       } else if (snapshot.hasError) {
+            //         print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
+            //         return Text(
+            //             '${snapshot.error}');
+            //       }
+            //       // print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+            //       // print(snapshot.data!.city!.name);
+            //       return const CircularProgressIndicator();
+            //     },
+            //   ),
+            // ),
+            // Padding(
             //   padding: EdgeInsets.only(
             //       top: MediaQuery.of(context).size.height * 0.07,
             //       right: MediaQuery.of(context).size.height * 0.021),
             //   child: Align(
             //     alignment: Alignment.topRight,
-            //     child: FutureBuilder<Weather>(
-            //       future: futureWeather,
+            //     child: FutureBuilder<Weather5Days>(
+            //       future: futureWeatherWeek,
             //       builder: (context, snapshot) {
             //         if (snapshot.hasData) {
-            //           print(snapshot.data!.temperature);
+            //           var bob = snapshot.data?.city?.name;
             //           return Text(
-            //             "${snapshot.data!.wind_speed!.toInt()} km/h",
+            //             "${bob} km/h",
             //             style: GoogleFonts.roboto(
             //               fontSize: 18,
             //               color: Colors.black45,
@@ -260,6 +288,8 @@ class _MyHomePageState extends State<MyHomePage> {
             //           return Text('${snapshot.error}');
             //         }
             //
+            //         print("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+            //         // print(snapshot.data?.weather?[0]==null?55:snapshot.data!.weather?[0]);
             //         // By default, show a loading spinner.
             //         return const CircularProgressIndicator();
             //       },
@@ -280,37 +310,37 @@ class _MyHomePageState extends State<MyHomePage> {
             //         ),
             //       ),
             //     )),
-            Padding(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.17,
-              ),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: FutureBuilder<Weather5Days>(
-                  future: futureWeatherWeek,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-
-                      return Text(
-                        (snapshot.data!.city!.name).toString(),
-                        style: GoogleFonts.roboto(
-                          fontSize: 28,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-                      return Text('${snapshot.error}');
-                    }
-                    print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPCCCCCCCCCCCCCCCCCCCCCCc");
-
-                    print(snapshot.data!.city);
-                    // By default, show a loading spinner.
-                    return const CircularProgressIndicator();
-                  },
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(
+            //     top: MediaQuery.of(context).size.height * 0.17,
+            //   ),
+            //   child: Align(
+            //     alignment: Alignment.topCenter,
+            //     child: FutureBuilder<Weather5Days>(
+            //       future: futureWeatherWeek,
+            //       builder: (context, snapshot) {
+            //         if (snapshot.hasData) {
+            //
+            //           return Text(
+            //             (snapshot.data!.city!.name).toString(),
+            //             style: GoogleFonts.roboto(
+            //               fontSize: 28,
+            //               color: Colors.black45,
+            //             ),
+            //           );
+            //         } else if (snapshot.hasError) {
+            //           print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+            //           return Text('${snapshot.error}');
+            //         }
+            //         print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPCCCCCCCCCCCCCCCCCCCCCCc");
+            //
+            //         print(snapshot.data!.city);
+            //         // By default, show a loading spinner.
+            //         return const CircularProgressIndicator();
+            //       },
+            //     ),
+            //   ),
+            // ),
             // Padding(
             //   padding: EdgeInsets.only(
             //     top: MediaQuery.of(context).size.height * 0.17,
@@ -358,5 +388,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-

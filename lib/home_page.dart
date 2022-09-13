@@ -348,7 +348,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )),
             ),
-            // BottomWidget()
+            BottomWidget()
           ],
         ),
       ),

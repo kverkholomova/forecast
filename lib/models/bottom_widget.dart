@@ -29,20 +29,20 @@ class BottomWidget extends StatelessWidget {
                       if (snapshot.hasData) {
                         // print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
                         // print(snapshot.data?.date);
-                        var tom = snapshot.data?.tomorrow!.substring(0,11);
+                        var tom = snapshot.data?.city!.name;
                         return Text(
-                          "${snapshot.data?.tomorrow!.substring(5,7)}.${snapshot.data?.tomorrow!.substring(8,11)}",
+                          "${snapshot.data?.city!.name}",
                             style: GoogleFonts.roboto(
                                   fontSize: 12,
                                   color: Colors.black45,
                                 ),
                         );
                       } else if (snapshot.hasError) {
-                        print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-                        return Text('${snapshot.error}');
+                        print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
+                        return Text('${snapshot.error}${snapshot.data?.list}');
                       }
                       print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                      print(snapshot.data!.tomorrow);
+                      print(snapshot.data!.city!.name);
                       return const CircularProgressIndicator();
                     },
                   ),

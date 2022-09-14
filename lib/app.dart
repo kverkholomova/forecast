@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:forecast/widgets/bottom_widget.dart';
+import 'package:forecast/screens/home_page.dart';
 
-import 'home_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BottomWidget(),
+      home: const Expanded(child: HomePage()),
     );
   }
 }

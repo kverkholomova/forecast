@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import '../models/weather_week_model.dart';
 import '../utils/location_functionality.dart';
-import '../models/weather_daily_model.dart';
+import '../to_delete/weather_daily_model.dart';
 import 'package:http/http.dart' as http;
 
 Future<Weather5Days> fetchWeatherForWeek() async {

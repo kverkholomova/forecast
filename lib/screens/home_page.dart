@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   late VideoPlayerController _controller;
 
   late VideoPlayerController _controller1;
-
+  late VideoPlayerController _controller2;
   @override
   void initState() {
     super.initState();
@@ -47,6 +47,12 @@ class _HomePageState extends State<HomePage> {
         _controller.setLooping(true);
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
       });
+    _controller2 = VideoPlayerController.asset("assets/clouds.mp4")
+      ..initialize().then((_) {
+        _controller.play();
+        _controller.setLooping(true);
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+      });
     setState(() {
       serviceEn();
       permissGranted();
@@ -57,6 +63,8 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    _controller1.dispose();
+    _controller2.dispose();
   }
 
   @override
@@ -73,37 +81,40 @@ class _HomePageState extends State<HomePage> {
             height: double.infinity,
             child: Stack(
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * 0.17,horizontal: MediaQuery.of(context).size.height * 0.01),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 1,
-                        height: MediaQuery.of(context).size.width * 1,
-                        child: FutureBuilder<Weather5Days>(
-                          future: futureWeatherWeek,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
+                Align(
+                  alignment: Alignment.center,
+                  child: FittedBox(
+                    fit: BoxFit.fill,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 1,
+                      height: MediaQuery.of(context).size.width * 1,
+                      child: FutureBuilder<Weather5Days>(
+                        future: futureWeatherWeek,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
 
-                              return VideoPlayer(snapshot.data!.common_list?[0]
-                                          ["weather"][0]["description"] ==
-                                      "overcast clouds"
-                                  ? _controller
-                                  : _controller1);
+                            print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
+                            print(snapshot.data!.common_list![0]
+                            ["weather"][0]["description"] ==
+                                "overcast clouds" ? "0": snapshot.data!.common_list![0]
+                            ["weather"][0]["description"] ==
+                                "light rain" ? "_controller1":"_controller2");
+                            return VideoPlayer(
+                                snapshot.data!.common_list![0]
+                                        ["weather"][0]["description"] ==
+                                    "overcast clouds" ? _controller: snapshot.data!.common_list![0]
+                            ["weather"][0]["description"] ==
+                                "light rain" ? _controller1:_controller2);
 
-                              // return Text("${snapshot.data!.common_list?[0]["weather"][0]["description"]}");
-                              // return VideoPlayer(_controller);
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
+                            // return Text("${snapshot.data!.common_list?[0]["weather"][0]["description"]}");
+                            // return VideoPlayer(_controller);
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          }
 
-                            // By default, show a loading spinner.
-                            return Container();
-                          },
-                        ),
+                          // By default, show a loading spinner.
+                          return Container();
+                        },
                       ),
                     ),
                   ),
@@ -312,8 +323,6 @@ class _HomePageState extends State<HomePage> {
                             onPressed: (){
                               num_day = 8;
                               changeIndex();
-                              print("IIIIIIIIIIIIIIIIIIIIIIIIIIIIndex");
-                              print(index);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const AnotherDayForecast()),
@@ -321,12 +330,10 @@ class _HomePageState extends State<HomePage> {
                             },
                               child: Column(
                                 children: [
-
                                     FutureBuilder<Weather5Days>(
                                       future: futureWeatherWeek,
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
-
                                           var tom =
                                               "${snapshot.data?.common_list?[8]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[8]["dt_txt"].toString().substring(8, 11)}";
                                           return Text(
@@ -344,19 +351,38 @@ class _HomePageState extends State<HomePage> {
                                         return const CircularProgressIndicator();
                                       },
                                     ),
+                                  FutureBuilder<Weather5Days>(
+                                    future: futureWeatherWeek,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="light rain"){
+                                        return Icon(
+                                        Icons.grain_rounded,
+                                        color: Colors.black45,
+                                        size: 40,
+                                        );
+                                        }
+                                        else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="overcast clouds"){
+                                          return Icon(
+                                            Icons.cloud,
+                                            color: Colors.black45,
+                                            size: 40,
+                                          );
+                                        }
 
-                                  // Text(
-                                  //   "09.09",
-                                  //   style: GoogleFonts.roboto(
-                                  //     fontSize: 12,
-                                  //     color: Colors.black45,
-                                  //   ),
-                                  // ),
-                                  const Icon(
-                                    Icons.sunny,
-                                    color: Colors.black45,
-                                    size: 40,
+                                      } else if (snapshot.hasError) {
+                                        return Text(
+                                            '${snapshot.error}${snapshot.data?.common_list}');
+                                      }
+
+                                      return const CircularProgressIndicator();
+                                    },
                                   ),
+                                  // const Icon(
+                                  //   Icons.sunny,
+                                  //   color: Colors.black45,
+                                  //   size: 40,
+                                  // ),
                                   Text(
                                     "Thursday",
                                     style: GoogleFonts.roboto(
@@ -395,8 +421,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: (){
                             num_day = 16;
                             changeIndex();
-                            print("IIIIIIIIIIIIIIIIIIIIIIIIIIIIndex");
-                            print(index);
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const AnotherDayForecast()),
@@ -426,18 +451,34 @@ class _HomePageState extends State<HomePage> {
                                   return const CircularProgressIndicator();
                                 },
                               ),
-                              // Text(
-                              //   "09.09",
-                              //   style: GoogleFonts.roboto(
-                              //     fontSize: 12,
-                              //     color: Colors.black45,
-                              //   ),
-                              // ),
-                              const Icon(
-                                Icons.sunny,
-                                color: Colors.black45,
-                                size: 40,
+                              FutureBuilder<Weather5Days>(
+                                future: futureWeatherWeek,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="light rain"){
+                                      return Icon(
+                                        Icons.grain_rounded,
+                                        color: Colors.black45,
+                                        size: 40,
+                                      );
+                                    }
+                                    else if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="overcast clouds"){
+                                      return Icon(
+                                        Icons.cloud,
+                                        color: Colors.black45,
+                                        size: 40,
+                                      );
+                                    }
+
+                                  } else if (snapshot.hasError) {
+                                    return Text(
+                                        '${snapshot.error}${snapshot.data?.common_list}');
+                                  }
+
+                                  return const CircularProgressIndicator();
+                                },
                               ),
+
                               Text(
                                 "Thursday",
                                 style: GoogleFonts.roboto(
@@ -504,17 +545,32 @@ class _HomePageState extends State<HomePage> {
                                   return const CircularProgressIndicator();
                                 },
                               ),
-                              // Text(
-                              //   "09.09",
-                              //   style: GoogleFonts.roboto(
-                              //     fontSize: 12,
-                              //     color: Colors.black45,
-                              //   ),
-                              // ),
-                              const Icon(
-                                Icons.sunny,
-                                color: Colors.black45,
-                                size: 40,
+                              FutureBuilder<Weather5Days>(
+                                future: futureWeatherWeek,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="light rain"){
+                                      return Icon(
+                                        Icons.grain_rounded,
+                                        color: Colors.black45,
+                                        size: 40,
+                                      );
+                                    }
+                                    else if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="overcast clouds"){
+                                      return Icon(
+                                        Icons.cloud,
+                                        color: Colors.black45,
+                                        size: 40,
+                                      );
+                                    }
+
+                                  } else if (snapshot.hasError) {
+                                    return Text(
+                                        '${snapshot.error}${snapshot.data?.common_list}');
+                                  }
+
+                                  return const CircularProgressIndicator();
+                                },
                               ),
                               Text(
                                 "Thursday",
@@ -582,17 +638,32 @@ class _HomePageState extends State<HomePage> {
                                   return const CircularProgressIndicator();
                                 },
                               ),
-                              // Text(
-                              //   "09.09",
-                              //   style: GoogleFonts.roboto(
-                              //     fontSize: 12,
-                              //     color: Colors.black45,
-                              //   ),
-                              // ),
-                              const Icon(
-                                Icons.sunny,
-                                color: Colors.black45,
-                                size: 40,
+                              FutureBuilder<Weather5Days>(
+                                future: futureWeatherWeek,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="light rain"){
+                                      return Icon(
+                                        Icons.grain_rounded,
+                                        color: Colors.black45,
+                                        size: 40,
+                                      );
+                                    }
+                                    else if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="overcast clouds"){
+                                      return Icon(
+                                        Icons.cloud,
+                                        color: Colors.black45,
+                                        size: 40,
+                                      );
+                                    }
+
+                                  } else if (snapshot.hasError) {
+                                    return Text(
+                                        '${snapshot.error}${snapshot.data?.common_list}');
+                                  }
+
+                                  return const CircularProgressIndicator();
+                                },
                               ),
                               Text(
                                 "Thursday",
@@ -660,17 +731,32 @@ class _HomePageState extends State<HomePage> {
                                   return const CircularProgressIndicator();
                                 },
                               ),
-                              // Text(
-                              //   "09.09",
-                              //   style: GoogleFonts.roboto(
-                              //     fontSize: 12,
-                              //     color: Colors.black45,
-                              //   ),
-                              // ),
-                              const Icon(
-                                Icons.sunny,
-                                color: Colors.black45,
-                                size: 40,
+                              FutureBuilder<Weather5Days>(
+                                future: futureWeatherWeek,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="light rain"){
+                                      return Icon(
+                                        Icons.grain_rounded,
+                                        color: Colors.black45,
+                                        size: 40,
+                                      );
+                                    }
+                                    else if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="overcast clouds"){
+                                      return Icon(
+                                        Icons.cloud,
+                                        color: Colors.black45,
+                                        size: 40,
+                                      );
+                                    }
+
+                                  } else if (snapshot.hasError) {
+                                    return Text(
+                                        '${snapshot.error}${snapshot.data?.common_list}');
+                                  }
+
+                                  return const CircularProgressIndicator();
+                                },
                               ),
                               Text(
                                 "Thursday",

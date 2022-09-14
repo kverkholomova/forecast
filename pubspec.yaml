@@ -67,6 +67,7 @@ flutter:
   assets:
     - assets/windy_cloud.mp4
     - assets/rain.mp4
+    - assets/clouds.mp4
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

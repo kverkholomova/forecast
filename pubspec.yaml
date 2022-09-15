@@ -39,6 +39,7 @@ dependencies:
   geolocator: ^9.0.1
   http: ^0.13.5
   location: ^4.4.0
+  flutter_svg: ^1.1.5
 
 
 dev_dependencies:

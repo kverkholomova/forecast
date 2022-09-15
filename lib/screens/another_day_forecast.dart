@@ -7,6 +7,7 @@ import 'package:forecast/models/weather_week_model.dart';
 import 'package:forecast/screens/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 import '../api/weather_week_api.dart';
 import '../utils/location_functionality.dart';
@@ -178,7 +179,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
               Padding(
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.035,
-                    right: MediaQuery.of(context).size.height * 0.021),
+                    right: MediaQuery.of(context).size.height * 0.03),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: FutureBuilder<Weather5Days>(
@@ -187,14 +188,16 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                       if (snapshot.hasData) {
 
                         var tom =
-                            "${snapshot.data?.common_list?[num_day]["main"]["humidity"]}%";
+                            "${snapshot.data?.common_list?[num_day]["main"]["humidity"]}";
                         return Text(
-                          "$tom",
-                          style: GoogleFonts.roboto(
-                            fontSize: 24,
-                            color: Colors.black45,
-                          ),
-                        );
+                              "$tom",
+                              style: GoogleFonts.roboto(
+                                fontSize: 24,
+                                color: Colors.black45,
+                              ),
+                            );
+
+
                       } else if (snapshot.hasError) {
                         print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
                         return Text(
@@ -209,8 +212,40 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.07,
-                    right: MediaQuery.of(context).size.height * 0.021),
+                    top: MediaQuery.of(context).size.height * 0.03,
+                    right: MediaQuery.of(context).size.height * 0.08),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Icon(WeatherIcons.humidity,color: Colors.black45,),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.085,
+                    right: MediaQuery.of(context).size.height * 0.13),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Icon(WeatherIcons.cloudy_windy,color: Colors.black45,size: 20,),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.09,
+                    right: MediaQuery.of(context).size.height * 0.01),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Text("km/h",
+                    style: GoogleFonts.roboto(
+                      fontSize: 12,
+                      color: Colors.black45,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.09,
+                    right: MediaQuery.of(context).size.height * 0.057),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: FutureBuilder<Weather5Days>(
@@ -219,7 +254,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                       if (snapshot.hasData) {
 
                         var tom =
-                            "${snapshot.data?.common_list?[num_day]["wind"]["speed"]} km/h";
+                            "${snapshot.data?.common_list?[num_day]["wind"]["speed"]}";
                         return Text(
                           "$tom",
                           style: GoogleFonts.roboto(

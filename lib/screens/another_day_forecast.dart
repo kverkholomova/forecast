@@ -63,7 +63,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
       body: Padding(
         padding: EdgeInsets.only(
           top: MediaQuery.of(context).size.height * 0.1,
-          bottom: MediaQuery.of(context).size.height * 0.02,
+          // bottom: MediaQuery.of(context).size.height * 0.02,
         ),
 
         child: Container(
@@ -109,36 +109,39 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
+                child: Padding(
+                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.035),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: FutureBuilder<Weather5Days>(
+                      future: futureWeatherWeek,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
 
-                        var tom =
-                            "${snapshot.data?.common_list?[num_day]["main"]["temp"]?.toInt()}\u2103";
-                        return Text(
-                          "$tom",
-                          style: GoogleFonts.openSans(
-                            fontSize: 64,
-                            color: colors[index],
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
-                        return Text(
-                            '${snapshot.error}${snapshot.data?.common_list}');
-                      }
-                      print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                      print(snapshot.data!.city!.name);
-                      return const CircularProgressIndicator();
-                    },
+                          var tom =
+                              "${snapshot.data?.common_list?[num_day]["main"]["temp"]?.toInt()}\u2103";
+                          return Text(
+                            "$tom",
+                            style: GoogleFonts.openSans(
+                              fontSize: 64,
+                              color: colors[index],
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
+                          return Text(
+                              '${snapshot.error}${snapshot.data?.common_list}');
+                        }
+                        print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+                        print(snapshot.data!.city!.name);
+                        return const CircularProgressIndicator();
+                      },
+                    ),
                   ),
                 ),
               ),
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.12,
+                top: MediaQuery.of(context).size.height * 0.15,
                 // left: MediaQuery.of(context).size.height * 0.021,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -238,39 +241,42 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.2,
+                  top: MediaQuery.of(context).size.height * 0,
                 ),
                 child: Align(
-                  alignment: Alignment.topCenter,
-                  child: FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: FutureBuilder<Weather5Days>(
+                      future: futureWeatherWeek,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
 
-                        var tom =
-                            "${snapshot.data?.city?.name}";
-                        return Text(
-                          "$tom",
-                          style: GoogleFonts.roboto(
-                            fontSize: 28,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
-                        return Text(
-                            '${snapshot.error}${snapshot.data?.common_list}');
-                      }
-                      print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                      print(snapshot.data!.city!.name);
-                      return const CircularProgressIndicator();
-                    },
+                          var tom =
+                              "${snapshot.data?.city?.name}";
+                          return Text(
+                            "$tom",
+                            style: GoogleFonts.roboto(
+                              fontSize: 28,
+                              color: Colors.black45,
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
+                          return Text(
+                              '${snapshot.error}${snapshot.data?.common_list}');
+                        }
+                        print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+                        print(snapshot.data!.city!.name);
+                        return const CircularProgressIndicator();
+                      },
+                    ),
                   ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.55,
+                  top: MediaQuery.of(context).size.height * 0.22,
                 ),
                 child: Align(
                     alignment: Alignment.topCenter,
@@ -284,7 +290,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.6,
+                  top: MediaQuery.of(context).size.height * 0.55,
                 ),
                 child: Align(
                   alignment: Alignment.topCenter,
@@ -316,14 +322,14 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.7),
+                    top: MediaQuery.of(context).size.height * 0.65),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
                       MaterialButton(
                         onPressed: (){
-                          num_day = 0;
+                          num_day = 8;
                           changeIndex();
                           Navigator.push(
                             context,
@@ -336,13 +342,14 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               future: futureWeatherWeek,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
+                                  iconNum =  snapshot.data!.common_list?[0]["weather"][0]["icon"];
                                   var tom =
                                       "${snapshot.data?.common_list?[0]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[0]["dt_txt"].toString().substring(8, 11)}";
                                   return Text(
                                     tom,
                                     style: GoogleFonts.roboto(
                                       fontSize: 12,
-                                      color: Colors.black45,
+                                      color: num_day==0?Colors.indigoAccent.withOpacity(0.7):Colors.black45,
                                     ),
                                   );
                                 } else if (snapshot.hasError) {
@@ -357,41 +364,20 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               future: futureWeatherWeek,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-                                  print(snapshot.data!.common_list?[0]["weather"][0]["icon"]);
-                                  String iconNum =  snapshot.data!.common_list?[0]["weather"][0]["icon"];
-                                  Image.network(
-                                    " http://openweathermap.org/img/wn/$iconNum@2x.png"
 
+
+                                  return ImageIcon(
+                                    size: 60,
+
+                                    NetworkImage(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[0]["weather"][0]["icon"]}@2x.png',
+                                    ),
+
+                                    // AssetImage(
+                                    //        'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[0]["weather"][0]["icon"]}@2x.png',
+                                    //   ),
+                                    color: num_day==0?colors[index]:Colors.black45,
                                   );
-                                  // if (snapshot.data!.common_list?[0]["weather"][0]["description"]=="light rain"){
-                                  //   return
-                                  //   //   Text(
-                                  //   //   "${snapshot.data!.common_list?[0]["weather"][0]}"
-                                  //   // );
-                                  //     Image.asset(
-                                  //
-                                  //         "${snapshot.data!.common_list?[0]["weather"][0]["icon"]}"
-                                  //   );
-                                  //   // return Icon(
-                                  //   //   Icons.grain_rounded,
-                                  //   //   color: Colors.black45,
-                                  //   //   size: 40,
-                                  //   // );
-                                  // }
-                                  // else if (snapshot.data!.common_list?[0]["weather"][0]["description"]=="overcast clouds"){
-                                  //   return Icon(
-                                  //     Icons.cloud,
-                                  //     color: Colors.black45,
-                                  //     size: 40,
-                                  //   );
-                                  // } else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="broken clouds"){
-                                  //   return Icon(
-                                  //     Icons.cloud_queue_rounded,
-                                  //     color: Colors.black45,
-                                  //     size: 40,
-                                  //   );
-                                  // }
 
                                 } else if (snapshot.hasError) {
                                   return Text(
@@ -401,16 +387,11 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                 return const CircularProgressIndicator();
                               },
                             ),
-                            // const Icon(
-                            //   Icons.sunny,
-                            //   color: Colors.black45,
-                            //   size: 40,
-                            // ),
                             Text(
                               "Thursday",
                               style: GoogleFonts.roboto(
                                 fontSize: 12,
-                                color: Colors.black45,
+                                color: num_day==0?Colors.indigoAccent.withOpacity(0.7):Colors.black45,
                               ),
                             ),
                             FutureBuilder<Weather5Days>(
@@ -424,7 +405,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     tom,
                                     style: GoogleFonts.fredoka(
                                       fontSize: 18,
-                                      color: Colors.black45,
+                                      color: num_day==0?Colors.indigoAccent.withOpacity(0.7):Colors.black45,
                                     ),
                                   );
                                 } else if (snapshot.hasError) {
@@ -476,26 +457,13 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               future: futureWeatherWeek,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="light rain"){
-                                    return Icon(
-                                      Icons.grain_rounded,
-                                      color: num_day==8?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
-                                  else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="overcast clouds"){
-                                    return Icon(
-                                      Icons.cloud,
-                                      color: num_day==8?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  } else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="broken clouds"){
-                                    return Icon(
-                                      Icons.cloud_queue_rounded,
-                                      color: num_day==8?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
+                                  return ImageIcon(
+                                    size: 60,
+                                    NetworkImage(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[8]["weather"][0]["icon"]}@2x.png',
+                                    ),
+                                    color: num_day==8?colors[index]:Colors.black45,
+                                  );
 
                                 } else if (snapshot.hasError) {
                                   return Text(
@@ -505,11 +473,6 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                 return const CircularProgressIndicator();
                               },
                             ),
-                            // const Icon(
-                            //   Icons.sunny,
-                            //   color: Colors.black45,
-                            //   size: 40,
-                            // ),
                             Text(
                               "Thursday",
                               style: GoogleFonts.roboto(
@@ -548,7 +511,6 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                         onPressed: (){
                           num_day = 16;
                           changeIndex();
-
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const AnotherDayForecast()),
@@ -582,27 +544,13 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               future: futureWeatherWeek,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="light rain"){
-                                    return Icon(
-                                      Icons.grain_rounded,
-                                      color: num_day==16?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
-                                  else if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="overcast clouds"){
-                                    return Icon(
-                                      Icons.cloud,
-                                      color: num_day==16?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
-                                  else if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="broken clouds"){
-                                    return Icon(
-                                      Icons.cloud_queue_rounded,
-                                      color: num_day==16?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
+                                  return ImageIcon(
+                                    size: 60,
+                                    NetworkImage(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[16]["weather"][0]["icon"]}@2x.png',
+                                    ),
+                                    color: num_day==16?colors[index]:Colors.black45,
+                                  );
 
                                 } else if (snapshot.hasError) {
                                   return Text(
@@ -683,26 +631,13 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               future: futureWeatherWeek,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="light rain"){
-                                    return Icon(
-                                      Icons.grain_rounded,
-                                      color: num_day==24?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
-                                  else if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="overcast clouds"){
-                                    return Icon(
-                                      Icons.cloud,
-                                      color: num_day==24?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }else if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="broken clouds"){
-                                    return Icon(
-                                      Icons.cloud_queue_rounded,
-                                      color: num_day==24?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
+                                  return ImageIcon(
+                                    size: 60,
+                                    NetworkImage(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[24]["weather"][0]["icon"]}@2x.png',
+                                    ),
+                                    color: num_day==24?colors[index]:Colors.black45,
+                                  );
 
                                 } else if (snapshot.hasError) {
                                   return Text(
@@ -782,26 +717,13 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               future: futureWeatherWeek,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="light rain"){
-                                    return Icon(
-                                      Icons.grain_rounded,
-                                      color: num_day==32?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
-                                  else if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="overcast clouds"){
-                                    return Icon(
-                                      Icons.cloud,
-                                      color: num_day==32?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }else if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="broken clouds"){
-                                    return Icon(
-                                      Icons.cloud_queue_rounded,
-                                      color: num_day==32?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
+                                  return ImageIcon(
+                                    size: 60,
+                                    NetworkImage(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[32]["weather"][0]["icon"]}@2x.png',
+                                    ),
+                                    color: num_day==32?colors[index]:Colors.black45,
+                                  );
 
                                 } else if (snapshot.hasError) {
                                   return Text(
@@ -881,26 +803,15 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               future: futureWeatherWeek,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="light rain"){
-                                    return Icon(
-                                      Icons.grain_rounded,
-                                      color: num_day==39?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
-                                  else if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="overcast clouds"){
-                                    return Icon(
-                                      Icons.cloud,
-                                      color: num_day==39?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  } else if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="broken clouds"){
-                                    return Icon(
-                                      Icons.cloud_queue_rounded,
-                                      color: num_day==39?colors[index]:Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
+                                  return ImageIcon(
+                                    size: 60,
+
+                                    NetworkImage(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[39]["weather"][0]["icon"]}@2x.png',
+                                    ),
+
+                                    color: num_day==39?colors[index]:Colors.black45,
+                                  );
 
                                 } else if (snapshot.hasError) {
                                   return Text(
@@ -943,6 +854,601 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                           ],
                         ),
                       ),
+                      // MaterialButton(
+                      //   onPressed: (){
+                      //     num_day = 0;
+                      //     changeIndex();
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(builder: (context) => const HomePage()),
+                      //     );
+                      //   },
+                      //   child: Column(
+                      //     children: [
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[0]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[0]["dt_txt"].toString().substring(8, 11)}";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.roboto(
+                      //                 fontSize: 12,
+                      //                 color: Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //             print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+                      //             print(snapshot.data!.common_list?[0]["weather"][0]["icon"]);
+                      //             String iconNum =  snapshot.data!.common_list?[0]["weather"][0]["icon"];
+                      //             Image.network(
+                      //               " http://openweathermap.org/img/wn/$iconNum@2x.png"
+                      //
+                      //             );
+                      //
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       // const Icon(
+                      //       //   Icons.sunny,
+                      //       //   color: Colors.black45,
+                      //       //   size: 40,
+                      //       // ),
+                      //       Text(
+                      //         "Thursday",
+                      //         style: GoogleFonts.roboto(
+                      //           fontSize: 12,
+                      //           color: Colors.black45,
+                      //         ),
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[0]["main"]["temp"]?.toInt()}\u2103";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.fredoka(
+                      //                 fontSize: 18,
+                      //                 color: Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //
+                      //     ],
+                      //   ),
+                      //
+                      // ),
+                      // MaterialButton(
+                      //   onPressed: (){
+                      //     num_day = 8;
+                      //     changeIndex();
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(builder: (context) => const AnotherDayForecast()),
+                      //     );
+                      //   },
+                      //   child: Column(
+                      //     children: [
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[8]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[8]["dt_txt"].toString().substring(8, 11)}";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.roboto(
+                      //                 fontSize: 12,
+                      //                 color: num_day==8?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //             if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="light rain"){
+                      //               return Icon(
+                      //                 Icons.grain_rounded,
+                      //                 color: num_day==8?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //             else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="overcast clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud,
+                      //                 color: num_day==8?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             } else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="broken clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud_queue_rounded,
+                      //                 color: num_day==8?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       // const Icon(
+                      //       //   Icons.sunny,
+                      //       //   color: Colors.black45,
+                      //       //   size: 40,
+                      //       // ),
+                      //       Text(
+                      //         "Thursday",
+                      //         style: GoogleFonts.roboto(
+                      //           fontSize: 12,
+                      //           color: num_day==8?colors[index]:Colors.black45,
+                      //         ),
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[8]["main"]["temp"]?.toInt()}\u2103";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.fredoka(
+                      //                 fontSize: 18,
+                      //                 color: num_day==8?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //
+                      //     ],
+                      //   ),
+                      //
+                      // ),
+                      // MaterialButton(
+                      //   onPressed: (){
+                      //     num_day = 16;
+                      //     changeIndex();
+                      //
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(builder: (context) => const AnotherDayForecast()),
+                      //     );
+                      //   },
+                      //   child: Column(
+                      //     children: [
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[16]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[16]["dt_txt"].toString().substring(8, 11)}";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.roboto(
+                      //                 fontSize: 12,
+                      //                 color: num_day==16?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //             if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="light rain"){
+                      //               return Icon(
+                      //                 Icons.grain_rounded,
+                      //                 color: num_day==16?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //             else if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="overcast clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud,
+                      //                 color: num_day==16?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //             else if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="broken clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud_queue_rounded,
+                      //                 color: num_day==16?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //
+                      //       Text(
+                      //         "Thursday",
+                      //         style: GoogleFonts.roboto(
+                      //           fontSize: 12,
+                      //           color: num_day==16?colors[index]:Colors.black45,
+                      //         ),
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[16]["main"]["temp"]?.toInt()}\u2103";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.fredoka(
+                      //                 fontSize: 18,
+                      //                 color: num_day==16?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //
+                      //     ],
+                      //   ),
+                      // ),
+                      // MaterialButton(
+                      //   onPressed: (){
+                      //     num_day = 24;
+                      //     changeIndex();
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(builder: (context) => const AnotherDayForecast()),
+                      //     );
+                      //   },
+                      //   child: Column(
+                      //     children: [
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[24]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[24]["dt_txt"].toString().substring(8, 11)}";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.roboto(
+                      //                 fontSize: 12,
+                      //                 color: num_day==24?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //             if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="light rain"){
+                      //               return Icon(
+                      //                 Icons.grain_rounded,
+                      //                 color: num_day==24?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //             else if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="overcast clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud,
+                      //                 color: num_day==24?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }else if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="broken clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud_queue_rounded,
+                      //                 color: num_day==24?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       Text(
+                      //         "Thursday",
+                      //         style: GoogleFonts.roboto(
+                      //           fontSize: 12,
+                      //           color: num_day==24?colors[index]:Colors.black45,
+                      //         ),
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[24]["main"]["temp"]?.toInt()}\u2103";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.fredoka(
+                      //                 fontSize: 18,
+                      //                 color: num_day==24?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //
+                      //     ],
+                      //   ),
+                      // ),
+                      // MaterialButton(
+                      //   onPressed: (){
+                      //     num_day = 32;
+                      //     changeIndex();
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(builder: (context) => const AnotherDayForecast()),
+                      //     );
+                      //   },
+                      //   child: Column(
+                      //     children: [
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[32]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[32]["dt_txt"].toString().substring(8, 11)}";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.roboto(
+                      //                 fontSize: 12,
+                      //                 color: num_day==32?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //             if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="light rain"){
+                      //               return Icon(
+                      //                 Icons.grain_rounded,
+                      //                 color: num_day==32?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //             else if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="overcast clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud,
+                      //                 color: num_day==32?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }else if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="broken clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud_queue_rounded,
+                      //                 color: num_day==32?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       Text(
+                      //         "Thursday",
+                      //         style: GoogleFonts.roboto(
+                      //           fontSize: 12,
+                      //           color: num_day==32?colors[index]:Colors.black45,
+                      //         ),
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[32]["main"]["temp"]?.toInt()}\u2103";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.fredoka(
+                      //                 fontSize: 18,
+                      //                 color: num_day==32?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //
+                      //     ],
+                      //   ),
+                      // ),
+                      // MaterialButton(
+                      //   onPressed: (){
+                      //     num_day = 39;
+                      //     changeIndex();
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(builder: (context) => const AnotherDayForecast()),
+                      //     );
+                      //   },
+                      //   child: Column(
+                      //     children: [
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[39]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[39]["dt_txt"].toString().substring(8, 11)}";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.roboto(
+                      //                 fontSize: 12,
+                      //                 color: num_day==39?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //             if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="light rain"){
+                      //               return Icon(
+                      //                 Icons.grain_rounded,
+                      //                 color: num_day==39?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //             else if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="overcast clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud,
+                      //                 color: num_day==39?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             } else if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="broken clouds"){
+                      //               return Icon(
+                      //                 Icons.cloud_queue_rounded,
+                      //                 color: num_day==39?colors[index]:Colors.black45,
+                      //                 size: 40,
+                      //               );
+                      //             }
+                      //
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //       Text(
+                      //         "Thursday",
+                      //         style: GoogleFonts.roboto(
+                      //           fontSize: 12,
+                      //           color: num_day==39?colors[index]:Colors.black45,
+                      //         ),
+                      //       ),
+                      //       FutureBuilder<Weather5Days>(
+                      //         future: futureWeatherWeek,
+                      //         builder: (context, snapshot) {
+                      //           if (snapshot.hasData) {
+                      //
+                      //             var tom =
+                      //                 "${snapshot.data?.common_list?[39]["main"]["temp"]?.toInt()}\u2103";
+                      //             return Text(
+                      //               tom,
+                      //               style: GoogleFonts.fredoka(
+                      //                 fontSize: 18,
+                      //                 color: num_day==39?colors[index]:Colors.black45,
+                      //               ),
+                      //             );
+                      //           } else if (snapshot.hasError) {
+                      //             return Text(
+                      //                 '${snapshot.error}${snapshot.data?.common_list}');
+                      //           }
+                      //
+                      //           return const CircularProgressIndicator();
+                      //         },
+                      //       ),
+                      //
+                      //     ],
+                      //   ),
+                      // ),
+                      /// AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                       // MaterialButton(
                       //   onPressed: (){
                       //     Navigator.push(

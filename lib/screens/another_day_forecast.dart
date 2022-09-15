@@ -357,34 +357,41 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               future: futureWeatherWeek,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  if (snapshot.data!.common_list?[0]["weather"][0]["description"]=="light rain"){
-                                    // return
-                                    // //   Text(
-                                    // //   "${snapshot.data!.common_list?[0]["weather"][0]}"
-                                    // // );
-                                    //   SvgPicture.string(
-                                    //
-                                    //       "${snapshot.data!.common_list?[0]["weather"][0]["icon"]}"
-                                    // );
-                                    return Icon(
-                                      Icons.grain_rounded,
-                                      color: Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
-                                  else if (snapshot.data!.common_list?[0]["weather"][0]["description"]=="overcast clouds"){
-                                    return Icon(
-                                      Icons.cloud,
-                                      color: Colors.black45,
-                                      size: 40,
-                                    );
-                                  } else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="broken clouds"){
-                                    return Icon(
-                                      Icons.cloud_queue_rounded,
-                                      color: Colors.black45,
-                                      size: 40,
-                                    );
-                                  }
+                                  print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+                                  print(snapshot.data!.common_list?[0]["weather"][0]["icon"]);
+                                  String iconNum =  snapshot.data!.common_list?[0]["weather"][0]["icon"];
+                                  Image.network(
+                                    " http://openweathermap.org/img/wn/$iconNum@2x.png"
+
+                                  );
+                                  // if (snapshot.data!.common_list?[0]["weather"][0]["description"]=="light rain"){
+                                  //   return
+                                  //   //   Text(
+                                  //   //   "${snapshot.data!.common_list?[0]["weather"][0]}"
+                                  //   // );
+                                  //     Image.asset(
+                                  //
+                                  //         "${snapshot.data!.common_list?[0]["weather"][0]["icon"]}"
+                                  //   );
+                                  //   // return Icon(
+                                  //   //   Icons.grain_rounded,
+                                  //   //   color: Colors.black45,
+                                  //   //   size: 40,
+                                  //   // );
+                                  // }
+                                  // else if (snapshot.data!.common_list?[0]["weather"][0]["description"]=="overcast clouds"){
+                                  //   return Icon(
+                                  //     Icons.cloud,
+                                  //     color: Colors.black45,
+                                  //     size: 40,
+                                  //   );
+                                  // } else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="broken clouds"){
+                                  //   return Icon(
+                                  //     Icons.cloud_queue_rounded,
+                                  //     color: Colors.black45,
+                                  //     size: 40,
+                                  //   );
+                                  // }
 
                                 } else if (snapshot.hasError) {
                                   return Text(

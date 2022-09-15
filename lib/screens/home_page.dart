@@ -20,11 +20,12 @@ List colors = [Color.fromRGBO(244, 173, 177, 100), Color.fromRGBO(252, 163, 123,
 
 
 int index = 0;
-
+String iconNum =  '';
 
 class _HomePageState extends State<HomePage> {
   late Future<Weather5Days> futureWeatherWeek;
   Random random = new Random();
+
   void changeIndex() {
     setState(() => index = random.nextInt(5));
   }
@@ -334,6 +335,7 @@ class _HomePageState extends State<HomePage> {
                                 future: futureWeatherWeek,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
+                                    iconNum =  snapshot.data!.common_list?[0]["weather"][0]["icon"];
                                     var tom =
                                         "${snapshot.data?.common_list?[0]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[0]["dt_txt"].toString().substring(8, 11)}";
                                     return Text(
@@ -355,26 +357,14 @@ class _HomePageState extends State<HomePage> {
                                 future: futureWeatherWeek,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    if (snapshot.data!.common_list?[0]["weather"][0]["description"]=="light rain"){
-                                      return Icon(
-                                        Icons.grain_rounded,
-                                        color: num_day==0?Colors.indigoAccent.withOpacity(0.7):Colors.black45,
-                                        size: 40,
+
+
+                                    return Image.network(
+                                           'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[0]["weather"][0]["icon"]}@2x.png',
+                                      width: 60,
+                                      height: 60,
+
                                       );
-                                    }
-                                    else if (snapshot.data!.common_list?[0]["weather"][0]["description"]=="overcast clouds"){
-                                      return Icon(
-                                        Icons.cloud,
-                                        color: num_day==0?Colors.indigoAccent.withOpacity(0.7):Colors.black45,
-                                        size: 40,
-                                      );
-                                    } else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="broken clouds"){
-                                      return Icon(
-                                        Icons.cloud_queue_rounded,
-                                        color: num_day==0?Colors.indigoAccent.withOpacity(0.7):Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
 
                                   } else if (snapshot.hasError) {
                                     return Text(
@@ -384,11 +374,6 @@ class _HomePageState extends State<HomePage> {
                                   return const CircularProgressIndicator();
                                 },
                               ),
-                              // const Icon(
-                              //   Icons.sunny,
-                              //   color: Colors.black45,
-                              //   size: 40,
-                              // ),
                               Text(
                                 "Thursday",
                                 style: GoogleFonts.roboto(
@@ -459,26 +444,12 @@ class _HomePageState extends State<HomePage> {
                                     future: futureWeatherWeek,
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
-                                        if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="light rain"){
-                                        return Icon(
-                                        Icons.grain_rounded,
-                                        color: Colors.black45,
-                                        size: 40,
+                                        return Image.network(
+                                          'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[8]["weather"][0]["icon"]}@2x.png',
+                                          width: 60,
+                                          height: 60,
+
                                         );
-                                        }
-                                        else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="overcast clouds"){
-                                          return Icon(
-                                            Icons.cloud,
-                                            color: Colors.black45,
-                                            size: 40,
-                                          );
-                                        } else if (snapshot.data!.common_list?[8]["weather"][0]["description"]=="broken clouds"){
-                                          return Icon(
-                                            Icons.cloud_queue_rounded,
-                                            color: Colors.black45,
-                                            size: 40,
-                                          );
-                                        }
 
                                       } else if (snapshot.hasError) {
                                         return Text(
@@ -565,27 +536,12 @@ class _HomePageState extends State<HomePage> {
                                 future: futureWeatherWeek,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="light rain"){
-                                      return Icon(
-                                        Icons.grain_rounded,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
-                                    else if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="overcast clouds"){
-                                      return Icon(
-                                        Icons.cloud,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
-                                    else if (snapshot.data!.common_list?[16]["weather"][0]["description"]=="broken clouds"){
-                                      return Icon(
-                                        Icons.cloud_queue_rounded,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
+                                    return Image.network(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[16]["weather"][0]["icon"]}@2x.png',
+                                      width: 60,
+                                      height: 60,
+
+                                    );
 
                                   } else if (snapshot.hasError) {
                                     return Text(
@@ -666,26 +622,12 @@ class _HomePageState extends State<HomePage> {
                                 future: futureWeatherWeek,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="light rain"){
-                                      return Icon(
-                                        Icons.grain_rounded,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
-                                    else if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="overcast clouds"){
-                                      return Icon(
-                                        Icons.cloud,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }else if (snapshot.data!.common_list?[24]["weather"][0]["description"]=="broken clouds"){
-                                      return Icon(
-                                        Icons.cloud_queue_rounded,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
+                                    return Image.network(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[24]["weather"][0]["icon"]}@2x.png',
+                                      width: 60,
+                                      height: 60,
+
+                                    );
 
                                   } else if (snapshot.hasError) {
                                     return Text(
@@ -765,26 +707,12 @@ class _HomePageState extends State<HomePage> {
                                 future: futureWeatherWeek,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="light rain"){
-                                      return Icon(
-                                        Icons.grain_rounded,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
-                                    else if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="overcast clouds"){
-                                      return Icon(
-                                        Icons.cloud,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }else if (snapshot.data!.common_list?[32]["weather"][0]["description"]=="broken clouds"){
-                                      return Icon(
-                                        Icons.cloud_queue_rounded,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
+                                    return Image.network(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[32]["weather"][0]["icon"]}@2x.png',
+                                      width: 60,
+                                      height: 60,
+
+                                    );
 
                                   } else if (snapshot.hasError) {
                                     return Text(
@@ -864,26 +792,12 @@ class _HomePageState extends State<HomePage> {
                                 future: futureWeatherWeek,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="light rain"){
-                                      return Icon(
-                                        Icons.grain_rounded,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
-                                    else if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="overcast clouds"){
-                                      return Icon(
-                                        Icons.cloud,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    } else if (snapshot.data!.common_list?[39]["weather"][0]["description"]=="broken clouds"){
-                                      return Icon(
-                                        Icons.cloud_queue_rounded,
-                                        color: Colors.black45,
-                                        size: 40,
-                                      );
-                                    }
+                                    return Image.network(
+                                      'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[39]["weather"][0]["icon"]}@2x.png',
+                                      width: 60,
+                                      height: 60,
+
+                                    );
 
                                   } else if (snapshot.hasError) {
                                     return Text(

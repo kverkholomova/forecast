@@ -70,9 +70,15 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/sunny_day.mp4
+    - assets/sunny.mp4
     - assets/windy_cloud.mp4
-    - assets/rain.mp4
-    - assets/clouds.mp4
+    - assets/windy_cloud.mp4
+    - assets/rainy_day.mp4
+    - assets/cloudy_rain.mp4
+    - assets/thunder_rain.mp4
+    - assets/snowfall.mp4
+    - assets/warm_wind.mp4
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

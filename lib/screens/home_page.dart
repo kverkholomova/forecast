@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                               '${snapshot.error}${snapshot.data?.commonList}');
                         }
 
-                        return const CircularProgressIndicator();
+                        return Container();
                       },
                     ),
                   ),
@@ -224,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                               '${snapshot.error}${snapshot.data?.commonList}');
                         }
 
-                        return const CircularProgressIndicator();
+                        return Container();
                       },
                     ),
                   ),
@@ -260,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                         return Text(
                             '${snapshot.error}${snapshot.data?.commonList}');
                       }
-                      return const CircularProgressIndicator();
+                      return Container();
                     },
                   ),
                 ),
@@ -353,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                         return Text(
                             '${snapshot.error}${snapshot.data?.commonList}');
                       }
-                      return const CircularProgressIndicator();
+                      return Container();
                     },
                   ),
                 ),
@@ -387,7 +387,7 @@ class _HomePageState extends State<HomePage> {
                               '${snapshot.error}${snapshot.data?.commonList}');
                         }
 
-                        return const CircularProgressIndicator();
+                        return Container();
                       },
                     ),
                   ),
@@ -513,7 +513,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -537,7 +537,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -568,7 +568,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                         ],
@@ -617,7 +617,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -639,7 +639,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -670,7 +670,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                         ],
@@ -720,7 +720,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -742,7 +742,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -773,7 +773,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                         ],
@@ -821,7 +821,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -843,7 +843,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -874,7 +874,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                         ],
@@ -922,7 +922,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -944,7 +944,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -975,7 +975,7 @@ class _HomePageState extends State<HomePage> {
                                         ?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                         ],

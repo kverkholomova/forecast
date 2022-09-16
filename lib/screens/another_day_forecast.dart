@@ -165,7 +165,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                           return Text(
                               '${snapshot.error}${snapshot.data?.commonList}');
                         }
-                        return const CircularProgressIndicator();
+                        return Container();
                       },
                     ),
                   ),
@@ -196,7 +196,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                           return Text(
                               '${snapshot.error}${snapshot.data?.commonList}');
                         }
-                        return const CircularProgressIndicator();
+                        return Container();
                       },
                     ),
                   ),
@@ -228,7 +228,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                         return Text(
                             '${snapshot.error}${snapshot.data?.commonList}');
                       }
-                      return const CircularProgressIndicator();
+                      return Container();
                     },
                   ),
                 ),
@@ -289,7 +289,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                         return Text(
                             '${snapshot.error}${snapshot.data?.commonList}');
                       }
-                      return const CircularProgressIndicator();
+                      return Container();
                     },
                   ),
                 ),
@@ -320,7 +320,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                           return Text(
                               '${snapshot.error}${snapshot.data?.commonList}');
                         }
-                        return const CircularProgressIndicator();
+                        return Container();
                       },
                     ),
                   ),
@@ -450,7 +450,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -474,7 +474,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -503,7 +503,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
 
@@ -544,7 +544,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -564,7 +564,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -593,7 +593,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
 
@@ -632,7 +632,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -652,7 +652,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
 
@@ -682,7 +682,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
 
@@ -720,7 +720,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -740,7 +740,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -769,7 +769,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
 
@@ -807,7 +807,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -827,7 +827,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -856,7 +856,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
 
@@ -894,7 +894,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           FutureBuilder<Weather5Days>(
@@ -916,7 +916,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
                           Text(
@@ -945,7 +945,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     '${snapshot.error}${snapshot.data?.commonList}');
                               }
 
-                              return const CircularProgressIndicator();
+                              return Container();
                             },
                           ),
 

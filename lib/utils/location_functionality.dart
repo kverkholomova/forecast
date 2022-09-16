@@ -2,13 +2,8 @@
 
 import 'package:location/location.dart';
 
-var location = new Location();
-// var currentLocation;
-// Future<void> getCurrentLocation() async{
-//   currentLocation = await location.getLocation();
-//   print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-//   print(currentLocation.longitude);
-// }
+var location = Location();
+
 
 Future<void> serviceEn() async{
   var serviceEnabled = await location.serviceEnabled();

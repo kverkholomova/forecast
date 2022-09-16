@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   late VideoPlayerController _controller;
 
   VideoPlayerController getController(String path) {
-    _controller = VideoPlayerController.asset("assets/windy_cloud.mp4")
+    _controller = VideoPlayerController.asset(path)
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
@@ -56,62 +56,11 @@ class _HomePageState extends State<HomePage> {
     return _controller;
   }
 
-  // late VideoPlayerController _controller1;
-  // late VideoPlayerController _controller2;
-  // late VideoPlayerController _controller3;
-  // late VideoPlayerController _controller4;
-  // late VideoPlayerController _controller5;
-  // late VideoPlayerController _controller6;
-  // late VideoPlayerController _controller7;
-  // late VideoPlayerController _controller8;
 
   @override
   void initState() {
     super.initState();
     futureWeatherWeek = fetchWeatherForWeek();
-    getController("assets/rain.mp4");
-
-    // _controller1 = VideoPlayerController.asset("assets/rain.mp4")
-    //   ..initialize().then((_) {
-    //     _controller.play();
-    //     _controller.setLooping(true);
-    //     // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-    //   });
-    // _controller2 = VideoPlayerController.asset("assets/clouds.mp4")
-    //   ..initialize().then((_) {
-    //     _controller.play();
-    //     _controller.setLooping(true);
-    //   });
-    // _controller3 = VideoPlayerController.asset("assets/clouds.mp4")
-    //   ..initialize().then((_) {
-    //     _controller.play();
-    //     _controller.setLooping(true);
-    //   });
-    // _controller4 = VideoPlayerController.asset("assets/clouds.mp4")
-    //   ..initialize().then((_) {
-    //     _controller.play();
-    //     _controller.setLooping(true);
-    //   });
-    // _controller5 = VideoPlayerController.asset("assets/clouds.mp4")
-    //   ..initialize().then((_) {
-    //     _controller.play();
-    //     _controller.setLooping(true);
-    //   });
-    // _controller6 = VideoPlayerController.asset("assets/clouds.mp4")
-    //   ..initialize().then((_) {
-    //     _controller.play();
-    //     _controller.setLooping(true);
-    //   });
-    // _controller7 = VideoPlayerController.asset("assets/clouds.mp4")
-    //   ..initialize().then((_) {
-    //     _controller.play();
-    //     _controller.setLooping(true);
-    //   });
-    // _controller8 = VideoPlayerController.asset("assets/clouds.mp4")
-    //   ..initialize().then((_) {
-    //     _controller.play();
-    //     _controller.setLooping(true);
-    //   });
     setState(() {
       serviceEn();
       permissGranted();
@@ -122,14 +71,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     _controller.dispose();
-    // _controller1.dispose();
-    // _controller2.dispose();
-    // _controller3.dispose();
-    // _controller4.dispose();
-    // _controller5.dispose();
-    // _controller6.dispose();
-    // _controller7.dispose();
-    // _controller8.dispose();
   }
 
   @override
@@ -166,38 +107,47 @@ class _HomePageState extends State<HomePage> {
                       future: futureWeatherWeek,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return VideoPlayer(snapshot.data!.common_list![0]
+                          return VideoPlayer(snapshot.data!.commonList![0]
                           ["weather"][0]["description"] ==
                               "clear sky"
                               ? getController("assets/sunny_day.mp4")
-                              : snapshot.data!.common_list![0]
+                              : snapshot.data!.commonList![0]
                           ["weather"][0]["description"] ==
                               "few clouds"
                               ? getController("assets/sunny.mp4")
-                              : snapshot.data!.common_list![0]
+                              : snapshot.data!.commonList![0]
                           ["weather"][0]["description"] ==
                               "scattered clouds"
                               ? getController("assets/windy_cloud.mp4")
-                              : snapshot.data!.common_list![0]
+                              : snapshot.data!.commonList![0]
                           ["weather"][0]["description"] ==
                               "broken clouds"
                               ? getController("assets/windy_cloud.mp4")
-                              : snapshot.data!.common_list![0]
+                              : snapshot.data!.commonList![0]
                           ["weather"][0]["description"] ==
                               "shower rain"
                               ? getController("assets/rainy_day.mp4")
-                              : snapshot.data!.common_list![0]
+                              : snapshot.data!.commonList![0]
                           ["weather"][0]["description"] ==
                               "light rain"
                               ? getController("assets/cloudy_rain.mp4")
-                              : snapshot.data!.common_list![0]
+                              : snapshot.data!.commonList![0]
                           ["weather"][0]["description"] ==
                               "thunderstorm"
                               ? getController("assets/thunder_rain.mp4")
-                              : snapshot.data!.common_list![0]
+                              : snapshot.data!.commonList![0]
                           ["weather"][0]["description"] ==
                               "snow"
                               ? getController("assets/snowfall.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"].contains("rain")
+                              ? getController("assets/rainy_day.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"].contains("sun")
+                              ? getController("assets/sunny.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"].contains("cloud")
+                              ? getController("assets/clouds.mp4")
                               : getController("assets/warm_wind.mp4"));
 
                           // return Text("${snapshot.data!.common_list?[0]["weather"][0]["description"]}");
@@ -228,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           var tom =
-                              "${snapshot.data?.common_list?[0]["main"]["temp"]
+                              "${snapshot.data?.commonList?[0]["main"]["temp"]
                               ?.toInt()}\u2103";
                           return Text(
                             tom,
@@ -239,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         } else if (snapshot.hasError) {
                           return Text(
-                              '${snapshot.error}${snapshot.data?.common_list}');
+                              '${snapshot.error}${snapshot.data?.commonList}');
                         }
 
                         return const CircularProgressIndicator();
@@ -264,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                         if (snapshot.hasData) {
                           var tom =
                               "${snapshot.data!
-                              .common_list?[0]["weather"][0]["description"]}";
+                              .commonList?[0]["weather"][0]["description"]}";
                           return Text(
                             tom,
                             style: GoogleFonts.roboto(
@@ -274,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         } else if (snapshot.hasError) {
                           return Text(
-                              '${snapshot.error}${snapshot.data?.common_list}');
+                              '${snapshot.error}${snapshot.data?.commonList}');
                         }
 
                         return const CircularProgressIndicator();
@@ -301,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                       if (snapshot.hasData) {
                         var tom =
                             "${snapshot.data
-                            ?.common_list?[0]["main"]["humidity"]}";
+                            ?.commonList?[0]["main"]["humidity"]}";
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
@@ -311,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data?.common_list}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
                       return const CircularProgressIndicator();
                     },
@@ -394,7 +344,7 @@ class _HomePageState extends State<HomePage> {
                       if (snapshot.hasData) {
                         var tom =
                             "${snapshot.data
-                            ?.common_list?[0]["wind"]["speed"]}";
+                            ?.commonList?[0]["wind"]["speed"]}";
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
@@ -404,7 +354,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data?.common_list}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
                       return const CircularProgressIndicator();
                     },
@@ -495,7 +445,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         } else if (snapshot.hasError) {
                           return Text(
-                              '${snapshot.error}${snapshot.data?.common_list}');
+                              '${snapshot.error}${snapshot.data?.commonList}');
                         }
 
                         return const CircularProgressIndicator();
@@ -535,11 +485,11 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         var tom =
-                            "${snapshot.data?.common_list?[0]["dt_txt"]
+                            "${snapshot.data?.commonList?[0]["dt_txt"]
                             .toString()
                             .substring(0, 4)}.${snapshot.data
-                            ?.common_list?[0]["dt_txt"].toString().substring(
-                            5, 7)}.${snapshot.data?.common_list?[0]["dt_txt"]
+                            ?.commonList?[0]["dt_txt"].toString().substring(
+                            5, 7)}.${snapshot.data?.commonList?[0]["dt_txt"]
                             .toString()
                             .substring(8, 10)}";
                         return Text(
@@ -551,7 +501,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data?.common_list}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return const CircularProgressIndicator();
@@ -590,10 +540,10 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[8]["dt_txt"]
+                                      ?.commonList?[8]["dt_txt"]
                                       .toString()
                                       .substring(5, 7)}.${snapshot.data
-                                      ?.common_list?[8]["dt_txt"]
+                                      ?.commonList?[8]["dt_txt"]
                                       .toString()
                                       .substring(8, 11)}";
                                   return Text(
@@ -606,7 +556,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -621,7 +571,7 @@ class _HomePageState extends State<HomePage> {
                                     NetworkImage(
                                       'http://openweathermap.org/img/wn/${snapshot
                                           .data!
-                                          .common_list?[8]["weather"][0]["icon"]}@2x.png',
+                                          .commonList?[8]["weather"][0]["icon"]}@2x.png',
                                     ),
                                     color: numDay == 8
                                         ? colors[index]
@@ -630,7 +580,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -649,7 +599,7 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[8]["main"]["temp"]
+                                      ?.commonList?[8]["main"]["temp"]
                                       ?.toInt()}\u2103";
                                   return Text(
                                     tom,
@@ -661,7 +611,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -692,10 +642,10 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[16]["dt_txt"]
+                                      ?.commonList?[16]["dt_txt"]
                                       .toString()
                                       .substring(5, 7)}.${snapshot.data
-                                      ?.common_list?[16]["dt_txt"]
+                                      ?.commonList?[16]["dt_txt"]
                                       .toString()
                                       .substring(8, 11)}";
                                   return Text(
@@ -708,7 +658,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -723,14 +673,14 @@ class _HomePageState extends State<HomePage> {
                                     NetworkImage(
                                       'http://openweathermap.org/img/wn/${snapshot
                                           .data!
-                                          .common_list?[16]["weather"][0]["icon"]}@2x.png',
+                                          .commonList?[16]["weather"][0]["icon"]}@2x.png',
                                     ),
                                     color: Colors.black45,
                                   );
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -749,7 +699,7 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[16]["main"]["temp"]
+                                      ?.commonList?[16]["main"]["temp"]
                                       ?.toInt()}\u2103";
                                   return Text(
                                     tom,
@@ -761,7 +711,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -791,10 +741,10 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[24]["dt_txt"]
+                                      ?.commonList?[24]["dt_txt"]
                                       .toString()
                                       .substring(5, 7)}.${snapshot.data
-                                      ?.common_list?[24]["dt_txt"]
+                                      ?.commonList?[24]["dt_txt"]
                                       .toString()
                                       .substring(8, 11)}";
                                   return Text(
@@ -807,7 +757,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -822,14 +772,14 @@ class _HomePageState extends State<HomePage> {
                                     NetworkImage(
                                       'http://openweathermap.org/img/wn/${snapshot
                                           .data!
-                                          .common_list?[24]["weather"][0]["icon"]}@2x.png',
+                                          .commonList?[24]["weather"][0]["icon"]}@2x.png',
                                     ),
                                     color: Colors.black45,
                                   );
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -848,7 +798,7 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[24]["main"]["temp"]
+                                      ?.commonList?[24]["main"]["temp"]
                                       ?.toInt()}\u2103";
                                   return Text(
                                     tom,
@@ -860,7 +810,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -890,10 +840,10 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[32]["dt_txt"]
+                                      ?.commonList?[32]["dt_txt"]
                                       .toString()
                                       .substring(5, 7)}.${snapshot.data
-                                      ?.common_list?[32]["dt_txt"]
+                                      ?.commonList?[32]["dt_txt"]
                                       .toString()
                                       .substring(8, 11)}";
                                   return Text(
@@ -906,7 +856,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -921,14 +871,14 @@ class _HomePageState extends State<HomePage> {
                                     NetworkImage(
                                       'http://openweathermap.org/img/wn/${snapshot
                                           .data!
-                                          .common_list?[32]["weather"][0]["icon"]}@2x.png',
+                                          .commonList?[32]["weather"][0]["icon"]}@2x.png',
                                     ),
                                     color: Colors.black45,
                                   );
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -947,7 +897,7 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[32]["main"]["temp"]
+                                      ?.commonList?[32]["main"]["temp"]
                                       ?.toInt()}\u2103";
                                   return Text(
                                     tom,
@@ -959,7 +909,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -989,10 +939,10 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[39]["dt_txt"]
+                                      ?.commonList?[39]["dt_txt"]
                                       .toString()
                                       .substring(5, 7)}.${snapshot.data
-                                      ?.common_list?[39]["dt_txt"]
+                                      ?.commonList?[39]["dt_txt"]
                                       .toString()
                                       .substring(8, 11)}";
                                   return Text(
@@ -1005,7 +955,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -1020,14 +970,14 @@ class _HomePageState extends State<HomePage> {
                                     NetworkImage(
                                       'http://openweathermap.org/img/wn/${snapshot
                                           .data!
-                                          .common_list?[39]["weather"][0]["icon"]}@2x.png',
+                                          .commonList?[39]["weather"][0]["icon"]}@2x.png',
                                     ),
                                     color: Colors.black45,
                                   );
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();
@@ -1046,7 +996,7 @@ class _HomePageState extends State<HomePage> {
                                 if (snapshot.hasData) {
                                   var tom =
                                       "${snapshot.data
-                                      ?.common_list?[39]["main"]["temp"]
+                                      ?.commonList?[39]["main"]["temp"]
                                       ?.toInt()}\u2103";
                                   return Text(
                                     tom,
@@ -1058,7 +1008,7 @@ class _HomePageState extends State<HomePage> {
                                 } else if (snapshot.hasError) {
                                   return Text(
                                       '${snapshot.error}${snapshot.data
-                                          ?.common_list}');
+                                          ?.commonList}');
                                 }
 
                                 return const CircularProgressIndicator();

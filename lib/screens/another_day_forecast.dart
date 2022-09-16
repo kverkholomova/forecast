@@ -9,6 +9,7 @@ import 'package:video_player/video_player.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 import '../api/weather_week_api.dart';
+import '../constants.dart';
 import '../utils/location_functionality.dart';
 
 class AnotherDayForecast extends StatefulWidget {
@@ -36,7 +37,9 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
   void initState() {
     super.initState();
     futureWeatherWeek = fetchWeatherForWeek();
+    getController("assets/clouds.mp4");
     setState(() {
+      description='';
       serviceEn();
       permissGranted();
     });
@@ -85,12 +88,52 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                         future: futureWeatherWeek,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return VideoPlayer(choseController(snapshot));
+                            return VideoPlayer(snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"] ==
+                                "clear sky"
+                                ? getController("assets/sunny_day.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"] ==
+                                "few clouds"
+                                ? getController("assets/sunny.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"] ==
+                                "scattered clouds"
+                                ? getController("assets/windy_cloud.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"] ==
+                                "broken clouds"
+                                ? getController("assets/windy_cloud.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"] ==
+                                "shower rain"
+                                ? getController("assets/rainy_day.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"] ==
+                                "light rain"
+                                ? getController("assets/cloudy_rain.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"] ==
+                                "thunderstorm"
+                                ? getController("assets/thunder_rain.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"] ==
+                                "snow"
+                                ? getController("assets/snowfall.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"].contains("rain")
+                                ? getController("assets/rainy_day.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"].contains("sun")
+                                ? getController("assets/sunny.mp4")
+                                : snapshot.data!.commonList![numDay]
+                            ["weather"][0]["description"] =="overcast clouds"
+                                ? getController("assets/windy_cloud.mp4")
+                                : getController("assets/warm_wind.mp4"));
 
                           } else if (snapshot.hasError) {
                             return Text('${snapshot.error}');
                           }
-
                           // By default, show a loading spinner.
                           return Container();
                         },
@@ -109,7 +152,6 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                       future: futureWeatherWeek,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-
                           var tom =
                               "${snapshot.data?.commonList?[numDay]["main"]["temp"]?.toInt()}\u2103";
                           return Text(
@@ -341,46 +383,32 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
   }
 
   VideoPlayerController choseController(AsyncSnapshot<Weather5Days> snapshot) {
-    return snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"] ==
+    return description ==
                               "clear sky"
                               ? getController("assets/sunny_day.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"] ==
+                              : description ==
                               "few clouds"
                               ? getController("assets/sunny.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"] ==
+                              : description ==
                               "scattered clouds"
                               ? getController("assets/windy_cloud.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"] ==
+                              : description ==
                               "broken clouds"
                               ? getController("assets/windy_cloud.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"] ==
+                              : description ==
                               "shower rain"
                               ? getController("assets/rainy_day.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"] ==
+                              : description ==
                               "light rain"
                               ? getController("assets/cloudy_rain.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"] ==
+                              : description ==
                               "thunderstorm"
                               ? getController("assets/thunder_rain.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"] ==
+                              : description ==
                               "snow"
-                              ? getController("assets/snowfall.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"].contains("rain")
-                              ? getController("assets/rainy_day.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"].contains("sun")
                               ? getController("assets/sunny.mp4")
-                              : snapshot.data!.commonList![numDay]
-                          ["weather"][0]["description"].contains("cloud")
+                              : description ==
+                              "overcast clouds"
                               ? getController("assets/clouds.mp4")
                               : getController("assets/warm_wind.mp4");
   }
@@ -405,6 +433,8 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
+                                description= snapshot.data!.commonList![0]
+                                ["weather"][0]["description"];
                                 iconNum =  snapshot.data!.commonList?[0]["weather"][0]["icon"];
                                 var tom =
                                     "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(8, 11)}";
@@ -483,6 +513,8 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     ),
                     MaterialButton(
                       onPressed: (){
+                        print(description);
+                        print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                         numDay = 8;
                         changeIndex();
                         Navigator.push(
@@ -496,6 +528,8 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
+                                description= snapshot.data!.commonList![8]
+                                ["weather"][0]["description"];
                                 var tom =
                                     "${snapshot.data?.commonList?[8]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[8]["dt_txt"].toString().substring(8, 11)}";
                                 return Text(
@@ -582,7 +616,8 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-
+                                description= snapshot.data!.commonList![16]
+                                ["weather"][0]["description"];
                                 var tom =
                                     "${snapshot.data?.commonList?[16]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[16]["dt_txt"].toString().substring(8, 11)}";
                                 return Text(
@@ -669,7 +704,8 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-
+                                description= snapshot.data!.commonList![24]
+                                ["weather"][0]["description"];
                                 var tom =
                                     "${snapshot.data?.commonList?[24]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[24]["dt_txt"].toString().substring(8, 11)}";
                                 return Text(
@@ -755,7 +791,8 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-
+                                description= snapshot.data!.commonList![32]
+                                ["weather"][0]["description"];
                                 var tom =
                                     "${snapshot.data?.commonList?[32]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[32]["dt_txt"].toString().substring(8, 11)}";
                                 return Text(
@@ -841,7 +878,8 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-
+                                description= snapshot.data!.commonList![39]
+                                ["weather"][0]["description"];
                                 var tom =
                                     "${snapshot.data?.commonList?[39]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[39]["dt_txt"].toString().substring(8, 11)}";
                                 return Text(

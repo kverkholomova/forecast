@@ -8,6 +8,7 @@ import 'package:video_player/video_player.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 import '../api/weather_week_api.dart';
+import '../constants.dart';
 import '../utils/location_functionality.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,23 +19,18 @@ class HomePage extends StatefulWidget {
 }
 
 int numDay = 0;
-List colors = [
-  const Color.fromRGBO(244, 173, 177, 100),
-  const Color.fromRGBO(252, 163, 123, 100),
-  const Color.fromRGBO(252, 194, 123, 100),
-  const Color.fromRGBO(123, 198, 252, 100),
-  const Color.fromRGBO(123, 183, 252, 100)
-];
+
 DateTime date = DateTime.now();
 String dateFormat = DateFormat('EEEE').format(date);
 String dateWeekName = '';
 int index = 0;
 String iconNum = '';
-
+String description='';
 class _HomePageState extends State<HomePage> {
   late Future<Weather5Days> futureWeatherWeek;
   Random random = Random();
   DateTime dateWeek = DateTime.now();
+
 
   weekDaysName(int dayCount) {
     dateWeek = dateWeek.add(Duration(days: dayCount));
@@ -55,8 +51,6 @@ class _HomePageState extends State<HomePage> {
       });
     return _controller;
   }
-
-
   @override
   void initState() {
     super.initState();
@@ -107,7 +101,51 @@ class _HomePageState extends State<HomePage> {
                       future: futureWeatherWeek,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return VideoPlayer(choseController(snapshot));
+                          print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+                          print(snapshot.data!.commonList![0]
+                          ["weather"][0]["description"].contains("cloud"));
+                          return VideoPlayer(snapshot.data!.commonList![0]
+                          ["weather"][0]["description"] ==
+                              "clear sky"
+                              ? getController("assets/sunny_day.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"] ==
+                              "few clouds"
+                              ? getController("assets/sunny.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"] ==
+                              "scattered clouds"
+                              ? getController("assets/windy_cloud.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"] ==
+                              "broken clouds"
+                              ? getController("assets/windy_cloud.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"] ==
+                              "shower rain"
+                              ? getController("assets/rainy_day.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"] ==
+                              "light rain"
+                              ? getController("assets/cloudy_rain.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"] ==
+                              "thunderstorm"
+                              ? getController("assets/thunder_rain.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"] ==
+                              "snow"
+                              ? getController("assets/snowfall.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"].contains("rain")
+                              ? getController("assets/rainy_day.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"].contains("sun")
+                              ? getController("assets/sunny.mp4")
+                              : snapshot.data!.commonList![0]
+                          ["weather"][0]["description"] =="overcast clouds"
+                              ? getController("assets/clouds.mp4")
+                              : getController("assets/warm_wind.mp4"));
 
                           // return Text("${snapshot.data!.common_list?[0]["weather"][0]["description"]}");
                           // return VideoPlayer(_controller);
@@ -432,6 +470,8 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     MaterialButton(
                       onPressed: () {
+                        print(description);
+                        print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                         dateWeekName =
                             DateFormat('EEEE').format(weekDaysName(1));
                         numDay = 8;
@@ -449,6 +489,9 @@ class _HomePageState extends State<HomePage> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
+                                description= snapshot.data!.commonList![8]
+                                ["weather"][0]["description"];
+
                                 var tom =
                                     "${snapshot.data
                                     ?.commonList?[8]["dt_txt"]
@@ -551,6 +594,8 @@ class _HomePageState extends State<HomePage> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
+                                description= snapshot.data!.commonList![16]
+                                ["weather"][0]["description"];
                                 var tom =
                                     "${snapshot.data
                                     ?.commonList?[16]["dt_txt"]
@@ -633,6 +678,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     MaterialButton(
                       onPressed: () {
+                        print(description);
+                        print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
                         dateWeekName =
                             DateFormat('EEEE').format(weekDaysName(3));
                         numDay = 24;
@@ -650,6 +697,8 @@ class _HomePageState extends State<HomePage> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
+                                description= snapshot.data!.commonList![24]
+                                ["weather"][0]["description"];
                                 var tom =
                                     "${snapshot.data
                                     ?.commonList?[24]["dt_txt"]
@@ -749,6 +798,8 @@ class _HomePageState extends State<HomePage> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
+                                description= snapshot.data!.commonList![32]
+                                ["weather"][0]["description"];
                                 var tom =
                                     "${snapshot.data
                                     ?.commonList?[32]["dt_txt"]
@@ -848,6 +899,8 @@ class _HomePageState extends State<HomePage> {
                             future: futureWeatherWeek,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
+                                description= snapshot.data!.commonList![39]
+                                ["weather"][0]["description"];
                                 var tom =
                                     "${snapshot.data
                                     ?.commonList?[39]["dt_txt"]
@@ -973,7 +1026,7 @@ class _HomePageState extends State<HomePage> {
                         ["weather"][0]["description"].contains("sun")
                             ? getController("assets/sunny.mp4")
                             : snapshot.data!.commonList![0]
-                        ["weather"][0]["description"].contains("cloud")
+                        ["weather"][0]["description"] =="overcast clouds"
                             ? getController("assets/clouds.mp4")
                             : getController("assets/warm_wind.mp4");
   }

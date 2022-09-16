@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:intl/intl.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
 import 'package:forecast/screens/another_day_forecast.dart';
@@ -17,17 +16,27 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-int num_day = 0;
-List colors = [Color.fromRGBO(244, 173, 177, 100), Color.fromRGBO(252, 163, 123, 100), Color.fromRGBO(252, 194, 123, 100), Color.fromRGBO(123, 198, 252, 100), Color.fromRGBO(123, 183, 252, 100)];
+int numDay = 0;
+List colors = [const Color.fromRGBO(244, 173, 177, 100), const Color.fromRGBO(252, 163, 123, 100), const Color.fromRGBO(252, 194, 123, 100), const Color.fromRGBO(123, 198, 252, 100), const Color.fromRGBO(123, 183, 252, 100)];
 DateTime date = DateTime.now();
+String dateFormat = DateFormat('EEEE').format(date);
+
+
+String dateWeekName ='';
 
 int index = 0;
 String iconNum =  '';
 
 class _HomePageState extends State<HomePage> {
-  late Future<Weather5Days> futureWeatherWeek;
-  Random random = new Random();
 
+
+  late Future<Weather5Days> futureWeatherWeek;
+  Random random = Random();
+  DateTime dateWeek=DateTime.now();
+  weekDaysName(int dayCount){
+ dateWeek = dateWeek.add(Duration(days: dayCount));
+ return dateWeek;
+}
   void changeIndex() {
     setState(() => index = random.nextInt(5));
   }
@@ -95,13 +104,6 @@ class _HomePageState extends State<HomePage> {
                         future: futureWeatherWeek,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-
-                            print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
-                            print(snapshot.data!.common_list![0]
-                            ["weather"][0]["description"] ==
-                                "overcast clouds" ? "0": snapshot.data!.common_list![0]
-                            ["weather"][0]["description"] ==
-                                "light rain" ? "_controller1":"_controller2");
                             return VideoPlayer(
                                 snapshot.data!.common_list![0]
                                         ["weather"][0]["description"] ==
@@ -199,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                           var tom =
                               "${snapshot.data?.common_list?[0]["main"]["humidity"]}";
                           return Text(
-                            "$tom",
+                            tom,
                             style: GoogleFonts.roboto(
                               fontSize: 24,
                               color: Colors.black45,
@@ -208,12 +210,9 @@ class _HomePageState extends State<HomePage> {
 
 
                         } else if (snapshot.hasError) {
-                          print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
                           return Text(
                               '${snapshot.error}${snapshot.data?.common_list}');
                         }
-                        print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                        print(snapshot.data!.city!.name);
                         return const CircularProgressIndicator();
                       },
                     ),
@@ -223,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.03,
                       right: MediaQuery.of(context).size.height * 0.08),
-                  child: Align(
+                  child: const Align(
                     alignment: Alignment.topRight,
                     child: Icon(WeatherIcons.humidity,color: Colors.black45,),
                   ),
@@ -232,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).size.height * 0.085,
                       right: MediaQuery.of(context).size.height * 0.13),
-                  child: Align(
+                  child: const Align(
                     alignment: Alignment.topRight,
                     child: Icon(WeatherIcons.cloudy_windy,color: Colors.black45,size: 20,),
                   ),
@@ -261,23 +260,19 @@ class _HomePageState extends State<HomePage> {
                       future: futureWeatherWeek,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-
                           var tom =
                               "${snapshot.data?.common_list?[0]["wind"]["speed"]}";
                           return Text(
-                            "$tom",
+                            tom,
                             style: GoogleFonts.roboto(
                               fontSize: 18,
                               color: Colors.black45,
                             ),
                           );
                         } else if (snapshot.hasError) {
-                          print("ERRRRROOOOOOOOOOOOOOOOOORRRR");
                           return Text(
                               '${snapshot.error}${snapshot.data?.common_list}');
                         }
-                        print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                        print(snapshot.data!.city!.name);
                         return const CircularProgressIndicator();
                       },
                     ),
@@ -382,7 +377,7 @@ class _HomePageState extends State<HomePage> {
                   child: Align(
                       alignment: Alignment.topCenter,
                       child: Text(
-                        DateFormat('EEEE').format(date),
+                        dateFormat,
                         style: GoogleFonts.roboto(
                           fontSize: 28,
                           color: Colors.indigoAccent.withOpacity(0.7),
@@ -426,103 +421,10 @@ class _HomePageState extends State<HomePage> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        // MaterialButton(
-                        //   onPressed: (){
-                        //     num_day = 8;
-                        //     changeIndex();
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(builder: (context) => const HomePage()),
-                        //     );
-                        //   },
-                        //   child: Column(
-                        //     children: [
-                        //       FutureBuilder<Weather5Days>(
-                        //         future: futureWeatherWeek,
-                        //         builder: (context, snapshot) {
-                        //           if (snapshot.hasData) {
-                        //             iconNum =  snapshot.data!.common_list?[0]["weather"][0]["icon"];
-                        //             var tom =
-                        //                 "${snapshot.data?.common_list?[0]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.common_list?[0]["dt_txt"].toString().substring(8, 11)}";
-                        //             return Text(
-                        //               tom,
-                        //               style: GoogleFonts.roboto(
-                        //                 fontSize: 12,
-                        //                 color: num_day==0?Colors.indigoAccent.withOpacity(0.7):Colors.black45,
-                        //               ),
-                        //             );
-                        //           } else if (snapshot.hasError) {
-                        //             return Text(
-                        //                 '${snapshot.error}${snapshot.data?.common_list}');
-                        //           }
-                        //
-                        //           return const CircularProgressIndicator();
-                        //         },
-                        //       ),
-                        //       FutureBuilder<Weather5Days>(
-                        //         future: futureWeatherWeek,
-                        //         builder: (context, snapshot) {
-                        //           if (snapshot.hasData) {
-                        //
-                        //
-                        //             return ImageIcon(
-                        //               size: 60,
-                        //
-                        //               NetworkImage(
-                        //                   'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[0]["weather"][0]["icon"]}@2x.png',
-                        //                 ),
-                        //
-                        //               // AssetImage(
-                        //               //        'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[0]["weather"][0]["icon"]}@2x.png',
-                        //               //   ),
-                        //               color: Colors.indigoAccent.withOpacity(0.7),
-                        //             );
-                        //
-                        //           } else if (snapshot.hasError) {
-                        //             return Text(
-                        //                 '${snapshot.error}${snapshot.data?.common_list}');
-                        //           }
-                        //
-                        //           return const CircularProgressIndicator();
-                        //         },
-                        //       ),
-                        //       Text(
-                        //         "Thursday",
-                        //         style: GoogleFonts.roboto(
-                        //           fontSize: 12,
-                        //           color: num_day==0?Colors.indigoAccent.withOpacity(0.7):Colors.black45,
-                        //         ),
-                        //       ),
-                        //       FutureBuilder<Weather5Days>(
-                        //         future: futureWeatherWeek,
-                        //         builder: (context, snapshot) {
-                        //           if (snapshot.hasData) {
-                        //
-                        //             var tom =
-                        //                 "${snapshot.data?.common_list?[0]["main"]["temp"]?.toInt()}\u2103";
-                        //             return Text(
-                        //               tom,
-                        //               style: GoogleFonts.fredoka(
-                        //                 fontSize: 18,
-                        //                 color: num_day==0?Colors.indigoAccent.withOpacity(0.7):Colors.black45,
-                        //               ),
-                        //             );
-                        //           } else if (snapshot.hasError) {
-                        //             return Text(
-                        //                 '${snapshot.error}${snapshot.data?.common_list}');
-                        //           }
-                        //
-                        //           return const CircularProgressIndicator();
-                        //         },
-                        //       ),
-                        //
-                        //     ],
-                        //   ),
-                        //
-                        // ),
                         MaterialButton(
                             onPressed: (){
-                              num_day = 8;
+                              dateWeekName = DateFormat('EEEE').format(weekDaysName(1));
+                              numDay = 8;
                               changeIndex();
                               Navigator.push(
                                 context,
@@ -561,7 +463,7 @@ class _HomePageState extends State<HomePage> {
                                           NetworkImage(
                                             'http://openweathermap.org/img/wn/${snapshot.data!.common_list?[8]["weather"][0]["icon"]}@2x.png',
                                           ),
-                                          color: num_day==8?colors[index]:Colors.black45,
+                                          color: numDay==8?colors[index]:Colors.black45,
                                         );
 
                                       } else if (snapshot.hasError) {
@@ -572,13 +474,9 @@ class _HomePageState extends State<HomePage> {
                                       return const CircularProgressIndicator();
                                     },
                                   ),
-                                  // const Icon(
-                                  //   Icons.sunny,
-                                  //   color: Colors.black45,
-                                  //   size: 40,
-                                  // ),
+
                                   Text(
-                                    "Thursday",
+                                    DateFormat('EEEE').format(weekDaysName(1)),
                                     style: GoogleFonts.roboto(
                                       fontSize: 12,
                                       color: Colors.black45,
@@ -613,7 +511,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         MaterialButton(
                           onPressed: (){
-                            num_day = 16;
+                            dateWeekName = DateFormat('EEEE').format(weekDaysName(2));
+                            numDay = 16;
                             changeIndex();
 
                             Navigator.push(
@@ -668,7 +567,7 @@ class _HomePageState extends State<HomePage> {
                               ),
 
                               Text(
-                                "Thursday",
+                                DateFormat('EEEE').format(weekDaysName(2)),
                                 style: GoogleFonts.roboto(
                                   fontSize: 12,
                                   color: Colors.black45,
@@ -702,7 +601,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         MaterialButton(
                           onPressed: (){
-                            num_day = 24;
+                            dateWeekName = DateFormat('EEEE').format(weekDaysName(3));
+                            numDay = 24;
                             changeIndex();
                             Navigator.push(
                               context,
@@ -755,7 +655,7 @@ class _HomePageState extends State<HomePage> {
                                 },
                               ),
                               Text(
-                                "Thursday",
+                                DateFormat('EEEE').format(weekDaysName(3)),
                                 style: GoogleFonts.roboto(
                                   fontSize: 12,
                                   color: Colors.black45,
@@ -789,7 +689,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         MaterialButton(
                           onPressed: (){
-                            num_day = 32;
+                            dateWeekName = DateFormat('EEEE').format(weekDaysName(4));
+                            numDay = 32;
                             changeIndex();
                             Navigator.push(
                               context,
@@ -842,7 +743,7 @@ class _HomePageState extends State<HomePage> {
                                 },
                               ),
                               Text(
-                                "Thursday",
+                                DateFormat('EEEE').format(weekDaysName(4)),
                                 style: GoogleFonts.roboto(
                                   fontSize: 12,
                                   color: Colors.black45,
@@ -876,7 +777,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         MaterialButton(
                           onPressed: (){
-                            num_day = 39;
+                            dateWeekName = DateFormat('EEEE').format(weekDaysName(5));
+                            numDay = 39;
                             changeIndex();
                             Navigator.push(
                               context,
@@ -930,7 +832,7 @@ class _HomePageState extends State<HomePage> {
                                 },
                               ),
                               Text(
-                                "Thursday",
+                                DateFormat('EEEE').format(weekDaysName(5)),
                                 style: GoogleFonts.roboto(
                                   fontSize: 12,
                                   color: Colors.black45,

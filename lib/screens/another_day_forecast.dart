@@ -374,7 +374,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               return Text(
                                   '${snapshot.error}${snapshot.data?.commonList}');
                             }
-                            return const CircularProgressIndicator();
+                            return Container();
                           },
                         ),
                       ),

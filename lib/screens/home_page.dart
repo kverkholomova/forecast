@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
 
     super.initState();
     futureWeatherWeek = fetchWeatherForWeek();
-    Timer(const Duration(seconds: 3), () => dataLoadFunction());
+    Timer(const Duration(seconds: 4), () => dataLoadFunction());
     setState(() {
       serviceEn();
       permissGranted();

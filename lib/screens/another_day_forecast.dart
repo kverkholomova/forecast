@@ -339,7 +339,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.22,
+                        top: MediaQuery.of(context).size.height * 0.2,
                       ),
                       child: Align(
                           alignment: Alignment.topCenter,
@@ -353,7 +353,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.28,
+                        top: MediaQuery.of(context).size.height * 0.25,
                       ),
                       child: Align(
                         alignment: Alignment.topCenter,
@@ -463,10 +463,13 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[0]["weather"][0]["icon"] ==
                           "01n") {
-                        return Icon(
-                          Icons.sunny,
-                          size: 60,
-                          color: numDay == 0 ? colors[index] : Colors.black45,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
+                            color: numDay == 0 ? colors[index] : Colors.black45,
+                          ),
                         );
                       } else {
                         return ImageIcon(
@@ -564,10 +567,13 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
                           "01n") {
-                        return Icon(
-                          Icons.sunny,
-                          size: 60,
-                          color: numDay == 8 ? colors[index] : Colors.black45,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
+                            color: numDay == 8 ? colors[index] : Colors.black45,
+                          ),
                         );
                       } else {
                         return ImageIcon(
@@ -659,10 +665,13 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[16]["weather"][0]["icon"] ==
                           "01n") {
-                        return Icon(
-                          Icons.sunny,
-                          size: 60,
-                          color: numDay == 16 ? colors[index] : Colors.black45,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
+                            color: numDay == 16 ? colors[index] : Colors.black45,
+                          ),
                         );
                       } else {
                         return ImageIcon(
@@ -753,12 +762,15 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[24]["weather"][0]["icon"]=="01n"){
-                        return Icon(
-                          Icons.sunny,
-                          size: 60,
-                          color: numDay == 24
-                              ? colors[index]
-                              : Colors.black45,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
+                            color: numDay == 24
+                                ? colors[index]
+                                : Colors.black45,
+                          ),
                         );
                       }
                       else{
@@ -849,12 +861,15 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[32]["weather"][0]["icon"]=="01n"){
-                        return Icon(
-                          Icons.sunny,
-                          size: 60,
-                          color: numDay == 32
-                              ? colors[index]
-                              : Colors.black45,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
+                            color: numDay == 32
+                                ? colors[index]
+                                : Colors.black45,
+                          ),
                         );
                       }
                       else{
@@ -945,12 +960,15 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[39]["weather"][0]["icon"]=="01n"){
-                        return Icon(
-                          Icons.sunny,
-                          size: 60,
-                          color: numDay == 39
-                              ? colors[index]
-                              : Colors.black45,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
+                            color: numDay == 39
+                                ? colors[index]
+                                : Colors.black45,
+                          ),
                         );
                       }
                       else{

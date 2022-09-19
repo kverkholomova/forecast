@@ -114,48 +114,7 @@ class _HomePageState extends State<HomePage> {
                       future: futureWeatherWeek,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return VideoPlayer(snapshot.data!.commonList![0]
-                          ["weather"][0]["description"] ==
-                              "clear sky"
-                              ? getController("assets/sunny_day.mp4")
-                              : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"] ==
-                              "few clouds"
-                              ? getController("assets/sunny.mp4")
-                              : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"] ==
-                              "scattered clouds"
-                              ? getController("assets/windy_cloud.mp4")
-                              : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"] ==
-                              "broken clouds"
-                              ? getController("assets/windy_cloud.mp4")
-                              : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"] ==
-                              "shower rain"
-                              ? getController("assets/rainy_day.mp4")
-                              : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"] ==
-                              "light rain"
-                              ? getController("assets/cloudy_rain.mp4")
-                              : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"] ==
-                              "thunderstorm"
-                              ? getController("assets/thunder_rain.mp4")
-                              : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"] ==
-                              "snow"
-                              ? getController("assets/snowfall.mp4")
-                              : snapshot.data!.commonList![0]
-                          // ["weather"][0]["description"].contains("rain")
-                          //     ? getController("assets/rainy_day.mp4")
-                          //     : snapshot.data!.commonList![0]
-                          // ["weather"][0]["description"].contains("sun")
-                          //     ? getController("assets/sunny.mp4")
-                          //     : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"] == "overcast clouds"
-                              ? getController("assets/windy_cloud.mp4")
-                              : getController("assets/warm_wind.mp4"));
+                          return VideoPlayer(controllerVideo(snapshot));
                         } else if (snapshot.hasError) {
                           return Text('${snapshot.error}');
                         }
@@ -470,6 +429,51 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  VideoPlayerController controllerVideo(AsyncSnapshot<Weather5Days> snapshot) {
+    return snapshot.data!.commonList![0]
+                        ["weather"][0]["description"] ==
+                            "clear sky"
+                            ? getController("assets/sunny_day.mp4")
+                            : snapshot.data!.commonList![0]
+                        ["weather"][0]["description"] ==
+                            "few clouds"
+                            ? getController("assets/sunny.mp4")
+                            : snapshot.data!.commonList![0]
+                        ["weather"][0]["description"] ==
+                            "scattered clouds"
+                            ? getController("assets/windy_cloud.mp4")
+                            : snapshot.data!.commonList![0]
+                        ["weather"][0]["description"] ==
+                            "broken clouds"
+                            ? getController("assets/windy_cloud.mp4")
+                            : snapshot.data!.commonList![0]
+                        ["weather"][0]["description"] ==
+                            "shower rain"
+                            ? getController("assets/rainy_day.mp4")
+                            : snapshot.data!.commonList![0]
+                        ["weather"][0]["description"] ==
+                            "light rain"
+                            ? getController("assets/cloudy_rain.mp4")
+                            : snapshot.data!.commonList![0]
+                        ["weather"][0]["description"] ==
+                            "thunderstorm"
+                            ? getController("assets/thunder_rain.mp4")
+                            : snapshot.data!.commonList![0]
+                        ["weather"][0]["description"] ==
+                            "snow"
+                            ? getController("assets/snowfall.mp4")
+                            : snapshot.data!.commonList![0]
+                        // ["weather"][0]["description"].contains("rain")
+                        //     ? getController("assets/rainy_day.mp4")
+                        //     : snapshot.data!.commonList![0]
+                        // ["weather"][0]["description"].contains("sun")
+                        //     ? getController("assets/sunny.mp4")
+                        //     : snapshot.data!.commonList![0]
+                        ["weather"][0]["description"] == "overcast clouds"
+                            ? getController("assets/windy_cloud.mp4")
+                            : getController("assets/warm_wind.mp4");
   }
 
   SingleChildScrollView buildBottomWeatherWidget(BuildContext context) {
@@ -1057,48 +1061,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // VideoPlayerController choseController(AsyncSnapshot<Weather5Days> snapshot) {
-  //   return snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"] ==
-  //       "clear sky"
-  //       ? getController("assets/sunny_day.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"] ==
-  //       "few clouds"
-  //       ? getController("assets/sunny.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"] ==
-  //       "scattered clouds"
-  //       ? getController("assets/windy_cloud.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"] ==
-  //       "broken clouds"
-  //       ? getController("assets/windy_cloud.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"] ==
-  //       "shower rain"
-  //       ? getController("assets/rainy_day.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"] ==
-  //       "light rain"
-  //       ? getController("assets/cloudy_rain.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"] ==
-  //       "thunderstorm"
-  //       ? getController("assets/thunder_rain.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"] ==
-  //       "snow"
-  //       ? getController("assets/snowfall.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"].contains("rain")
-  //       ? getController("assets/rainy_day.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"].contains("sun")
-  //       ? getController("assets/sunny.mp4")
-  //       : snapshot.data!.commonList![0]
-  //   ["weather"][0]["description"] == "overcast clouds"
-  //       ? getController("assets/clouds.mp4")
-  //       : getController("assets/warm_wind.mp4");
-  // }
+
 }

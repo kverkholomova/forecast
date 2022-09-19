@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:forecast/main_page.dart';
 import 'package:forecast/screens/home_page.dart';
+import 'package:forecast/screens/today_forecast.dart';
 import 'package:forecast/widgets/loader.dart';
 
 
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:  HomePage(),
+      home:  MainPage(),
     );
   }
 }

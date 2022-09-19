@@ -391,27 +391,27 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           );
   }
 
-  VideoPlayerController choseController(AsyncSnapshot<Weather5Days> snapshot) {
-    return description == "clear sky"
-        ? getController("assets/sunny_day.mp4")
-        : description == "few clouds"
-            ? getController("assets/sunny.mp4")
-            : description == "scattered clouds"
-                ? getController("assets/windy_cloud.mp4")
-                : description == "broken clouds"
-                    ? getController("assets/windy_cloud.mp4")
-                    : description == "shower rain"
-                        ? getController("assets/rainy_day.mp4")
-                        : description == "light rain"
-                            ? getController("assets/cloudy_rain.mp4")
-                            : description == "thunderstorm"
-                                ? getController("assets/thunder_rain.mp4")
-                                : description == "snow"
-                                    ? getController("assets/sunny.mp4")
-                                    : description == "overcast clouds"
-                                        ? getController("assets/clouds.mp4")
-                                        : getController("assets/warm_wind.mp4");
-  }
+  // VideoPlayerController choseController(AsyncSnapshot<Weather5Days> snapshot) {
+  //   return description == "clear sky"
+  //       ? getController("assets/sunny_day.mp4")
+  //       : description == "few clouds"
+  //           ? getController("assets/sunny.mp4")
+  //           : description == "scattered clouds"
+  //               ? getController("assets/windy_cloud.mp4")
+  //               : description == "broken clouds"
+  //                   ? getController("assets/windy_cloud.mp4")
+  //                   : description == "shower rain"
+  //                       ? getController("assets/rainy_day.mp4")
+  //                       : description == "light rain"
+  //                           ? getController("assets/cloudy_rain.mp4")
+  //                           : description == "thunderstorm"
+  //                               ? getController("assets/thunder_rain.mp4")
+  //                               : description == "snow"
+  //                                   ? getController("assets/sunny.mp4")
+  //                                   : description == "overcast clouds"
+  //                                       ? getController("assets/clouds.mp4")
+  //                                       : getController("assets/warm_wind.mp4");
+  // }
 
   SingleChildScrollView buildBottomWeather(BuildContext context) {
     return SingleChildScrollView(
@@ -462,11 +462,11 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[0]["weather"][0]["icon"] ==
-                          "01d") {
+                          "01n") {
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8 ? colors[index] : Colors.black45,
+                          color: numDay == 0 ? colors[index] : Colors.black45,
                         );
                       } else {
                         return ImageIcon(
@@ -563,7 +563,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
-                          "01d") {
+                          "01n") {
                         return Icon(
                           Icons.sunny,
                           size: 60,
@@ -658,11 +658,11 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[16]["weather"][0]["icon"] ==
-                          "01d") {
+                          "01n") {
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8 ? colors[index] : Colors.black45,
+                          color: numDay == 16 ? colors[index] : Colors.black45,
                         );
                       } else {
                         return ImageIcon(
@@ -752,11 +752,11 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[24]["weather"][0]["icon"]=="01d"){
+                      if (snapshot.data!.commonList?[24]["weather"][0]["icon"]=="01n"){
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8
+                          color: numDay == 24
                               ? colors[index]
                               : Colors.black45,
                         );
@@ -848,11 +848,11 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[32]["weather"][0]["icon"]=="01d"){
+                      if (snapshot.data!.commonList?[32]["weather"][0]["icon"]=="01n"){
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8
+                          color: numDay == 32
                               ? colors[index]
                               : Colors.black45,
                         );
@@ -944,11 +944,11 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[39]["weather"][0]["icon"]=="01d"){
+                      if (snapshot.data!.commonList?[39]["weather"][0]["icon"]=="01n"){
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8
+                          color: numDay == 39
                               ? colors[index]
                               : Colors.black45,
                         );

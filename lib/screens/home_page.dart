@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+
     super.initState();
     futureWeatherWeek = fetchWeatherForWeek();
     Timer(const Duration(seconds: 3), () => dataLoadFunction());
@@ -146,14 +147,14 @@ class _HomePageState extends State<HomePage> {
                               "snow"
                               ? getController("assets/snowfall.mp4")
                               : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"].contains("rain")
-                              ? getController("assets/rainy_day.mp4")
-                              : snapshot.data!.commonList![0]
-                          ["weather"][0]["description"].contains("sun")
-                              ? getController("assets/sunny.mp4")
-                              : snapshot.data!.commonList![0]
+                          // ["weather"][0]["description"].contains("rain")
+                          //     ? getController("assets/rainy_day.mp4")
+                          //     : snapshot.data!.commonList![0]
+                          // ["weather"][0]["description"].contains("sun")
+                          //     ? getController("assets/sunny.mp4")
+                          //     : snapshot.data!.commonList![0]
                           ["weather"][0]["description"] == "overcast clouds"
-                              ? getController("assets/clouds.mp4")
+                              ? getController("assets/windy_cloud.mp4")
                               : getController("assets/warm_wind.mp4"));
                         } else if (snapshot.hasError) {
                           return Text('${snapshot.error}');
@@ -180,6 +181,8 @@ class _HomePageState extends State<HomePage> {
                       future: futureWeatherWeek,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
+                          print("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+                          print(snapshot.data!.commonList?[24]["weather"][0]["icon"]);
                           var tom =
                               "${snapshot.data?.commonList?[0]["main"]["temp"]
                               ?.toInt()}\u2103";
@@ -476,6 +479,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           MaterialButton(
             onPressed: () {
+              loading_new=true;
               print(description);
               print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
               dateWeekName =
@@ -527,13 +531,11 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
-                          "01d") {
+                          "01n") {
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8
-                              ? colors[index]
-                              : Colors.black45,
+                          color: Colors.black45,
                         );
                       }
                       else {
@@ -544,9 +546,7 @@ class _HomePageState extends State<HomePage> {
                                 .data!
                                 .commonList?[8]["weather"][0]["icon"]}@2x.png',
                           ),
-                          color: numDay == 8
-                              ? colors[index]
-                              : Colors.black45,
+                          color: Colors.black45,
                         );
                       }
                     } else if (snapshot.hasError) {
@@ -594,6 +594,7 @@ class _HomePageState extends State<HomePage> {
           ),
           MaterialButton(
             onPressed: () {
+              loading_new=true;
               dateWeekName =
                   DateFormat('EEEE').format(weekDaysName(2));
               numDay = 16;
@@ -643,13 +644,11 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[16]["weather"][0]["icon"] ==
-                          "01d") {
+                          "01n") {
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8
-                              ? colors[index]
-                              : Colors.black45,
+                          color: Colors.black45,
                         );
                       }
                       else {
@@ -708,6 +707,7 @@ class _HomePageState extends State<HomePage> {
           ),
           MaterialButton(
             onPressed: () {
+              loading_new=true;
               print(description);
               print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
               dateWeekName =
@@ -757,13 +757,11 @@ class _HomePageState extends State<HomePage> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[24]["weather"][0]["icon"]=="01d"){
+                      if (snapshot.data!.commonList?[24]["weather"][0]["icon"]=="01n"){
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8
-                              ? colors[index]
-                              : Colors.black45,
+                          color: Colors.black45,
                         );
                       }
                       else{
@@ -821,6 +819,7 @@ class _HomePageState extends State<HomePage> {
           ),
           MaterialButton(
             onPressed: () {
+              loading_new=true;
               dateWeekName =
                   DateFormat('EEEE').format(weekDaysName(4));
               numDay = 32;
@@ -868,13 +867,11 @@ class _HomePageState extends State<HomePage> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[32]["weather"][0]["icon"]=="01d"){
+                      if (snapshot.data!.commonList?[32]["weather"][0]["icon"]=="01n"){
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8
-                              ? colors[index]
-                              : Colors.black45,
+                          color: Colors.black45,
                         );
                       }
                       else{
@@ -932,6 +929,7 @@ class _HomePageState extends State<HomePage> {
           ),
           MaterialButton(
             onPressed: () {
+              loading_new=true;
               dateWeekName =
                   DateFormat('EEEE').format(weekDaysName(5));
               numDay = 39;
@@ -979,13 +977,11 @@ class _HomePageState extends State<HomePage> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[39]["weather"][0]["icon"]=="01d"){
+                      if (snapshot.data!.commonList?[39]["weather"][0]["icon"]=="01n"){
                         return Icon(
                           Icons.sunny,
                           size: 60,
-                          color: numDay == 8
-                              ? colors[index]
-                              : Colors.black45,
+                          color: Colors.black45,
                         );
                       }
                       else{
@@ -1046,48 +1042,48 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  VideoPlayerController choseController(AsyncSnapshot<Weather5Days> snapshot) {
-    return snapshot.data!.commonList![0]
-    ["weather"][0]["description"] ==
-        "clear sky"
-        ? getController("assets/sunny_day.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"] ==
-        "few clouds"
-        ? getController("assets/sunny.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"] ==
-        "scattered clouds"
-        ? getController("assets/windy_cloud.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"] ==
-        "broken clouds"
-        ? getController("assets/windy_cloud.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"] ==
-        "shower rain"
-        ? getController("assets/rainy_day.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"] ==
-        "light rain"
-        ? getController("assets/cloudy_rain.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"] ==
-        "thunderstorm"
-        ? getController("assets/thunder_rain.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"] ==
-        "snow"
-        ? getController("assets/snowfall.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"].contains("rain")
-        ? getController("assets/rainy_day.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"].contains("sun")
-        ? getController("assets/sunny.mp4")
-        : snapshot.data!.commonList![0]
-    ["weather"][0]["description"] == "overcast clouds"
-        ? getController("assets/clouds.mp4")
-        : getController("assets/warm_wind.mp4");
-  }
+  // VideoPlayerController choseController(AsyncSnapshot<Weather5Days> snapshot) {
+  //   return snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"] ==
+  //       "clear sky"
+  //       ? getController("assets/sunny_day.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"] ==
+  //       "few clouds"
+  //       ? getController("assets/sunny.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"] ==
+  //       "scattered clouds"
+  //       ? getController("assets/windy_cloud.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"] ==
+  //       "broken clouds"
+  //       ? getController("assets/windy_cloud.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"] ==
+  //       "shower rain"
+  //       ? getController("assets/rainy_day.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"] ==
+  //       "light rain"
+  //       ? getController("assets/cloudy_rain.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"] ==
+  //       "thunderstorm"
+  //       ? getController("assets/thunder_rain.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"] ==
+  //       "snow"
+  //       ? getController("assets/snowfall.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"].contains("rain")
+  //       ? getController("assets/rainy_day.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"].contains("sun")
+  //       ? getController("assets/sunny.mp4")
+  //       : snapshot.data!.commonList![0]
+  //   ["weather"][0]["description"] == "overcast clouds"
+  //       ? getController("assets/clouds.mp4")
+  //       : getController("assets/warm_wind.mp4");
+  // }
 }

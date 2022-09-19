@@ -8,7 +8,8 @@ Future<Weather5Days> fetchWeatherForWeek() async {
   var currentLocationData = await location.getLocation();
 
   final response = await http
-      .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
+      // .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
+      .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=Mountain%20View&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
 
 
   if (response.statusCode == 200) {

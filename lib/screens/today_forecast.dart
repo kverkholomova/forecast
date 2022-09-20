@@ -523,7 +523,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[1]["weather"][0]["icon"] ==
-                          "01n") {
+                          "01n"||snapshot.data!.commonList?[1]["weather"][0]["icon"] ==
+                          "01d") {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
@@ -648,7 +649,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[2]["weather"][0]["icon"] ==
-                          "01n") {
+                          "01n"||snapshot.data!.commonList?[2]["weather"][0]["icon"] ==
+                          "01d") {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
@@ -773,7 +775,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[3]["weather"][0]["icon"]=="01n"){
+                      if (snapshot.data!.commonList?[3]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[3]["weather"][0]["icon"]=="01d"){
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
@@ -897,7 +899,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[4]["weather"][0]["icon"]=="01n"){
+                      if (snapshot.data!.commonList?[4]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[4]["weather"][0]["icon"]=="01d"){
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
@@ -1021,7 +1023,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[5]["weather"][0]["icon"]=="01n"){
+                      if (snapshot.data!.commonList?[5]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[5]["weather"][0]["icon"]=="01d"){
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
@@ -1144,7 +1146,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[6]["weather"][0]["icon"]=="01n"){
+                      if (snapshot.data!.commonList?[6]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[6]["weather"][0]["icon"]=="01d"){
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
@@ -1267,7 +1269,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[7]["weather"][0]["icon"]=="01n"){
+                      if (snapshot.data!.commonList?[7]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[7]["weather"][0]["icon"]=="01d"){
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
@@ -1390,7 +1392,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                   future: futureWeatherWeek,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      if (snapshot.data!.commonList?[8]["weather"][0]["icon"]=="01n"){
+                      if (snapshot.data!.commonList?[8]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[8]["weather"][0]["icon"]=="01d"){
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Icon(

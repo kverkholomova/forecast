@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:forecast/screens/main_page.dart';
+import 'package:forecast/screens/today_forecast.dart';
 import 'package:forecast/widgets/loader.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -23,21 +25,19 @@ class HomePage extends StatefulWidget {
 bool loading = true;
 int numDay = 0;
 
-DateTime date = DateTime.now();
-String dateFormat = DateFormat('EEEE').format(date);
 String dateWeekName = '';
 int index = 0;
 String iconNum = '';
 String description = '';
-
+bool today= true;
 class _HomePageState extends State<HomePage> {
   late Future<Weather5Days> futureWeatherWeek;
   Random random = Random();
-  DateTime dateWeek = DateTime.now();
+
 
 
   weekDaysName(int dayCount) {
-    dateWeek = dateWeek.add(Duration(days: dayCount));
+    DateTime dateWeek = DateTime.now().add(Duration(days: dayCount));
     return dateWeek;
   }
 
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                 child: Align(
                     alignment: Alignment.topCenter,
                     child: Text(
-                      dateFormat,
+                      DateFormat('EEEE').format(weekDaysName(0)),
                       style: GoogleFonts.roboto(
                         fontSize: 28,
                         color: Colors.indigoAccent.withOpacity(0.7),
@@ -505,18 +505,25 @@ class _HomePageState extends State<HomePage> {
         children: [
           MaterialButton(
             onPressed: () {
-              loading_new=true;
-              print(description);
-              print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-              dateWeekName =
-                  DateFormat('EEEE').format(weekDaysName(1));
-              numDay = 8;
-              changeIndex();
+              setState(() {
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_today = true;
+                loading_new=true;
+                print(description);
+                print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                dateWeekName =
+                    DateFormat('EEEE').format(weekDaysName(1));
+                numDay = 8;
+                changeIndex();
+              });
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                    const AnotherDayForecast()),
+                    const MainPage()),
               );
             },
             child: Column(
@@ -624,17 +631,25 @@ class _HomePageState extends State<HomePage> {
           ),
           MaterialButton(
             onPressed: () {
-              loading_new=true;
-              dateWeekName =
-                  DateFormat('EEEE').format(weekDaysName(2));
-              numDay = 16;
-              changeIndex();
+              setState(() {
+
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_new=true;
+                loading_today = true;
+                dateWeekName =
+                    DateFormat('EEEE').format(weekDaysName(2));
+                numDay = 16;
+                changeIndex();
+              });
+
 
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                    const AnotherDayForecast()),
+                    const MainPage()),
               );
             },
             child: Column(
@@ -742,18 +757,25 @@ class _HomePageState extends State<HomePage> {
           ),
           MaterialButton(
             onPressed: () {
-              loading_new=true;
-              print(description);
-              print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-              dateWeekName =
-                  DateFormat('EEEE').format(weekDaysName(3));
-              numDay = 24;
-              changeIndex();
+              setState(() {
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_new=true;
+                loading_today = true;
+                print(description);
+                print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                dateWeekName =
+                    DateFormat('EEEE').format(weekDaysName(3));
+                numDay = 24;
+                changeIndex();
+              });
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                    const AnotherDayForecast()),
+                    const MainPage()),
               );
             },
             child: Column(
@@ -857,16 +879,23 @@ class _HomePageState extends State<HomePage> {
           ),
           MaterialButton(
             onPressed: () {
-              loading_new=true;
-              dateWeekName =
-                  DateFormat('EEEE').format(weekDaysName(4));
-              numDay = 32;
-              changeIndex();
+              setState(() {
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_new=true;
+                loading_today = true;
+                dateWeekName =
+                    DateFormat('EEEE').format(weekDaysName(4));
+                numDay = 32;
+                changeIndex();
+              });
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                    const AnotherDayForecast()),
+                    const MainPage()),
               );
             },
             child: Column(
@@ -970,16 +999,23 @@ class _HomePageState extends State<HomePage> {
           ),
           MaterialButton(
             onPressed: () {
-              loading_new=true;
-              dateWeekName =
-                  DateFormat('EEEE').format(weekDaysName(5));
-              numDay = 39;
-              changeIndex();
+              setState(() {
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_new=true;
+                dateWeekName =
+                    DateFormat('EEEE').format(weekDaysName(5));
+                numDay = 39;
+                changeIndex();
+                loading_today = true;
+              });
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                    const AnotherDayForecast()),
+                    const MainPage()),
               );
             },
             child: Column(

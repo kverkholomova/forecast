@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
 import 'package:forecast/screens/home_page.dart';
+import 'package:forecast/screens/today_forecast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
@@ -13,6 +14,7 @@ import '../api/weather_week_api.dart';
 import '../constants.dart';
 import '../utils/location_functionality.dart';
 import '../widgets/loader.dart';
+import 'main_page.dart';
 
 class AnotherDayForecast extends StatefulWidget {
   const AnotherDayForecast({Key? key}) : super(key: key);
@@ -62,10 +64,10 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
     setState(() => index = random.nextInt(5));
   }
 
-  DateTime dateWeek = DateTime.now();
+
 
   weekDaysName(int dayCount) {
-    dateWeek = dateWeek.add(Duration(days: dayCount));
+    DateTime dateWeek = DateTime.now().add(Duration(days: dayCount));
     return dateWeek;
   }
 
@@ -87,7 +89,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           top: MediaQuery
               .of(context)
               .size
-              .height * 0.1,
+              .height * 0,
         ),
         child: SizedBox(
           height: double.infinity,
@@ -301,6 +303,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                         .height * 0.65),
                 child: buildBottomWeather(context),
               ),
+
             ],
           ),
         ),
@@ -510,12 +513,19 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
         children: [
           MaterialButton(
             onPressed: () {
-              loading = true;
-              numDay = 8;
-              changeIndex();
+              setState(() {
+                hourly=false;
+                today = true;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_today = true;
+                loading = true;
+                numDay = 8;
+                changeIndex();
+              });
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
+                MaterialPageRoute(builder: (context) => const MainPage()),
               );
             },
             child: Column(
@@ -622,15 +632,18 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           ),
           MaterialButton(
             onPressed: () {
-              loading_new = true;
-              print(description);
-              print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-              numDay = 8;
-              changeIndex();
+              setState(() {
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_new = true;
+                numDay = 8;
+                changeIndex();
+              });
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const AnotherDayForecast()),
+                    builder: (context) => const MainPage()),
               );
             },
             child: Column(
@@ -729,13 +742,18 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           ),
           MaterialButton(
             onPressed: () {
-              loading_new = true;
-              numDay = 16;
-              changeIndex();
+              setState(() {
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_new = true;
+                numDay = 16;
+                changeIndex();
+              });
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const AnotherDayForecast()),
+                    builder: (context) => const MainPage()),
               );
             },
             child: Column(
@@ -837,9 +855,14 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           ),
           MaterialButton(
             onPressed: () {
-              loading_new = true;
-              numDay = 24;
-              changeIndex();
+              setState(() {
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_new = true;
+                numDay = 24;
+                changeIndex();
+              });
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -945,9 +968,14 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           ),
           MaterialButton(
             onPressed: () {
-              loading_new = true;
-              numDay = 32;
-              changeIndex();
+              setState(() {
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_new = true;
+                numDay = 32;
+                changeIndex();
+              });
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -1053,9 +1081,14 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           ),
           MaterialButton(
             onPressed: () {
-              loading_new = true;
-              numDay = 39;
-              changeIndex();
+              setState(() {
+                today = false;
+                selectedIndex=1;
+                controllerTab.index = 1;
+                loading_new = true;
+                numDay = 39;
+                changeIndex();
+              });
               Navigator.push(
                 context,
                 MaterialPageRoute(

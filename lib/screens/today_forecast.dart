@@ -21,15 +21,9 @@ class HomePageToday extends StatefulWidget {
   State<HomePageToday> createState() => _HomePageTodayState();
 }
 
-
-int numDay = 0;
+bool hourly = true;
 bool loading_today=true;
-DateTime date = DateTime.now();
-String dateFormat = DateFormat('EEEE').format(date);
-String dateWeekName = '';
-int index = 0;
-String iconNum = '';
-String description = '';
+
 
 class _HomePageTodayState extends State<HomePageToday> {
   late Future<Weather5Days> futureWeatherWeek;
@@ -201,7 +195,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 child: Align(
                     alignment: Alignment.topCenter,
                     child: Text(
-                      dateFormat,
+                      "Tuesday",
                       style: GoogleFonts.roboto(
                         fontSize: 28,
                         color: Colors.indigoAccent.withOpacity(0.7),

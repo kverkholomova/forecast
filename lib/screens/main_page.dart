@@ -1,10 +1,7 @@
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:forecast/screens/another_day_forecast.dart';
 import 'package:forecast/screens/home_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -20,6 +17,7 @@ class _MainPageState extends State<MainPage> {
       length: 2,
       child: Scaffold(
         appBar:AppBar(
+          elevation: 0,
           backgroundColor: Colors.white,
           flexibleSpace: Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -28,8 +26,8 @@ class _MainPageState extends State<MainPage> {
                 unselectedLabelColor: Colors.black45,
                 labelColor: Colors.indigoAccent.withOpacity(0.6),
                   indicatorColor: Colors.indigoAccent,
-                onTap: (int) {
-                  switch (int) {
+                onTap: (number) {
+                  switch (number) {
                     case 0:
                       loading=true;
                       loading_today=true;
@@ -44,9 +42,14 @@ class _MainPageState extends State<MainPage> {
                   }
                 },
                   tabs: [
-
-                    const Tab(icon: Text("Today")),
-                    const Tab(icon: Text("5Days")),
+                    Tab(icon: Text("Today", style: GoogleFonts.roboto(
+                      fontSize: 18,
+                      // color: Colors.indigoAccent.withOpacity(0.7),
+                    ),)),
+                    Tab(icon: Text("5Days", style: GoogleFonts.roboto(
+                      fontSize: 18,
+                      // color: Colors.indigoAccent.withOpacity(0.7),
+                    ),)),
                   ],
                 ),
             ],

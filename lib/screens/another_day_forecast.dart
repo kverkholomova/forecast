@@ -89,7 +89,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           top: MediaQuery
               .of(context)
               .size
-              .height * 0,
+              .height * 0.02,
         ),
         child: SizedBox(
           height: double.infinity,
@@ -172,7 +172,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     right: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.025),
+                        .height * 0.07),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: buildHumidity(),
@@ -187,7 +187,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     right: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.08),
+                        .height * 0.125),
                 child: const Align(
                   alignment: Alignment.topRight,
                   child: Icon(

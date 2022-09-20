@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
           top: MediaQuery
               .of(context)
               .size
-              .height * 0.01,
+              .height * 0.02,
           // bottom: MediaQuery.of(context).size.height * 0.02,
         ),
         child: SizedBox(
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                     right: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.08),
+                        .height * 0.125),
                 child: const Align(
                   alignment: Alignment.topRight,
                   child: Icon(
@@ -349,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                   right: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.025),
+                      .height * 0.07),
               child: Align(
                 alignment: Alignment.topRight,
                 child: FutureBuilder<Weather5Days>(
@@ -362,7 +362,7 @@ class _HomePageState extends State<HomePage> {
                       return Text(
                         tom,
                         style: GoogleFonts.roboto(
-                          fontSize: 24,
+                          fontSize: 22,
                           color: Colors.black45,
                         ),
                       );

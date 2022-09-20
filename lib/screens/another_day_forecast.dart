@@ -89,7 +89,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           top: MediaQuery
               .of(context)
               .size
-              .height * 0.02,
+              .height * 0.1,
         ),
         child: SizedBox(
           height: double.infinity,

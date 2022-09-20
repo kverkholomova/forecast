@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
           top: MediaQuery
               .of(context)
               .size
-              .height * 0.02,
+              .height * 0.1,
           // bottom: MediaQuery.of(context).size.height * 0.02,
         ),
         child: SizedBox(

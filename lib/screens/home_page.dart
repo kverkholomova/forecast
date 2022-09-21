@@ -103,73 +103,82 @@ class _HomePageState extends State<HomePage> {
               ),
               child: SizedBox(
                 height: double.infinity,
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: FittedBox(
-                        fit: BoxFit.fill,
-                        child: SizedBox(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.7,
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.7,
-                          child: FutureBuilder<Weather5Days>(
-                            future: futureWeatherWeek,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return VideoPlayer(controllerVideo(snapshot));
-                              } else if (snapshot.hasError) {
-                                return Text('${snapshot.error}');
-                              }
+                child: SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.35),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: SizedBox(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 1,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 1,
+                              child: FutureBuilder<Weather5Days>(
+                                future: futureWeatherWeek,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return VideoPlayer(controllerVideo(snapshot));
+                                  } else if (snapshot.hasError) {
+                                    return Text('${snapshot.error}');
+                                  }
 
-                              // By default, show a loading spinner.
-                              return Container();
-                            },
+                                  // By default, show a loading spinner.
+                                  return Container();
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    buildTemperature(context),
-                    buildDescription(context),
-                    buildHumidity(context),
-                    const HumidityIcon(),
-                    const WindSpeedIcon(),
-                    const WindKmH(),
-                    buildWindSpeed(context),
+                      buildTemperature(context),
+                      buildDescription(context),
+                      buildHumidity(context),
+                      const HumidityIcon(),
+                      const WindSpeedIcon(),
+                      const WindKmH(),
+                      buildWindSpeed(context),
 
-                    buildCityName(context),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.2,
-                      ),
-                      child: Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            DateFormat('EEEE').format(weekDaysName(0)),
-                            style: GoogleFonts.roboto(
-                              fontSize: 26,
-                              color: Colors.indigoAccent.withOpacity(0.7),
-                            ),
-                          )),
-                    ),
-                    buildDate(context),
-                    Padding(
-                      padding: EdgeInsets.only(
+                      buildCityName(context),
+                      Padding(
+                        padding: EdgeInsets.only(
                           top: MediaQuery
                               .of(context)
                               .size
-                              .height * 0.57),
-                      child: buildBottomWeatherWidget(context),
-                    ),
-                  ],
+                              .height * 0.19,
+                        ),
+                        child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              DateFormat('EEEE').format(weekDaysName(0)),
+                              style: GoogleFonts.roboto(
+                                fontSize: 26,
+                                color: Colors.indigoAccent.withOpacity(0.7),
+                              ),
+                            )),
+                      ),
+                      buildDate(context),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.57),
+                        child: buildBottomWeatherWidget(context),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -224,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                 top: MediaQuery
                     .of(context)
                     .size
-                    .height * 0.25,
+                    .height * 0.23,
               ),
               child: Align(
                 alignment: Alignment.topCenter,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
 import 'package:forecast/screens/home_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
+import 'package:forecast/widgets/icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
@@ -168,59 +169,24 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     top: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.137,
+                        .height * 0.045,
                     right: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.07),
+                        .height * 0.045),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: buildHumidity(),
                 ),
               ),
+              HumidityIcon(),
+              WindSpeedIcon(),
               Padding(
                 padding: EdgeInsets.only(
                     top: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.13,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.125),
-                child: const Align(
-                  alignment: Alignment.topRight,
-                  child: Icon(
-                    WeatherIcons.humidity,
-                    color: Colors.black45,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.085,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.13),
-                child: const Align(
-                  alignment: Alignment.topRight,
-                  child: Icon(
-                    WeatherIcons.cloudy_windy,
-                    color: Colors.black45,
-                    size: 20,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.1,
+                        .height * 0.02,
                     right: MediaQuery
                         .of(context)
                         .size
@@ -241,7 +207,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     top: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.09,
+                        .height * 0.01,
                     right: MediaQuery
                         .of(context)
                         .size
@@ -329,7 +295,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                       return Text(
                         tom,
                         style: GoogleFonts.roboto(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: Colors.black45,
                         ),
                       );
@@ -351,7 +317,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
-                            fontSize: 28,
+                            fontSize: 26,
                             color: Colors.black45,
                           ),
                         );
@@ -395,11 +361,11 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                     if (snapshot.hasData) {
                       var tom =
                           "${snapshot.data
-                          ?.commonList?[numDay]["main"]["humidity"]}";
+                          ?.commonList?[numDay]["main"]["humidity"]} %";
                       return Text(
                         tom,
                         style: GoogleFonts.roboto(
-                          fontSize: 24,
+                          fontSize: 20,
                           color: Colors.black45,
                         ),
                       );
@@ -504,7 +470,6 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
         ? getController("assets/windy_cloud.mp4")
         : getController("assets/warm_wind.mp4");
   }
-
 
   SingleChildScrollView buildBottomWeather(BuildContext context) {
     return SingleChildScrollView(

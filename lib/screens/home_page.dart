@@ -14,6 +14,7 @@ import 'package:weather_icons/weather_icons.dart';
 import '../api/weather_week_api.dart';
 import '../constants.dart';
 import '../utils/location_functionality.dart';
+import '../widgets/icons.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? Loader() : Scaffold(
+    return loading ? const Loader() : Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Padding(
@@ -129,49 +130,14 @@ class _HomePageState extends State<HomePage> {
               buildTemperature(context),
               buildDescription(context),
               buildHumidity(context),
+              const HumidityIcon(),
+              const WindSpeedIcon(),
               Padding(
                 padding: EdgeInsets.only(
                     top: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.13,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.125),
-                child: const Align(
-                  alignment: Alignment.topRight,
-                  child: Icon(
-                    WeatherIcons.humidity,
-                    color: Colors.black45,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.085,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.13),
-                child: const Align(
-                  alignment: Alignment.topRight,
-                  child: Icon(
-                    WeatherIcons.cloudy_windy,
-                    color: Colors.black45,
-                    size: 20,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.1,
+                        .height * 0.02,
                     right: MediaQuery
                         .of(context)
                         .size
@@ -202,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                     child: Text(
                       DateFormat('EEEE').format(weekDaysName(0)),
                       style: GoogleFonts.roboto(
-                        fontSize: 28,
+                        fontSize: 26,
                         color: Colors.indigoAccent.withOpacity(0.7),
                       ),
                     )),
@@ -248,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                       return Text(
                         tom,
                         style: GoogleFonts.roboto(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: Colors.black45,
                         ),
                       );
@@ -284,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
-                            fontSize: 28,
+                            fontSize: 26,
                             color: Colors.black45,
                           ),
                         );
@@ -307,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                   top: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.09,
+                      .height * 0.01,
                   right: MediaQuery
                       .of(context)
                       .size
@@ -345,11 +311,11 @@ class _HomePageState extends State<HomePage> {
                   top: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.137,
+                      .height * 0.045,
                   right: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.07),
+                      .height * 0.045),
               child: Align(
                 alignment: Alignment.topRight,
                 child: FutureBuilder<Weather5Days>(
@@ -358,11 +324,11 @@ class _HomePageState extends State<HomePage> {
                     if (snapshot.hasData) {
                       var tom =
                           "${snapshot.data
-                          ?.commonList?[0]["main"]["humidity"]}";
+                          ?.commonList?[0]["main"]["humidity"]} %";
                       return Text(
                         tom,
                         style: GoogleFonts.roboto(
-                          fontSize: 22,
+                          fontSize: 20,
                           color: Colors.black45,
                         ),
                       );
@@ -487,12 +453,6 @@ class _HomePageState extends State<HomePage> {
                             "snow"
                             ? getController("assets/snowfall.mp4")
                             : snapshot.data!.commonList![0]
-                        // ["weather"][0]["description"].contains("rain")
-                        //     ? getController("assets/rainy_day.mp4")
-                        //     : snapshot.data!.commonList![0]
-                        // ["weather"][0]["description"].contains("sun")
-                        //     ? getController("assets/sunny.mp4")
-                        //     : snapshot.data!.commonList![0]
                         ["weather"][0]["description"] == "overcast clouds"
                             ? getController("assets/windy_cloud.mp4")
                             : getController("assets/warm_wind.mp4");
@@ -566,8 +526,8 @@ class _HomePageState extends State<HomePage> {
                       if (snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
                           "01n"||snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
                           "01d") {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
                             Icons.sunny,
                             size: 45,
@@ -692,8 +652,8 @@ class _HomePageState extends State<HomePage> {
                       if (snapshot.data!.commonList?[16]["weather"][0]["icon"] ==
                           "01n"||snapshot.data!.commonList?[16]["weather"][0]["icon"] ==
                           "01d") {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
                             Icons.sunny,
                             size: 45,
@@ -815,8 +775,8 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[24]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[24]["weather"][0]["icon"]=="01d"){
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
                             Icons.sunny,
                             size: 45,
@@ -935,8 +895,8 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[32]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[32]["weather"][0]["icon"]=="01d"){
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
                             Icons.sunny,
                             size: 45,
@@ -1055,8 +1015,8 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!.commonList?[39]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[39]["weather"][0]["icon"]=="01d"){
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
                           child: Icon(
                             Icons.sunny,
                             size: 45,
@@ -1124,3 +1084,7 @@ class _HomePageState extends State<HomePage> {
 
 
 }
+
+
+
+

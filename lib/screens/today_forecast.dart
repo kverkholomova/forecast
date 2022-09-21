@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:forecast/widgets/icons.dart';
 import 'package:forecast/widgets/loader.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
-import 'package:forecast/screens/another_day_forecast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
-import 'package:weather_icons/weather_icons.dart';
 
 import '../api/weather_week_api.dart';
-import '../constants.dart';
 import '../utils/location_functionality.dart';
 import 'home_page.dart';
 
@@ -77,7 +74,7 @@ class _HomePageTodayState extends State<HomePageToday> {
 
   @override
   Widget build(BuildContext context) {
-    return loading_today ? Loader() : Scaffold(
+    return loading_today ? const Loader() : Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Padding(
@@ -125,50 +122,14 @@ class _HomePageTodayState extends State<HomePageToday> {
               buildTemperature(context),
               buildDescription(context),
               buildHumidity(context),
+              const HumidityIcon(),
+              const WindSpeedIcon(),
               Padding(
                 padding: EdgeInsets.only(
                     top: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.13,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.125),
-                child: const Align(
-                  alignment: Alignment.topRight,
-                  child: Icon(
-                    WeatherIcons.humidity,
-                    size: 20,
-                    color: Colors.black45,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.085,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.13),
-                child: const Align(
-                  alignment: Alignment.topRight,
-                  child: Icon(
-                    WeatherIcons.cloudy_windy,
-                    color: Colors.black45,
-                    size: 20,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.1,
+                        .height * 0.02,
                     right: MediaQuery
                         .of(context)
                         .size
@@ -240,7 +201,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                       return Text(
                         tom,
                         style: GoogleFonts.roboto(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: Colors.black45,
                         ),
                       );
@@ -276,7 +237,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
-                            fontSize: 28,
+                            fontSize: 26,
                             color: Colors.black45,
                           ),
                         );
@@ -299,7 +260,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                   top: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.09,
+                      .height * 0.01,
                   right: MediaQuery
                       .of(context)
                       .size
@@ -337,11 +298,11 @@ class _HomePageTodayState extends State<HomePageToday> {
                   top: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.136,
+                      .height * 0.045,
                   right: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.07),
+                      .height * 0.045),
               child: Align(
                 alignment: Alignment.topRight,
                 child: FutureBuilder<Weather5Days>(
@@ -350,11 +311,11 @@ class _HomePageTodayState extends State<HomePageToday> {
                     if (snapshot.hasData) {
                       var tom =
                           "${snapshot.data
-                          ?.commonList?[0]["main"]["humidity"]}";
+                          ?.commonList?[0]["main"]["humidity"]} %";
                       return Text(
                         tom,
                         style: GoogleFonts.roboto(
-                          fontSize: 22,
+                          fontSize: 20,
                           color: Colors.black45,
                         ),
                       );
@@ -531,8 +492,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                         if (snapshot.data!.commonList?[1]["weather"][0]["icon"] ==
                             "01n"||snapshot.data!.commonList?[1]["weather"][0]["icon"] ==
                             "01d") {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,
@@ -622,8 +583,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                         if (snapshot.data!.commonList?[2]["weather"][0]["icon"] ==
                             "01n"||snapshot.data!.commonList?[2]["weather"][0]["icon"] ==
                             "01d") {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,
@@ -711,8 +672,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.commonList?[3]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[3]["weather"][0]["icon"]=="01d"){
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,
@@ -801,8 +762,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.commonList?[4]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[4]["weather"][0]["icon"]=="01d"){
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,
@@ -891,8 +852,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.commonList?[5]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[5]["weather"][0]["icon"]=="01d"){
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,
@@ -980,8 +941,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.commonList?[6]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[6]["weather"][0]["icon"]=="01d"){
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,
@@ -1069,8 +1030,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.commonList?[7]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[7]["weather"][0]["icon"]=="01d"){
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,
@@ -1158,8 +1119,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.commonList?[8]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[8]["weather"][0]["icon"]=="01d"){
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,

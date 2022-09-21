@@ -9,10 +9,8 @@ import 'package:forecast/models/weather_week_model.dart';
 import 'package:forecast/screens/another_day_forecast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
-import 'package:weather_icons/weather_icons.dart';
 
 import '../api/weather_week_api.dart';
-import '../constants.dart';
 import '../utils/location_functionality.dart';
 import '../widgets/icons.dart';
 
@@ -48,6 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   late VideoPlayerController _controller;
 
+  late TextEditingController textEditingController;
   VideoPlayerController getController(String path) {
     _controller = VideoPlayerController.asset(path)
       ..initialize().then((_) {
@@ -69,7 +68,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     futureWeatherWeek = fetchWeatherForWeek();
     Timer(const Duration(seconds: 4), () => dataLoadFunction());
+
+
     setState(() {
+      textEditingController = TextEditingController();
       serviceEn();
       permissGranted();
     });
@@ -79,111 +81,137 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    textEditingController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return loading ? const Loader() : Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.only(
-          top: MediaQuery
-              .of(context)
-              .size
-              .height * 0.1,
-          // bottom: MediaQuery.of(context).size.height * 0.02,
-        ),
-        child: SizedBox(
-          height: double.infinity,
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: SizedBox(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 1,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 1,
-                    child: FutureBuilder<Weather5Days>(
-                      future: futureWeatherWeek,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return VideoPlayer(controllerVideo(snapshot));
-                        } else if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
-
-                        // By default, show a loading spinner.
-                        return Container();
-                      },
+    return loading ? const Loader() : SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.9,
+                  height: MediaQuery.of(context).size.width*0.16,
+                  color: Colors.white,
+                  child: TextField(
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 0.5, color: Colors.black45),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusColor: Colors.indigoAccent.withOpacity(0.7),
+                        hintText: "Find your city",
+                        hintStyle: GoogleFonts.roboto(
+                          fontSize: 14,
+                          color: Colors.black.withOpacity(0.3),
+                        )
                     ),
+                    controller: textEditingController,
+                    onSubmitted: (String value) async {
+                      city = value;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                            const MainPage()),
+                      );
+                    },
                   ),
                 ),
               ),
-              buildTemperature(context),
-              buildDescription(context),
-              buildHumidity(context),
-              const HumidityIcon(),
-              const WindSpeedIcon(),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.02,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.01),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Text(
-                    "km/h",
-                    style: GoogleFonts.roboto(
-                      fontSize: 12,
-                      color: Colors.black45,
-                    ),
-                  ),
-                ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.1,
+                // bottom: MediaQuery.of(context).size.height * 0.02,
               ),
-              buildWindSpeed(context),
+              child: SizedBox(
+                height: double.infinity,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: FittedBox(
+                        fit: BoxFit.fill,
+                        child: SizedBox(
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.7,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.7,
+                          child: FutureBuilder<Weather5Days>(
+                            future: futureWeatherWeek,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return VideoPlayer(controllerVideo(snapshot));
+                              } else if (snapshot.hasError) {
+                                return Text('${snapshot.error}');
+                              }
 
-              buildCityName(context),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.2,
-                ),
-                child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      DateFormat('EEEE').format(weekDaysName(0)),
-                      style: GoogleFonts.roboto(
-                        fontSize: 26,
-                        color: Colors.indigoAccent.withOpacity(0.7),
+                              // By default, show a loading spinner.
+                              return Container();
+                            },
+                          ),
+                        ),
                       ),
-                    )),
+                    ),
+                    buildTemperature(context),
+                    buildDescription(context),
+                    buildHumidity(context),
+                    const HumidityIcon(),
+                    const WindSpeedIcon(),
+                    const WindKmH(),
+                    buildWindSpeed(context),
+
+                    buildCityName(context),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.2,
+                      ),
+                      child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            DateFormat('EEEE').format(weekDaysName(0)),
+                            style: GoogleFonts.roboto(
+                              fontSize: 26,
+                              color: Colors.indigoAccent.withOpacity(0.7),
+                            ),
+                          )),
+                    ),
+                    buildDate(context),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.57),
+                      child: buildBottomWeatherWidget(context),
+                    ),
+                  ],
+                ),
               ),
-              buildDate(context),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.65),
-                child: buildBottomWeatherWidget(context),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -469,10 +497,9 @@ class _HomePageState extends State<HomePage> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_today = true;
-                loading_new=true;
-                print(description);
-                print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                loadingToday = true;
+                loadingNew=true;
+
                 dateWeekName =
                     DateFormat('EEEE').format(weekDaysName(1));
                 numDay = 8;
@@ -596,8 +623,8 @@ class _HomePageState extends State<HomePage> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_new=true;
-                loading_today = true;
+                loadingNew=true;
+                loadingToday = true;
                 dateWeekName =
                     DateFormat('EEEE').format(weekDaysName(2));
                 numDay = 16;
@@ -721,10 +748,9 @@ class _HomePageState extends State<HomePage> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_new=true;
-                loading_today = true;
-                print(description);
-                print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                loadingNew=true;
+                loadingToday = true;
+
                 dateWeekName =
                     DateFormat('EEEE').format(weekDaysName(3));
                 numDay = 24;
@@ -843,8 +869,8 @@ class _HomePageState extends State<HomePage> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_new=true;
-                loading_today = true;
+                loadingNew=true;
+                loadingToday = true;
                 dateWeekName =
                     DateFormat('EEEE').format(weekDaysName(4));
                 numDay = 32;
@@ -963,12 +989,12 @@ class _HomePageState extends State<HomePage> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_new=true;
+                loadingNew=true;
                 dateWeekName =
                     DateFormat('EEEE').format(weekDaysName(5));
                 numDay = 39;
                 changeIndex();
-                loading_today = true;
+                loadingToday = true;
               });
 
               Navigator.push(
@@ -1084,7 +1110,4 @@ class _HomePageState extends State<HomePage> {
 
 
 }
-
-
-
 

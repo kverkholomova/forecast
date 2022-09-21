@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class HumidityIcon extends StatelessWidget {
@@ -58,3 +59,38 @@ class WindSpeedIcon extends StatelessWidget {
     );
   }
 }
+
+class WindKmH extends StatelessWidget {
+  const WindKmH({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: MediaQuery
+              .of(context)
+              .size
+              .height * 0.02,
+          right: MediaQuery
+              .of(context)
+              .size
+              .height * 0.01),
+      child: Align(
+        alignment: Alignment.topRight,
+        child: Text(
+          "km/h",
+          style: GoogleFonts.roboto(
+            fontSize: 12,
+            color: Colors.black45,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+

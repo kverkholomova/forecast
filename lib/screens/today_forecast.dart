@@ -10,6 +10,7 @@ import 'package:video_player/video_player.dart';
 import '../api/weather_week_api.dart';
 import '../utils/location_functionality.dart';
 import 'home_page.dart';
+import 'main_page.dart';
 
 class HomePageToday extends StatefulWidget {
   const HomePageToday({Key? key}) : super(key: key);
@@ -17,12 +18,13 @@ class HomePageToday extends StatefulWidget {
   @override
   State<HomePageToday> createState() => _HomePageTodayState();
 }
-
+String city = '';
 bool hourly = true;
-bool loading_today=true;
+bool loadingToday=true;
 
 
 class _HomePageTodayState extends State<HomePageToday> {
+  late TextEditingController textEditingController;
   late Future<Weather5Days> futureWeatherWeek;
   Random random = Random();
   DateTime dateWeek = DateTime.now();
@@ -50,7 +52,7 @@ class _HomePageTodayState extends State<HomePageToday> {
 
   dataLoadFunction() async {
     setState(() {
-      loading_today = false;
+      loadingToday = false;
     });
   }
 
@@ -60,6 +62,8 @@ class _HomePageTodayState extends State<HomePageToday> {
     super.initState();
     futureWeatherWeek = fetchWeatherForWeek();
     Timer(const Duration(seconds: 4), () => dataLoadFunction());
+    textEditingController = TextEditingController();
+
     setState(() {
       serviceEn();
       permissGranted();
@@ -70,111 +74,136 @@ class _HomePageTodayState extends State<HomePageToday> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    textEditingController.dispose();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return loading_today ? const Loader() : Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.only(
-          top: MediaQuery
-              .of(context)
-              .size
-              .height * 0.1,
-          // bottom: MediaQuery.of(context).size.height * 0.02,
-        ),
-        child: SizedBox(
-          height: double.infinity,
-          child: Stack(
-            children: [
-
-              Align(
-                alignment: Alignment.center,
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: SizedBox(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 1,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 1,
-                    child: FutureBuilder<Weather5Days>(
-                      future: futureWeatherWeek,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return VideoPlayer(controllerVideo(snapshot));
-                        } else if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
-
-                        // By default, show a loading spinner.
-                        return Container();
-                      },
+    return loadingToday ? const Loader() : SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.9,
+                  height: MediaQuery.of(context).size.width*0.16,
+                  color: Colors.white,
+                  child: TextField(
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 0.5, color: Colors.black45),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      focusColor: Colors.indigoAccent.withOpacity(0.7),
+                      hintText: "Find your city",
+                      hintStyle: GoogleFonts.roboto(
+                        fontSize: 14,
+                        color: Colors.black.withOpacity(0.3),
+                      )
                     ),
+                    controller: textEditingController,
+                    onSubmitted: (String value) async {
+                      city = value;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                            const MainPage()),
+                      );
+                    },
                   ),
                 ),
               ),
-              buildTemperature(context),
-              buildDescription(context),
-              buildHumidity(context),
-              const HumidityIcon(),
-              const WindSpeedIcon(),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.02,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.01),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Text(
-                    "km/h",
-                    style: GoogleFonts.roboto(
-                      fontSize: 12,
-                      color: Colors.black45,
-                    ),
-                  ),
-                ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.1,
+                // bottom: MediaQuery.of(context).size.height * 0.02,
               ),
-              buildWindSpeed(context),
-              buildCityName(context),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.2,
-                ),
-                child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      "Tuesday",
-                      style: GoogleFonts.roboto(
-                        fontSize: 28,
-                        color: Colors.indigoAccent.withOpacity(0.7),
+              child: SizedBox(
+                height: double.infinity,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: FittedBox(
+                        fit: BoxFit.fill,
+                        child: SizedBox(
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.7,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.7,
+                          child: FutureBuilder<Weather5Days>(
+                            future: futureWeatherWeek,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return VideoPlayer(controllerVideo(snapshot));
+                              } else if (snapshot.hasError) {
+                                return Text('${snapshot.error}');
+                              }
+                              return Container();
+                            },
+                          ),
+                        ),
                       ),
-                    )),
+                    ),
+                    buildTemperature(context),
+                    buildDescription(context),
+                    buildHumidity(context),
+                    const HumidityIcon(),
+                    const WindSpeedIcon(),
+                    const WindKmH(),
+                    buildWindSpeed(context),
+                    buildCityName(context),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.2,
+                      ),
+                      child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            "Tuesday",
+                            style: GoogleFonts.roboto(
+                              fontSize: 28,
+                              color: Colors.indigoAccent.withOpacity(0.7),
+                            ),
+                          )),
+                    ),
+                    buildDate(context),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.57),
+                      child: buildBottomWeatherWidget(context),
+                    ),
+
+                  ],
+                ),
               ),
-              buildDate(context),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.65),
-                child: buildBottomWeatherWidget(context),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

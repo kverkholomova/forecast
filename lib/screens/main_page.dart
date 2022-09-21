@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:forecast/screens/another_day_forecast.dart';
 import 'package:forecast/screens/home_page.dart';
@@ -20,15 +22,19 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   void initState() {
     // TODO: implement initState
     super.initState();
+
     // Create TabController for getting the index of current tab
     controllerTab = today&&hourly?TabController(length: 2, vsync: this,initialIndex: 0):today&&!hourly?TabController(length: 2, vsync: this, initialIndex: 1):TabController(length: 2, vsync: this, initialIndex: 1);
-
     controllerTab.addListener(() {
       setState(() {
         selectedIndex = controllerTab.index;
       });
-      print("Selected Index: " + controllerTab.index.toString());
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -36,7 +42,6 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-
         bottomNavigationBar: Container(
           color: Colors.white,
           child: TabBar(
@@ -45,23 +50,6 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
             unselectedLabelColor: Colors.black45,
             labelColor: Colors.indigoAccent.withOpacity(0.6),
             indicatorColor: Colors.indigoAccent,
-            // onTap: (number) {
-            //   switch (number) {
-            //     case 0:
-            //       print("Selected Index2: " + _controller.index.toString());
-            //       loading=true;
-            //       // loading_today=true;
-            //       break;
-            //     case 1:
-            //       print("Selected Index3: " + _controller.index.toString());
-            //       // loading=true;
-            //       loading_today=true;
-            //       break;
-            //     default:
-            //       loading=true;
-            //       loading_today=true;
-            //   }
-            // },
             tabs: [
               Tab(icon: Text("Today", style: GoogleFonts.roboto(
                 fontSize: 18,
@@ -78,8 +66,8 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
         body: TabBarView(
           controller: controllerTab,
           children: [
-            HomePageToday(),
-            today?HomePage():AnotherDayForecast(),
+            const HomePageToday(),
+            today?const HomePage():const AnotherDayForecast(),
           ],
         ),
       ),

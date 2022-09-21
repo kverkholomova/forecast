@@ -1,9 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:forecast/screens/main_page.dart';
-import 'package:forecast/screens/home_page.dart';
-import 'package:forecast/screens/today_forecast.dart';
-import 'package:forecast/widgets/loader.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -21,7 +18,7 @@ class MyApp extends StatelessWidget {
     home: AnimatedSplashScreen(
     splash: 'assets/forecast_logo.png',
     splashIconSize: 180,
-    nextScreen: MainPage(),
+    nextScreen: const MainPage(),
     splashTransition: SplashTransition.sizeTransition,
     duration: 3000,
     ));

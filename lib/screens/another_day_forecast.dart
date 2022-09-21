@@ -9,7 +9,6 @@ import 'package:forecast/widgets/icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
-import 'package:weather_icons/weather_icons.dart';
 
 import '../api/weather_week_api.dart';
 import '../constants.dart';
@@ -24,7 +23,7 @@ class AnotherDayForecast extends StatefulWidget {
   State<AnotherDayForecast> createState() => _AnotherDayForecastState();
 }
 
-bool loading_new = true;
+bool loadingNew = true;
 
 class _AnotherDayForecastState extends State<AnotherDayForecast> {
   late Future<Weather5Days> futureWeatherWeek;
@@ -42,15 +41,18 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
 
   dataLoadFunction() async {
     setState(() {
-      loading_new = false;
+      loadingNew = false;
     });
   }
+  late TextEditingController textEditingController;
 
   @override
   void initState() {
     super.initState();
     futureWeatherWeek = fetchWeatherForWeek();
     getController("assets/clouds.mp4");
+    textEditingController = TextEditingController();
+
     Timer(const Duration(seconds: 3), () => dataLoadFunction());
     setState(() {
       description = '';
@@ -76,205 +78,229 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    textEditingController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return loading_new
-        ? Loader()
-        : Scaffold(
+    return loadingNew
+        ? const Loader()
+        : SafeArea(
+          child: Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.only(
-          top: MediaQuery
-              .of(context)
-              .size
-              .height * 0.1,
-        ),
-        child: SizedBox(
-          height: double.infinity,
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.17,
-                    horizontal:
-                    MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.01),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: SizedBox(
-                      width: MediaQuery
+      body: Stack(
+          children:[
+            Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.9,
+                  height: MediaQuery.of(context).size.width*0.16,
+                  color: Colors.white,
+                  child: TextField(
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 0.5, color: Colors.black45),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusColor: Colors.indigoAccent.withOpacity(0.7),
+                        hintText: "Find your city",
+                        hintStyle: GoogleFonts.roboto(
+                          fontSize: 14,
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                    ),
+                    controller: textEditingController,
+                    onSubmitted: (String value) async {
+                      city = value;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                            const MainPage()),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+          padding: EdgeInsets.only(
+            top: MediaQuery
+                .of(context)
+                .size
+                .height * 0.1,
+          ),
+          child: SizedBox(
+            height: double.infinity,
+            child: Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery
                           .of(context)
                           .size
-                          .width * 1,
-                      height: MediaQuery
+                          .height * 0.17,
+                      horizontal:
+                      MediaQuery
                           .of(context)
                           .size
-                          .width * 1,
-                      child: FutureBuilder<Weather5Days>(
-                        future: futureWeatherWeek,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return VideoPlayer(controllerVideo(snapshot));
-                          } else if (snapshot.hasError) {
-                            return Text('${snapshot.error}');
-                          }
-                          // By default, show a loading spinner.
-                          return Container();
-                        },
+                          .height * 0.01),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: SizedBox(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 1,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 1,
+                        child: FutureBuilder<Weather5Days>(
+                          future: futureWeatherWeek,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return VideoPlayer(controllerVideo(snapshot));
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return Container();
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Padding(
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.035),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: buildTemperature(),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.15,
+                  // left: MediaQuery.of(context).size.height * 0.021,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: buildDescription(),
+                    ),
+                  ),
+                ),
+                Padding(
                   padding: EdgeInsets.only(
                       top: MediaQuery
                           .of(context)
                           .size
-                          .height * 0.035),
+                          .height * 0.045,
+                      right: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.045),
                   child: Align(
-                    alignment: Alignment.topLeft,
-                    child: buildTemperature(),
+                    alignment: Alignment.topRight,
+                    child: buildHumidity(),
                   ),
                 ),
-              ),
-              Positioned(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.15,
-                // left: MediaQuery.of(context).size.height * 0.021,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                const HumidityIcon(),
+                const WindSpeedIcon(),
+                const WindKmH(),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.01,
+                      right: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.057),
                   child: Align(
-                    alignment: Alignment.topLeft,
-                    child: buildDescription(),
+                    alignment: Alignment.topRight,
+                    child: buildWindSpeed(),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
+                Padding(
+                  padding: EdgeInsets.only(
                     top: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.045,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.045),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: buildHumidity(),
-                ),
-              ),
-              HumidityIcon(),
-              WindSpeedIcon(),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.02,
-                    right: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.01),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Text(
-                    "km/h",
-                    style: GoogleFonts.roboto(
-                      fontSize: 12,
-                      color: Colors.black45,
+                        .height * 0,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: buildCityName(),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
+                Padding(
+                  padding: EdgeInsets.only(
                     top: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.01,
-                    right: MediaQuery
+                        .height * 0.2,
+                  ),
+                  child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        dateWeekName,
+                        style: GoogleFonts.roboto(
+                          fontSize: 28,
+                          color: colors[index],
+                        ),
+                      )),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery
                         .of(context)
                         .size
-                        .height * 0.057),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: buildWindSpeed(),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0,
-                ),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: buildCityName(),
+                        .height * 0.25,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: buildDate(),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.2,
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.65),
+                  child: buildBottomWeather(context),
                 ),
-                child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      dateWeekName,
-                      style: GoogleFonts.roboto(
-                        fontSize: 28,
-                        color: colors[index],
-                      ),
-                    )),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.25,
-                ),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: buildDate(),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.65),
-                child: buildBottomWeather(context),
-              ),
 
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+      ),])
+    ),
+        );
   }
 
   FutureBuilder<Weather5Days> buildDate() {
@@ -483,7 +509,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                 today = true;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_today = true;
+                loadingToday = true;
                 loading = true;
                 numDay = 8;
                 changeIndex();
@@ -601,7 +627,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_new = true;
+                loadingNew = true;
                 numDay = 8;
                 changeIndex();
               });
@@ -711,7 +737,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_new = true;
+                loadingNew = true;
                 numDay = 16;
                 changeIndex();
               });
@@ -824,7 +850,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_new = true;
+                loadingNew = true;
                 numDay = 24;
                 changeIndex();
               });
@@ -937,7 +963,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_new = true;
+                loadingNew = true;
                 numDay = 32;
                 changeIndex();
               });
@@ -1050,7 +1076,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                 today = false;
                 selectedIndex=1;
                 controllerTab.index = 1;
-                loading_new = true;
+                loadingNew = true;
                 numDay = 39;
                 changeIndex();
               });

@@ -92,45 +92,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  width: MediaQuery.of(context).size.width*0.9,
-                  height: MediaQuery.of(context).size.width*0.16,
-                  color: Colors.white,
-                  child: TextField(
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(width: 0.5, color: Colors.black45),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusColor: Colors.indigoAccent.withOpacity(0.7),
-                        hintText: "Find your city",
-                        hintStyle: GoogleFonts.roboto(
-                          fontSize: 14,
-                          color: Colors.black.withOpacity(0.3),
-                        )
-                    ),
-                    controller: textEditingController,
-                    onSubmitted: (String value) async {
-                      city = value;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                            const MainPage()),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
+
             Padding(
               padding: EdgeInsets.only(
                 top: MediaQuery
@@ -208,6 +170,45 @@ class _HomePageState extends State<HomePage> {
                       child: buildBottomWeatherWidget(context),
                     ),
                   ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.9,
+                  height: MediaQuery.of(context).size.width*0.16,
+                  color: Colors.white,
+                  child: TextField(
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(width: 0.5, color: Colors.black45),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusColor: Colors.indigoAccent.withOpacity(0.7),
+                        hintText: "Find your city",
+                        hintStyle: GoogleFonts.roboto(
+                          fontSize: 14,
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                    ),
+                    controller: textEditingController,
+                    onSubmitted: (String value) async {
+                      city = value;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                            const MainPage()),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

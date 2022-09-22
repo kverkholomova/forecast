@@ -96,7 +96,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                 top: MediaQuery
                     .of(context)
                     .size
-                    .width * 0.50,
+                    .width * 0.53,
                 bottom: MediaQuery
                     .of(context)
                     .size
@@ -247,7 +247,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           ),
       ),
             Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.015),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Container(

@@ -73,10 +73,11 @@ class WindKmH extends StatelessWidget {
               .of(context)
               .size
               .height * 0.02,
-          right: MediaQuery
-              .of(context)
-              .size
-              .height * 0.01),
+          // right: MediaQuery
+          //     .of(context)
+          //     .size
+          //     .height * 0.01
+      ),
       child: Align(
         alignment: Alignment.topRight,
         child: Text(

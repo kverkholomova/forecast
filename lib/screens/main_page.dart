@@ -27,6 +27,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     controllerTab = today&&hourly?TabController(length: 2, vsync: this,initialIndex: 0):today&&!hourly?TabController(length: 2, vsync: this, initialIndex: 1):TabController(length: 2, vsync: this, initialIndex: 1);
     controllerTab.addListener(() {
       setState(() {
+
         selectedIndex = controllerTab.index;
       });
     });

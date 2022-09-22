@@ -89,6 +89,43 @@ class _HomePageTodayState extends State<HomePageToday> {
         body: Stack(
           children: [
             Padding(
+              padding: EdgeInsets.only(top: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.50,
+                bottom: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.3,),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: FittedBox(
+                  fit: BoxFit.fill,
+                  child: SizedBox(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.9,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.9,
+                    child: FutureBuilder<Weather5Days>(
+                      future: futureWeatherWeek,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return VideoPlayer(controllerVideo(snapshot));
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return Container();
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
               padding: EdgeInsets.only(
                 top: MediaQuery
                     .of(context)
@@ -100,83 +137,38 @@ class _HomePageTodayState extends State<HomePageToday> {
                 height: double.infinity,
                 child: SingleChildScrollView(
                   physics: NeverScrollableScrollPhysics(),
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.15,),
-                        child: Padding(
-                          padding: EdgeInsets.only(top: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.2),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: FittedBox(
-                              fit: BoxFit.fill,
-                              child: SizedBox(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 1,
-                                height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 1,
-                                child: FutureBuilder<Weather5Days>(
-                                  future: futureWeatherWeek,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return VideoPlayer(controllerVideo(snapshot));
-                                    } else if (snapshot.hasError) {
-                                      return Text('${snapshot.error}');
-                                    }
-                                    return Container();
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      buildTemperature(context),
-                      buildDescription(context),
-                      buildHumidity(context),
-                      const HumidityIcon(),
-                      const WindSpeedIcon(),
-                      const WindKmH(),
-                      buildWindSpeed(context),
-                      buildCityName(context),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.19,
-                        ),
-                        child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Text(
-                              DateFormat('EEEE').format(weekDaysName(0)),
-                              style: GoogleFonts.roboto(
-                                fontSize: 24,
-                                color: Colors.indigoAccent.withOpacity(0.7),
-                              ),
-                            )),
-                      ),
-                      buildDate(context),
-                      Padding(
-                        padding: EdgeInsets.only(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Stack(
+                      children: [
+                        buildTemperature(context),
+                        buildDescription(context),
+                        buildHumidity(context),
+                        const HumidityIcon(),
+                        const WindSpeedIcon(),
+                        const WindKmH(),
+                        buildWindSpeed(context),
+                        buildCityName(context),
+                        Padding(
+                          padding: EdgeInsets.only(
                             top: MediaQuery
                                 .of(context)
                                 .size
-                                .height * 0.57),
-                        child: buildBottomWeatherWidget(context),
-                      ),
-
-                    ],
+                                .height * 0.19,
+                          ),
+                          child: Align(
+                              alignment: Alignment.topCenter,
+                              child: Text(
+                                DateFormat('EEEE').format(weekDaysName(0)),
+                                style: GoogleFonts.roboto(
+                                  fontSize: 24,
+                                  color: Colors.indigoAccent.withOpacity(0.7),
+                                ),
+                              )),
+                        ),
+                        buildDate(context),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -219,6 +211,14 @@ class _HomePageTodayState extends State<HomePageToday> {
                   ),
                 ),
               ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.68),
+              child: buildBottomWeatherWidget(context),
             ),
           ],
         ),
@@ -273,28 +273,25 @@ class _HomePageTodayState extends State<HomePageToday> {
               ),
               child: Align(
                 alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom = "${snapshot.data?.city?.name}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 26,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data?.commonList}');
-                      }
+                child: FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom = "${snapshot.data?.city?.name}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 26,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
+                    return Container();
+                  },
                 ),
               ),
             );
@@ -310,30 +307,33 @@ class _HomePageTodayState extends State<HomePageToday> {
                   right: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.057),
+                      .height * 0.057
+              ),
               child: Align(
                 alignment: Alignment.topRight,
-                child: FutureBuilder<Weather5Days>(
-                  future: futureWeatherWeek,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var tom =
-                          "${snapshot.data
-                          ?.commonList?[0]["wind"]["speed"]}";
-                      return Text(
-                        tom,
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          '${snapshot.error}${snapshot.data?.commonList}');
-                    }
-                    return Container();
-                  },
-                ),
+                child:
+                    FutureBuilder<Weather5Days>(
+                      future: futureWeatherWeek,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          var tom =
+                              "${snapshot.data
+                              ?.commonList?[0]["wind"]["speed"]}";
+                          return Text(
+                            tom,
+                            style: GoogleFonts.roboto(
+                              fontSize: 18,
+                              color: Colors.black45,
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              '${snapshot.error}${snapshot.data?.commonList}');
+                        }
+                        return Container();
+                      },
+                    ),
+
               ),
             );
   }
@@ -345,10 +345,11 @@ class _HomePageTodayState extends State<HomePageToday> {
                       .of(context)
                       .size
                       .height * 0.045,
-                  right: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.045),
+                  // right: MediaQuery
+                  //     .of(context)
+                  //     .size
+                  //     .height * 0.045
+              ),
               child: Align(
                 alignment: Alignment.topRight,
                 child: FutureBuilder<Weather5Days>(
@@ -383,32 +384,29 @@ class _HomePageTodayState extends State<HomePageToday> {
                   .size
                   .height * 0.15,
               // left: MediaQuery.of(context).size.height * 0.021,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data!
-                            .commonList?[0]["weather"][0]["description"]}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data?.commonList}');
-                      }
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data!
+                          .commonList?[0]["weather"][0]["description"]}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
+                    return Container();
+                  },
                 ),
               ),
             );
@@ -416,40 +414,37 @@ class _HomePageTodayState extends State<HomePageToday> {
 
   Padding buildTemperature(BuildContext context) {
     return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.035),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data?.commonList?[0]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.openSans(
-                            fontSize: 64,
-                            color: Colors.indigoAccent.withOpacity(0.7),
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
+      padding: EdgeInsets.only(
+          top: MediaQuery
+              .of(context)
+              .size
+              .height * 0.035),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: FutureBuilder<Weather5Days>(
+          future: futureWeatherWeek,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var tom =
+                  "${snapshot.data?.commonList?[0]["main"]["temp"]
+                  ?.toInt()}\u2103";
+              return Text(
+                tom,
+                style: GoogleFonts.openSans(
+                  fontSize: 64,
+                  color: Colors.indigoAccent.withOpacity(0.7),
                 ),
-              ),
-            );
+              );
+            } else if (snapshot.hasError) {
+              return Text(
+                  '${snapshot.error}${snapshot.data?.commonList}');
+            }
+
+            return Container();
+          },
+        ),
+      ),
+    );
   }
 
   VideoPlayerController controllerVideo(AsyncSnapshot<Weather5Days> snapshot) {
@@ -502,722 +497,698 @@ class _HomePageTodayState extends State<HomePageToday> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-                children: [
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
+          Column(
+              children: [
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
 
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[1]["dt_txt"]
-                            .toString().substring(11,16)}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[1]["dt_txt"]
+                          .toString().substring(11,16)}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.commonList?[1]["weather"][0]["icon"] ==
+                          "01d") {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
                             color: Colors.black45,
                           ),
                         );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
                       }
-
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[1]["weather"][0]["icon"] ==
-                            "01d") {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Icon(
-                              Icons.sunny,
-                              size: 45,
-                              color: Colors.black45,
-                            ),
-                          );
-                        }
-                        else {
-                          return ImageIcon(
-                            size: 60,
-                            NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[1]["weather"][0]["icon"]}@2x.png',
-                            ),
-                            color: Colors.black45,
-                          );
-                        }
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                      else {
+                        return ImageIcon(
+                          size: 60,
+                          NetworkImage(
+                            'http://openweathermap.org/img/wn/${snapshot
+                                .data!
+                                .commonList?[1]["weather"][0]["icon"]}@2x.png',
+                          ),
+                          color: Colors.black45,
+                        );
                       }
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[1]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.fredoka(
-                            fontSize: 18,
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[1]["main"]["temp"]
+                          ?.toInt()}\u2103";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+              ],
+            ),
+          Column(
+              children: [
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[2]["dt_txt"]
+                          .toString().substring(11,16)}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.commonList?[2]["weather"][0]["icon"] ==
+                          "01d") {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
                             color: Colors.black45,
                           ),
                         );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
                       }
+                      else {
+                        return ImageIcon(
+                          size: 60,
+                          NetworkImage(
+                            'http://openweathermap.org/img/wn/${snapshot
+                                .data!
+                                .commonList?[2]["weather"][0]["icon"]}@2x.png',
+                          ),
+                          color: Colors.black45,
+                        );
+                      }
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                ],
-              ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-                children: [
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[2]["dt_txt"]
-                            .toString().substring(11,16)}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[2]["main"]["temp"]
+                          ?.toInt()}\u2103";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+              ],
+            ),
+          Column(
+              children: [
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[3]["dt_txt"]
+                          .toString().substring(11,16)}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.commonList?[3]["weather"][0]["icon"]=="01d"){
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
                             color: Colors.black45,
                           ),
                         );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
                       }
+                      else{
+                        return ImageIcon(
+                          size: 60,
+                          NetworkImage(
+                            'http://openweathermap.org/img/wn/${snapshot
+                                .data!
+                                .commonList?[3]["weather"][0]["icon"]}@2x.png',
+                          ),
+                          color: Colors.black45,
+                        );}
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[2]["weather"][0]["icon"] ==
-                            "01d") {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Icon(
-                              Icons.sunny,
-                              size: 45,
-                              color: Colors.black45,
-                            ),
-                          );
-                        }
-                        else {
-                          return ImageIcon(
-                            size: 60,
-                            NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[2]["weather"][0]["icon"]}@2x.png',
-                            ),
-                            color: Colors.black45,
-                          );
-                        }
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[3]["main"]["temp"]
+                          ?.toInt()}\u2103";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[2]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.fredoka(
-                            fontSize: 18,
+                    return Container();
+                  },
+                ),
+              ],
+            ),
+          Column(
+              children: [
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      description = snapshot.data!.commonList![32]
+                      ["weather"][0]["description"];
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[4]["dt_txt"]
+                          .toString().substring(11,16)}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.commonList?[4]["weather"][0]["icon"]=="01d"){
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
                             color: Colors.black45,
                           ),
                         );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
                       }
+                      else{
+                        return ImageIcon(
+                          size: 60,
+                          NetworkImage(
+                            'http://openweathermap.org/img/wn/${snapshot
+                                .data!
+                                .commonList?[4]["weather"][0]["icon"]}@2x.png',
+                          ),
+                          color: Colors.black45,
+                        );}
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                ],
-              ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-                children: [
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[3]["dt_txt"]
-                            .toString().substring(11,16)}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[4]["main"]["temp"]
+                          ?.toInt()}\u2103";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+              ],
+            ),
+          Column(
+              children: [
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      description = snapshot.data!.commonList![39]
+                      ["weather"][0]["description"];
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[5]["dt_txt"]
+                          .toString().substring(11,16)}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.commonList?[5]["weather"][0]["icon"]=="01d"){
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
                             color: Colors.black45,
                           ),
                         );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
                       }
+                      else{
+                        return ImageIcon(
+                          size: 60,
+                          NetworkImage(
+                            'http://openweathermap.org/img/wn/${snapshot
+                                .data!
+                                .commonList?[5]["weather"][0]["icon"]}@2x.png',
+                          ),
+                          color: Colors.black45,
+                        );}
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[3]["weather"][0]["icon"]=="01d"){
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Icon(
-                              Icons.sunny,
-                              size: 45,
-                              color: Colors.black45,
-                            ),
-                          );
-                        }
-                        else{
-                          return ImageIcon(
-                            size: 60,
-                            NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[3]["weather"][0]["icon"]}@2x.png',
-                            ),
-                            color: Colors.black45,
-                          );}
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[5]["main"]["temp"]
+                          ?.toInt()}\u2103";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[3]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.fredoka(
-                            fontSize: 18,
+                    return Container();
+                  },
+                ),
+              ],
+            ),
+          Column(
+              children: [
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[6]["dt_txt"]
+                          .toString().substring(11,16)}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.commonList?[6]["weather"][0]["icon"]=="01d"){
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
                             color: Colors.black45,
                           ),
                         );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
                       }
+                      else{
+                        return ImageIcon(
+                          size: 60,
+                          NetworkImage(
+                            'http://openweathermap.org/img/wn/${snapshot
+                                .data!
+                                .commonList?[6]["weather"][0]["icon"]}@2x.png',
+                          ),
+                          color: Colors.black45,
+                        );}
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                ],
-              ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-                children: [
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![32]
-                        ["weather"][0]["description"];
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[4]["dt_txt"]
-                            .toString().substring(11,16)}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[6]["main"]["temp"]
+                          ?.toInt()}\u2103";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+              ],
+            ),
+          Column(
+              children: [
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[7]["dt_txt"]
+                          .toString().substring(11,16)}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.commonList?[7]["weather"][0]["icon"]=="01d"){
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
                             color: Colors.black45,
                           ),
                         );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
                       }
+                      else{
+                        return ImageIcon(
+                          size: 60,
+                          NetworkImage(
+                            'http://openweathermap.org/img/wn/${snapshot
+                                .data!
+                                .commonList?[7]["weather"][0]["icon"]}@2x.png',
+                          ),
+                          color: Colors.black45,
+                        );}
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[4]["weather"][0]["icon"]=="01d"){
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Icon(
-                              Icons.sunny,
-                              size: 45,
-                              color: Colors.black45,
-                            ),
-                          );
-                        }
-                        else{
-                          return ImageIcon(
-                            size: 60,
-                            NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[4]["weather"][0]["icon"]}@2x.png',
-                            ),
-                            color: Colors.black45,
-                          );}
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[7]["main"]["temp"]
+                          ?.toInt()}\u2103";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[4]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.fredoka(
-                            fontSize: 18,
+                    return Container();
+                  },
+                ),
+              ],
+            ),
+          Column(
+              children: [
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[8]["dt_txt"]
+                          .toString().substring(11,16)}";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.roboto(
+                          fontSize: 12,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
+
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.commonList?[8]["weather"][0]["icon"]=="01d"){
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                          child: Icon(
+                            Icons.sunny,
+                            size: 45,
                             color: Colors.black45,
                           ),
                         );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
                       }
-
-                      return Container();
-                    },
-                  ),
-                ],
-              ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-                children: [
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![39]
-                        ["weather"][0]["description"];
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[5]["dt_txt"]
-                            .toString().substring(11,16)}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            color: Colors.black45,
+                      else{
+                        return ImageIcon(
+                          size: 60,
+                          NetworkImage(
+                            'http://openweathermap.org/img/wn/${snapshot
+                                .data!
+                                .commonList?[8]["weather"][0]["icon"]}@2x.png',
                           ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
+                          color: Colors.black45,
+                        );}
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[5]["weather"][0]["icon"]=="01d"){
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Icon(
-                              Icons.sunny,
-                              size: 45,
-                              color: Colors.black45,
-                            ),
-                          );
-                        }
-                        else{
-                          return ImageIcon(
-                            size: 60,
-                            NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[5]["weather"][0]["icon"]}@2x.png',
-                            ),
-                            color: Colors.black45,
-                          );}
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
+                    return Container();
+                  },
+                ),
+                FutureBuilder<Weather5Days>(
+                  future: futureWeatherWeek,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var tom =
+                          "${snapshot.data
+                          ?.commonList?[8]["main"]["temp"]
+                          ?.toInt()}\u2103";
+                      return Text(
+                        tom,
+                        style: GoogleFonts.fredoka(
+                          fontSize: 18,
+                          color: Colors.black45,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                          '${snapshot.error}${snapshot.data
+                              ?.commonList}');
+                    }
 
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[5]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.fredoka(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                ],
-              ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-                children: [
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[6]["dt_txt"]
-                            .toString().substring(11,16)}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[6]["weather"][0]["icon"]=="01d"){
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Icon(
-                              Icons.sunny,
-                              size: 45,
-                              color: Colors.black45,
-                            ),
-                          );
-                        }
-                        else{
-                          return ImageIcon(
-                            size: 60,
-                            NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[6]["weather"][0]["icon"]}@2x.png',
-                            ),
-                            color: Colors.black45,
-                          );}
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[6]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.fredoka(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                ],
-              ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-                children: [
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[7]["dt_txt"]
-                            .toString().substring(11,16)}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[7]["weather"][0]["icon"]=="01d"){
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Icon(
-                              Icons.sunny,
-                              size: 45,
-                              color: Colors.black45,
-                            ),
-                          );
-                        }
-                        else{
-                          return ImageIcon(
-                            size: 60,
-                            NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[7]["weather"][0]["icon"]}@2x.png',
-                            ),
-                            color: Colors.black45,
-                          );}
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[7]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.fredoka(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                ],
-              ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Column(
-                children: [
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[8]["dt_txt"]
-                            .toString().substring(11,16)}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 12,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[8]["weather"][0]["icon"]=="01d"){
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Icon(
-                              Icons.sunny,
-                              size: 45,
-                              color: Colors.black45,
-                            ),
-                          );
-                        }
-                        else{
-                          return ImageIcon(
-                            size: 60,
-                            NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[8]["weather"][0]["icon"]}@2x.png',
-                            ),
-                            color: Colors.black45,
-                          );}
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                  FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[8]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.fredoka(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
-                      }
-
-                      return Container();
-                    },
-                  ),
-                ],
-              ),
-          ),
+                    return Container();
+                  },
+                ),
+              ],
+            ),
 
         ],
       ),

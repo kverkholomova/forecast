@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 height: double.infinity,
                 child: SingleChildScrollView(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   child: Stack(
                     children: [
                       buildTemperature(context),
@@ -178,14 +178,15 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.015),
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Container(
-                  width: MediaQuery.of(context).size.width*0.9,
-                  height: MediaQuery.of(context).size.width*0.16,
+                  // width: MediaQuery.of(context).size.width*0.9,
+                  height: MediaQuery.of(context).size.width*0.13,
                   color: Colors.white,
                   child: TextField(
+                    textAlignVertical: TextAlignVertical.bottom,
                     decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(width: 0.5, color: Colors.black45),
@@ -198,7 +199,7 @@ class _HomePageState extends State<HomePage> {
                         focusColor: Colors.indigoAccent.withOpacity(0.7),
                         hintText: "Find your city",
                         hintStyle: GoogleFonts.roboto(
-                          fontSize: 14,
+                          fontSize: 16,
                           color: Colors.black.withOpacity(0.3),
                         )
                     ),

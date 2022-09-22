@@ -64,12 +64,15 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           ),
         ),
 
-        body: TabBarView(
-          controller: controllerTab,
-          children: [
-            const HomePageToday(),
-            today?const HomePage():const AnotherDayForecast(),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: TabBarView(
+            controller: controllerTab,
+            children: [
+              const HomePageToday(),
+              today?const HomePage():const AnotherDayForecast(),
+            ],
+          ),
         ),
       ),
     );

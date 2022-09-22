@@ -130,45 +130,42 @@ class _HomePageTodayState extends State<HomePageToday> {
                 top: MediaQuery
                     .of(context)
                     .size
-                    .height * 0.1,
+                    .height * 0.11,
                 // bottom: MediaQuery.of(context).size.height * 0.02,
               ),
               child: SizedBox(
                 height: double.infinity,
                 child: SingleChildScrollView(
                   physics: NeverScrollableScrollPhysics(),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Stack(
-                      children: [
-                        buildTemperature(context),
-                        buildDescription(context),
-                        buildHumidity(context),
-                        const HumidityIcon(),
-                        const WindSpeedIcon(),
-                        const WindKmH(),
-                        buildWindSpeed(context),
-                        buildCityName(context),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: MediaQuery
-                                .of(context)
-                                .size
-                                .height * 0.19,
-                          ),
-                          child: Align(
-                              alignment: Alignment.topCenter,
-                              child: Text(
-                                DateFormat('EEEE').format(weekDaysName(0)),
-                                style: GoogleFonts.roboto(
-                                  fontSize: 24,
-                                  color: Colors.indigoAccent.withOpacity(0.7),
-                                ),
-                              )),
+                  child: Stack(
+                    children: [
+                      buildTemperature(context),
+                      buildDescription(context),
+                      buildHumidity(context),
+                      const HumidityIcon(),
+                      const WindSpeedIcon(),
+                      const WindKmH(),
+                      buildWindSpeed(context),
+                      buildCityName(context),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.19,
                         ),
-                        buildDate(context),
-                      ],
-                    ),
+                        child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              DateFormat('EEEE').format(weekDaysName(0)),
+                              style: GoogleFonts.roboto(
+                                fontSize: 24,
+                                color: Colors.indigoAccent.withOpacity(0.7),
+                              ),
+                            )),
+                      ),
+                      buildDate(context),
+                    ],
                   ),
                 ),
               ),
@@ -531,11 +528,16 @@ class _HomePageTodayState extends State<HomePageToday> {
                       if (snapshot.data!.commonList?[1]["weather"][0]["icon"] ==
                           "01d") {
                         return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Icon(
-                            Icons.sunny,
-                            size: 45,
-                            color: Colors.black45,
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              right: 5
+                            ),
+                            child: Icon(
+                              Icons.sunny,
+                              size: 45,
+                              color: Colors.black45,
+                            ),
                           ),
                         );
                       }

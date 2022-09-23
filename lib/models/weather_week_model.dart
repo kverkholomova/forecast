@@ -16,6 +16,7 @@ class Weather5Days {
     city = json['city'] != null ? City.fromJson(json['city']) : null;
   }
 
+
 }
 
 class CommonList {

@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:forecast/screens/exception_screen.dart';
+
 import '../models/weather_week_model.dart';
 import '../screens/today_forecast.dart';
 import '../utils/location_functionality.dart';
 import 'package:http/http.dart' as http;
 
+bool rightCity = true;
 Future<Weather5Days> fetchWeatherForWeek() async {
   var currentLocationData = await location.getLocation();
 
@@ -17,9 +21,18 @@ Future<Weather5Days> fetchWeatherForWeek() async {
     // then parse the JSON.
     return Weather5Days.fromJson(jsonDecode(response.body));
   }
+  // } else if (response.statusCode == 404) {
+  //   // If the server did return a 200 OK response,
+  //   // then parse the JSON.;
+  // }
   else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load weather');
+    rightCity = false;
+    print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+    print(response.statusCode);
+    print(rightCity);
+
+    throw Exception('Error ${response.statusCode}');
   }
 }

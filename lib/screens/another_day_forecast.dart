@@ -15,6 +15,7 @@ import '../constants.dart';
 import '../utils/location_functionality.dart';
 import '../widgets/loader.dart';
 import 'main_page.dart';
+import 'package:http/http.dart' as http;
 
 class AnotherDayForecast extends StatefulWidget {
   const AnotherDayForecast({Key? key}) : super(key: key);
@@ -46,6 +47,14 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
   }
   late TextEditingController textEditingController;
 
+  checkCityName()async{
+    final responseName = await http.get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
+
+    if (responseName.statusCode != 200){
+      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+      rightCity = false;
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -87,214 +96,259 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
         ? const Loader()
         : SafeArea(
           child: Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Stack(
-          children:[
-            Padding(
-            padding: EdgeInsets.only(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.53,
-                bottom: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.3),
-            child: Align(
-              alignment: Alignment.center,
-              child: FittedBox(
-                fit: BoxFit.fill,
-                child: SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.9,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.9,
-                  child: FutureBuilder<Weather5Days>(
-                    future: futureWeatherWeek,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return VideoPlayer(controllerVideo(snapshot));
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      }
-                      // By default, show a loading spinner.
-                      return Container();
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ),
-            Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery
-                .of(context)
-                .size
-                .height * 0.11,
-          ),
-          child: SizedBox(
-            height: double.infinity,
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.035),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: buildTemperature(),
-                    ),
-                  ),
-                  Positioned(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.15,
-                    // left: MediaQuery.of(context).size.height * 0.021,
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: buildDescription(),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.045,
-                        right: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.045),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: buildHumidity(),
-                    ),
-                  ),
-                  const HumidityIcon(),
-                  const WindSpeedIcon(),
-                  const WindKmH(),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.01,
-                        right: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.057),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: buildWindSpeed(),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0,
-                    ),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: buildCityName(),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.19,
-                    ),
-                    child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Text(
-                          dateWeekName,
-                          style: GoogleFonts.roboto(
-                            fontSize: 24,
-                            color: colors[index],
-                          ),
-                        )),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.23,
-                    ),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: buildDate(),
-                    ),
-                  ),
-
-
-                ],
-              ),
-            ),
-          ),
-      ),
-            Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  // width: MediaQuery.of(context).size.width*0.9,
-                  height: MediaQuery.of(context).size.width*0.13,
-                  color: Colors.white,
-                  child: TextField(
-                    textAlignVertical: TextAlignVertical.bottom,
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(width: 0.5, color: Colors.black45),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        focusColor: Colors.indigoAccent.withOpacity(0.7),
-                        hintText: "Find your city",
-                        hintStyle: GoogleFonts.roboto(
-                          fontSize: 16,
-                          color: Colors.black.withOpacity(0.3),
-                        )
-                    ),
-                    controller: textEditingController,
-                    onSubmitted: (String value) async {
-                      city = value;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                            const MainPage()),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
+      body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: Stack(
+            children:[
+              Padding(
+                padding: EdgeInsets.only(
                   top: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.68),
-              child: buildBottomWeather(context),
+                      .height<=684? MediaQuery
+                      .of(context)
+                      .size
+                      .height* 0.27:MediaQuery
+                      .of(context)
+                      .size
+                      .height* 0.27,
+                ),
+                child: Align(
+                    alignment: Alignment.center,
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width *1 ,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height *0.5,
+                        child: FutureBuilder<Weather5Days>(
+                          future: futureWeatherWeek,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return VideoPlayer(controllerVideo(snapshot));
+                            } else if (snapshot.hasError) {
+                              return Text('${snapshot.error}');
+                            }
+                            // By default, show a loading spinner.
+                            return Container();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+              ),
+
+              Padding(
+            padding: EdgeInsets.only(
+              top: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.11,
             ),
-          ])
+            child: Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.035),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: buildTemperature(),
+                  ),
+                ),
+                Positioned(
+                  top: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.15,
+                  // left: MediaQuery.of(context).size.height * 0.021,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: buildDescription(),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: SizedBox(
+                    width: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const HumidityIcon(),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height * 0.045,
+                              // right: MediaQuery
+                              //     .of(context)
+                              //     .size
+                              //     .height * 0.045
+                          ),
+                          child: buildHumidity(),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: SizedBox(
+                    width: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const WindSpeedIcon(),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height * 0.01,
+                              // right: MediaQuery
+                              //     .of(context)
+                              //     .size
+                              //     .height * 0.057
+                          ),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: buildWindSpeed(),
+                          ),
+                        ),
+                        const WindKmH(),
+
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: buildCityName(),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.19,
+                      ),
+                      child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            dateWeekName,
+                            style: GoogleFonts.roboto(
+                              fontSize: 24,
+                              color: colors[index],
+                            ),
+                          )),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0,
+                      ),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: buildDate(),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+        ),
+              Padding(
+                padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    // width: MediaQuery.of(context).size.width*0.9,
+                    height: MediaQuery.of(context).size.width*0.13,
+                    color: Colors.white,
+                    child: TextField(
+                      textAlignVertical: TextAlignVertical.bottom,
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(width: 0.5, color: Colors.black45),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          focusColor: Colors.indigoAccent.withOpacity(0.7),
+                          hintText: "Find your city",
+                          hintStyle: GoogleFonts.roboto(
+                            fontSize: 16,
+                            color: Colors.black.withOpacity(0.3),
+                          )
+                      ),
+                      controller: textEditingController,
+                      onSubmitted: (String value) async {
+                        setState(() async {
+                          loadingNew=true;
+                          city = value;
+                          await checkCityName();
+                          if (rightCity==true){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MainPage()),
+                            );
+                          }
+                          else{
+                            city = "";
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MainPage()),
+                            );
+                          }
+                        });
+                        city = value;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                              const MainPage()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.7),
+                child: buildBottomWeather(context),
+              ),
+            ]),
+      )
     ),
         );
   }
@@ -1082,7 +1136,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.only(left: 10),
             child: GestureDetector(
               onTap: () {
                 setState(() {

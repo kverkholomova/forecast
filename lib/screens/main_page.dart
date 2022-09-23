@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:forecast/api/weather_week_api.dart';
 import 'package:forecast/screens/another_day_forecast.dart';
+import 'package:forecast/screens/exception_screen.dart';
 import 'package:forecast/screens/home_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,9 +42,10 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return !rightCity?const ExceptionScreen():DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: Colors.white,
         bottomNavigationBar: Container(
           color: Colors.white,
           child: TabBar(
@@ -69,7 +72,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           child: TabBarView(
             controller: controllerTab,
             children: [
-              const HomePageToday(),
+              HomePageToday(),
               today?const HomePage():const AnotherDayForecast(),
             ],
           ),

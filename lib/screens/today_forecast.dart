@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:forecast/screens/exception_screen.dart';
 import 'package:forecast/screens/main_page.dart';
 import 'package:forecast/widgets/icons.dart';
 import 'package:forecast/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
-import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_webservice/directions.dart';
 import 'package:google_maps_webservice/src/places.dart';
@@ -52,7 +50,6 @@ class _HomePageTodayState extends State<HomePageToday> {
     final responseName = await http.get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
 
     if (responseName.statusCode != 200){
-      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
       rightCity = false;
     }
   }
@@ -99,6 +96,7 @@ class _HomePageTodayState extends State<HomePageToday> {
   Future<String> showGoogleAutoComplete() async {
 
     Prediction? p = await PlacesAutocomplete.show(
+
         offset: 0,
         radius: 1000,
         strictbounds: false,
@@ -110,38 +108,10 @@ class _HomePageTodayState extends State<HomePageToday> {
         components: [Component(Component.country, "pl")],
         types: ["(cities)"],
         hint: "Search City",
-        startText: city == null || city == "" ? "" : city
+        startText: city == null || city == "" ? "" : city,
     );
     return p!.description!;
   }
-
-  // Future<void> _handlePressButton() async {
-  //   Prediction? p = await PlacesAutocomplete.show(
-  //       context: context,
-  //       apiKey: kGoogleApiKey,
-  //       mode: Mode.overlay,
-  //       // Mode.fullscreen
-  //       language: "en",
-  //       components: [Component(Component.country, "en")]);
-  //   displayPrediction(p!, homeScaffoldKey.currentState);
-  // }
-  //
-  // Future<Null> displayPrediction(Prediction p, ScaffoldState? scaffold) async {
-  //   if (p != null) {
-  //     // get detail (lat/lng)
-  //     GoogleMapsPlaces _places = GoogleMapsPlaces(
-  //       apiKey: kGoogleApiKey,
-  //       apiHeaders: await GoogleApiHeaders().getHeaders(),
-  //     );
-  //     PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId.toString());
-  //     final lat = detail.result.geometry?.location.lat;
-  //     final lng = detail.result.geometry?.location.lng;
-  //
-  //     // scaffold.showSnackBar(
-  //     //   SnackBar(content: Text("${p.description} - $lat/$lng")),
-  //     // );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +142,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                                 if (snapshot.hasData) {
                                   return VideoPlayer(controllerVideo(snapshot));
                                 } else if (snapshot.hasError) {
-                                  return Text("Error found");
+                                  return const Text("Error found");
                                 }
                                 return Container();
                               },
@@ -238,8 +208,6 @@ class _HomePageTodayState extends State<HomePageToday> {
                         ],
                       ),
                     ),
-                    // Center(child: PlacesAutocompleteFormField(apiKey: "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg")),
-
                     Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.width * 0.02),
@@ -254,9 +222,6 @@ class _HomePageTodayState extends State<HomePageToday> {
                             onTap: () async {
 
                               city = await showGoogleAutoComplete();
-                              print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-                              print(city);
-
                               setState(() async {
                                     loadingToday=true;
 
@@ -300,29 +265,6 @@ class _HomePageTodayState extends State<HomePageToday> {
                                   color: Colors.black.withOpacity(0.3),
                                 )),
                             controller: textEditingController,
-                            // onSubmitted: (String value) {
-                            //
-                            //   setState(() async {
-                            //     loadingToday=true;
-                            //     city = value;
-                            //     await checkCityName();
-                            //     if (rightCity==true){
-                            //       Navigator.push(
-                            //           context,
-                            //           MaterialPageRoute(
-                            //               builder: (context) => const MainPage()),
-                            //         );
-                            //     }
-                            //     else{
-                            //       city = "";
-                            //       Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) => const MainPage()),
-                            //       );
-                            //     }
-                            //   });
-                            // },
                           ),
                         ),
                       ),

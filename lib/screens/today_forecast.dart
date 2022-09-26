@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:forecast/screens/exception_screen.dart';
 import 'package:forecast/screens/main_page.dart';
 import 'package:forecast/widgets/icons.dart';
 import 'package:forecast/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
+import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_webservice/directions.dart';
+import 'package:google_maps_webservice/src/places.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
@@ -15,6 +19,9 @@ import '../utils/location_functionality.dart';
 import 'home_page.dart';
 import 'package:http/http.dart' as http;
 
+const kGoogleApiKey = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
+final homeScaffoldKey = GlobalKey<ScaffoldState>();
+final searchScaffoldKey = GlobalKey<ScaffoldState>();
 class HomePageToday extends StatefulWidget {
   const HomePageToday({Key? key}) : super(key: key);
 
@@ -40,7 +47,6 @@ class _HomePageTodayState extends State<HomePageToday> {
   void changeIndex() {
     setState(() => index = random.nextInt(5));
   }
-
 
   checkCityName()async{
     final responseName = await http.get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
@@ -90,12 +96,45 @@ class _HomePageTodayState extends State<HomePageToday> {
     textEditingController.dispose();
   }
 
+  void ShowAutoComplete(){
+
+  }
+
+  // Future<void> _handlePressButton() async {
+  //   Prediction? p = await PlacesAutocomplete.show(
+  //       context: context,
+  //       apiKey: kGoogleApiKey,
+  //       mode: Mode.overlay,
+  //       // Mode.fullscreen
+  //       language: "en",
+  //       components: [Component(Component.country, "en")]);
+  //   displayPrediction(p!, homeScaffoldKey.currentState);
+  // }
+  //
+  // Future<Null> displayPrediction(Prediction p, ScaffoldState? scaffold) async {
+  //   if (p != null) {
+  //     // get detail (lat/lng)
+  //     GoogleMapsPlaces _places = GoogleMapsPlaces(
+  //       apiKey: kGoogleApiKey,
+  //       apiHeaders: await GoogleApiHeaders().getHeaders(),
+  //     );
+  //     PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId.toString());
+  //     final lat = detail.result.geometry?.location.lat;
+  //     final lng = detail.result.geometry?.location.lng;
+  //
+  //     // scaffold.showSnackBar(
+  //     //   SnackBar(content: Text("${p.description} - $lat/$lng")),
+  //     // );
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return loadingToday
         ? const Loader()
         : SafeArea(
             child: Scaffold(
+              key: homeScaffoldKey,
               backgroundColor: Colors.white,
               body: SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -184,6 +223,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                         ],
                       ),
                     ),
+                    // Center(child: PlacesAutocompleteFormField(apiKey: "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg")),
+
                     Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.width * 0.02),
@@ -193,51 +234,57 @@ class _HomePageTodayState extends State<HomePageToday> {
                           // width: MediaQuery.of(context).size.width*0.9,
                           height: MediaQuery.of(context).size.width * 0.13,
                           color: Colors.white,
-                          child: TextField(
-                            textAlignVertical: TextAlignVertical.bottom,
-                            decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 0.5, color: Colors.black45),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color:
-                                          Colors.indigoAccent.withOpacity(0.7)),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                focusColor:
-                                    Colors.indigoAccent.withOpacity(0.7),
-                                hintText: "Find your city",
-                                hintStyle: GoogleFonts.roboto(
-                                  fontSize: 16,
-                                  color: Colors.black.withOpacity(0.3),
-                                )),
-                            controller: textEditingController,
-                            onSubmitted: (String value) async {
-                              setState(() async {
-                                loadingToday=true;
-                                city = value;
-                                await checkCityName();
-                                if (rightCity==true){
-                                  Navigator.push(
+                          child: GestureDetector(
+                            onTap: ()async{
+
+                            },
+                            child: TextField(
+                              textAlignVertical: TextAlignVertical.bottom,
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 0.5, color: Colors.black45),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color:
+                                            Colors.indigoAccent.withOpacity(0.7)),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  focusColor:
+                                      Colors.indigoAccent.withOpacity(0.7),
+                                  hintText: "Find your city",
+                                  hintStyle: GoogleFonts.roboto(
+                                    fontSize: 16,
+                                    color: Colors.black.withOpacity(0.3),
+                                  )),
+                              controller: textEditingController,
+                              onSubmitted: (String value) {
+
+                                setState(() async {
+                                  loadingToday=true;
+                                  city = value;
+                                  await checkCityName();
+                                  if (rightCity==true){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const MainPage()),
+                                      );
+                                  }
+                                  else{
+                                    city = "";
+                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => const MainPage()),
                                     );
-                                }
-                                else{
-                                  city = "";
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const MainPage()),
-                                  );
-                                }
-                              });
-                            },
+                                  }
+                                });
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -1127,4 +1174,43 @@ class _HomePageTodayState extends State<HomePageToday> {
       ),
     );
   }
+
+
+//   Future<void> _handlePressButton() async {
+//     Prediction? p = await PlacesAutocomplete.show(
+//       context: context,
+//       apiKey: kGoogleApiKey,
+//       language: "en",
+//       decoration: InputDecoration(
+//         hintText: 'Search',
+//         focusedBorder: OutlineInputBorder(
+//           borderRadius: BorderRadius.circular(20),
+//           borderSide: BorderSide(
+//             color: Colors.white,
+//           ),
+//         ),
+//       ),
+//       components: [Component(Component.country, "en")],
+//     );
+//
+//     displayPrediction(p!, homeScaffoldKey.currentState);
+//   }
+//
+//
+// Future<Null> displayPrediction(Prediction p, ScaffoldState? scaffold) async {
+//   if (p != null) {
+//     // get detail (lat/lng)
+//     GoogleMapsPlaces _places = GoogleMapsPlaces(
+//       apiKey: kGoogleApiKey,
+//       apiHeaders: await GoogleApiHeaders().getHeaders(),
+//     );
+//     PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId.toString());
+//     final lat = detail.result.geometry?.location.lat;
+//     final lng = detail.result.geometry?.location.lng;
+//
+//     // scaffold?.showSnackBar(
+//     //   SnackBar(content: Text("${p.description} - $lat/$lng")),
+//     // );
+//   }
+// }
 }

@@ -59,7 +59,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
                 fontSize: 18,
                 // color: Colors.indigoAccent.withOpacity(0.7),
               ),)),
-              Tab(icon: Text("5Days", style: GoogleFonts.roboto(
+              Tab(icon: Text("5 Days", style: GoogleFonts.roboto(
                 fontSize: 18,
                 // color: Colors.indigoAccent.withOpacity(0.7),
               ),)),

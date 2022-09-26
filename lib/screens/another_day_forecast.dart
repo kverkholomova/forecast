@@ -189,10 +189,10 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                   .of(context)
                                   .size
                                   .height * 0.045,
-                              // right: MediaQuery
-                              //     .of(context)
-                              //     .size
-                              //     .height * 0.045
+                              right: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height * 0.045
                           ),
                           child: buildHumidity(),
                         ),
@@ -441,7 +441,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                       return Text(
                         tom,
                         style: GoogleFonts.roboto(
-                          fontSize: 20,
+                          fontSize: 18,
                           color: Colors.black45,
                         ),
                       );

@@ -352,10 +352,10 @@ class _HomePageTodayState extends State<HomePageToday> {
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.045,
-        // right: MediaQuery
-        //     .of(context)
-        //     .size
-        //     .height * 0.045
+        right: MediaQuery
+            .of(context)
+            .size
+            .height * 0.045
       ),
       child: Align(
         alignment: Alignment.topRight,
@@ -368,7 +368,7 @@ class _HomePageTodayState extends State<HomePageToday> {
               return Text(
                 tom,
                 style: GoogleFonts.roboto(
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.black45,
                 ),
               );

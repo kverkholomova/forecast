@@ -29,12 +29,11 @@ String dateWeekName = '';
 int index = 0;
 String iconNum = '';
 String description = '';
-bool today= true;
+bool today = true;
+
 class _HomePageState extends State<HomePage> {
   late Future<Weather5Days> futureWeatherWeek;
   Random random = Random();
-
-
 
   weekDaysName(int dayCount) {
     DateTime dateWeek = DateTime.now().add(Duration(days: dayCount));
@@ -46,15 +45,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   late VideoPlayerController _controller;
-  checkCityName()async{
-    final responseName = await http.get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
 
-    if (responseName.statusCode != 200){
-      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+  checkCityName() async {
+    final responseName = await http.get(Uri.parse(
+        'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
+
+    if (responseName.statusCode != 200) {
+      print(
+          "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
       rightCity = false;
     }
   }
+
   late TextEditingController textEditingController;
+
   VideoPlayerController getController(String path) {
     _controller = VideoPlayerController.asset(path)
       ..initialize().then((_) {
@@ -72,11 +76,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-
     super.initState();
     futureWeatherWeek = fetchWeatherForWeek();
     Timer(const Duration(seconds: 4), () => dataLoadFunction());
-
 
     setState(() {
       textEditingController = TextEditingController();
@@ -94,405 +96,311 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    return loading ? const Loader() : SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Stack(
-            children: [
-              Padding(
-              padding: EdgeInsets.only(top: MediaQuery
-                  .of(context)
-                  .size
-                  .height<=684? MediaQuery
-                  .of(context)
-                  .size
-                  .height* 0.27:MediaQuery
-                  .of(context)
-                  .size
-                  .height* 0.27,
-                  ),
-              child: Align(
-                alignment: Alignment.center,
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: SizedBox(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 1,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height<=684? MediaQuery
-                        .of(context)
-                        .size
-                        .height* 0.57:MediaQuery
-                        .of(context)
-                        .size
-                        .height* 0.5,
-                    child: FutureBuilder<Weather5Days>(
-                      future: futureWeatherWeek,
-                      builder: (context, snapshot) {
-                        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-    print(MediaQuery
-        .of(context)
-        .size
-        .height);
-    print(MediaQuery
-        .of(context)
-        .size
-        .height<=684? MediaQuery
-        .of(context)
-        .size
-        .height* 0.44:MediaQuery
-        .of(context)
-        .size
-        .height* 0.5);
-                        if (snapshot.hasData) {
-                          return VideoPlayer(controllerVideo(snapshot));
-                        } else if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
-
-                        // By default, show a loading spinner.
-                        return Container();
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.11,
-                  // bottom: MediaQuery.of(context).size.height * 0.02,
-                ),
+    return loading
+        ? const Loader()
+        : SafeArea(
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              body: SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
                 child: Stack(
                   children: [
-                    buildTemperature(context),
-                    buildDescription(context),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: SizedBox(
-                        width: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const HumidityIcon(),
-                            buildHumidity(context),
-
-                          ],
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: SizedBox(
-                        width: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const WindSpeedIcon(),
-                            buildWindSpeed(context),
-                            const WindKmH(),
-
-                          ],
-                        ),
-                      ),
-                    ),
-                    buildCityName(context),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.19,
+                        top: MediaQuery.of(context).size.height <= 684
+                            ? MediaQuery.of(context).size.height * 0.27
+                            : MediaQuery.of(context).size.height * 0.27,
                       ),
                       child: Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            DateFormat('EEEE').format(weekDaysName(0)),
-                            style: GoogleFonts.roboto(
-                              fontSize: 26,
-                              color: Colors.indigoAccent.withOpacity(0.7),
-                            ),
-                          )),
-                    ),
-                    buildDate(context),
+                        alignment: Alignment.center,
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 1,
+                            height: MediaQuery.of(context).size.height <= 684
+                                ? MediaQuery.of(context).size.height * 0.57
+                                : MediaQuery.of(context).size.height * 0.5,
+                            child: FutureBuilder<Weather5Days>(
+                              future: futureWeatherWeek,
+                              builder: (context, snapshot) {
+                                print(
+                                    "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+                                print(MediaQuery.of(context).size.height);
+                                print(MediaQuery.of(context).size.height <= 684
+                                    ? MediaQuery.of(context).size.height * 0.44
+                                    : MediaQuery.of(context).size.height * 0.5);
+                                if (snapshot.hasData) {
+                                  return VideoPlayer(controllerVideo(snapshot));
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
 
+                                // By default, show a loading spinner.
+                                return Container();
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.11,
+                        // bottom: MediaQuery.of(context).size.height * 0.02,
+                      ),
+                      child: Stack(
+                        children: [
+                          buildTemperature(context),
+                          buildDescription(context),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: SizedBox(
+                              width: 100,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const HumidityIcon(),
+                                  buildHumidity(context),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: SizedBox(
+                              width: 100,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const WindSpeedIcon(),
+                                  buildWindSpeed(context),
+                                  const WindKmH(),
+                                ],
+                              ),
+                            ),
+                          ),
+                          buildCityName(context),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.19,
+                            ),
+                            child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  DateFormat('EEEE').format(weekDaysName(0)),
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 26,
+                                    color: Colors.indigoAccent.withOpacity(0.7),
+                                  ),
+                                )),
+                          ),
+                          buildDate(context),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.02),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          // width: MediaQuery.of(context).size.width*0.9,
+                          height: MediaQuery.of(context).size.width * 0.13,
+                          color: Colors.white,
+                          child: TextField(
+                            textAlignVertical: TextAlignVertical.bottom,
+                            decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 0.5, color: Colors.black45),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1,
+                                      color:
+                                          Colors.indigoAccent.withOpacity(0.7)),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                focusColor:
+                                    Colors.indigoAccent.withOpacity(0.7),
+                                hintText: "Find your city",
+                                hintStyle: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  color: Colors.black.withOpacity(0.3),
+                                )),
+                            controller: textEditingController,
+                            onSubmitted: (String value) async {
+                              setState(() async {
+                                loading = true;
+                                city = value;
+                                await checkCityName();
+                                if (rightCity == true) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const MainPage()),
+                                  );
+                                } else {
+                                  city = "";
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const MainPage()),
+                                  );
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.7),
+                      child: buildBottomWeatherWidget(context),
+                    ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    // width: MediaQuery.of(context).size.width*0.9,
-                    height: MediaQuery.of(context).size.width*0.13,
-                    color: Colors.white,
-                    child: TextField(
-                      textAlignVertical: TextAlignVertical.bottom,
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 0.5, color: Colors.black45),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          focusColor: Colors.indigoAccent.withOpacity(0.7),
-                          hintText: "Find your city",
-                          hintStyle: GoogleFonts.roboto(
-                            fontSize: 16,
-                            color: Colors.black.withOpacity(0.3),
-                          )
-                      ),
-                      controller: textEditingController,
-                      onSubmitted: (String value) async {
-                        setState(() async {
-                          loading=true;
-                          city = value;
-                          await checkCityName();
-                          if (rightCity==true){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MainPage()),
-                            );
-                          }
-                          else{
-                            city = "";
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MainPage()),
-                            );
-                          }
-                        });
+            ),
+          );
+  }
 
-                      },
-                    ),
-                  ),
+  Padding buildDate(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).size.height * 0.23,
+      ),
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: FutureBuilder<Weather5Days>(
+          future: futureWeatherWeek,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var tom =
+                  "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(0, 4)}.${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(8, 10)}";
+              return Text(
+                tom,
+                style: GoogleFonts.roboto(
+                  fontSize: 13,
+                  color: Colors.black45,
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.7),
-                child: buildBottomWeatherWidget(context),
-              ),
-            ],
-          ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}${snapshot.data?.commonList}');
+            }
+
+            return Container();
+          },
         ),
       ),
     );
   }
 
-  Padding buildDate(BuildContext context) {
-    return Padding(
-              padding: EdgeInsets.only(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.23,
-              ),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: FutureBuilder<Weather5Days>(
-                  future: futureWeatherWeek,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var tom =
-                          "${snapshot.data?.commonList?[0]["dt_txt"]
-                          .toString()
-                          .substring(0, 4)}.${snapshot.data
-                          ?.commonList?[0]["dt_txt"].toString().substring(
-                          5, 7)}.${snapshot.data?.commonList?[0]["dt_txt"]
-                          .toString()
-                          .substring(8, 10)}";
-                      return Text(
-                        tom,
-                        style: GoogleFonts.roboto(
-                          fontSize: 13,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          '${snapshot.error}${snapshot.data?.commonList}');
-                    }
-
-                    return Container();
-                  },
-                ),
-              ),
-            );
-  }
-
   Padding buildCityName(BuildContext context) {
     return Padding(
-              padding: EdgeInsets.only(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0,
-              ),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: FutureBuilder<Weather5Days>(
-                  future: futureWeatherWeek,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var tom = "${snapshot.data?.city?.name}";
-                      return Text(
-                        tom,
-                        style: GoogleFonts.roboto(
-                          fontSize: 26,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          '${snapshot.error}${snapshot.data?.commonList}');
-                    }
-
-                    return Container();
-                  },
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).size.height * 0,
+      ),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: FutureBuilder<Weather5Days>(
+          future: futureWeatherWeek,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var tom = "${snapshot.data?.city?.name}";
+              return Text(
+                tom,
+                style: GoogleFonts.roboto(
+                  fontSize: 26,
+                  color: Colors.black45,
                 ),
-              ),
-            );
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}${snapshot.data?.commonList}');
+            }
+
+            return Container();
+          },
+        ),
+      ),
+    );
   }
 
   Padding buildWindSpeed(BuildContext context) {
     return Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.01,
-                  // right: MediaQuery
-                  //     .of(context)
-                  //     .size
-                  //     .height * 0.057
-              ),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: FutureBuilder<Weather5Days>(
-                  future: futureWeatherWeek,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var tom =
-                          "${snapshot.data
-                          ?.commonList?[0]["wind"]["speed"]}";
-                      return Text(
-                        tom,
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          '${snapshot.error}${snapshot.data?.commonList}');
-                    }
-                    return Container();
-                  },
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).size.height * 0.01,
+        // right: MediaQuery
+        //     .of(context)
+        //     .size
+        //     .height * 0.057
+      ),
+      child: Align(
+        alignment: Alignment.topRight,
+        child: FutureBuilder<Weather5Days>(
+          future: futureWeatherWeek,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var tom = "${snapshot.data?.commonList?[0]["wind"]["speed"]}";
+              return Text(
+                tom,
+                style: GoogleFonts.roboto(
+                  fontSize: 18,
+                  color: Colors.black45,
                 ),
-              ),
-            );
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}${snapshot.data?.commonList}');
+            }
+            return Container();
+          },
+        ),
+      ),
+    );
   }
 
   Padding buildHumidity(BuildContext context) {
     return Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.045,
-                  // right: MediaQuery
-                  //     .of(context)
-                  //     .size
-                  //     .height * 0.045
-              ),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: FutureBuilder<Weather5Days>(
-                  future: futureWeatherWeek,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var tom =
-                          "${snapshot.data
-                          ?.commonList?[0]["main"]["humidity"]} %";
-                      return Text(
-                        tom,
-                        style: GoogleFonts.roboto(
-                          fontSize: 20,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          '${snapshot.error}${snapshot.data?.commonList}');
-                    }
-                    return Container();
-                  },
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).size.height * 0.045,
+        right: MediaQuery
+            .of(context)
+            .size
+            .height * 0.045
+      ),
+      child: Align(
+        alignment: Alignment.topRight,
+        child: FutureBuilder<Weather5Days>(
+          future: futureWeatherWeek,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var tom =
+                  "${snapshot.data?.commonList?[0]["main"]["humidity"]} %";
+              return Text(
+                tom,
+                style: GoogleFonts.roboto(
+                  fontSize: 18,
+                  color: Colors.black45,
                 ),
-              ),
-            );
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}${snapshot.data?.commonList}');
+            }
+            return Container();
+          },
+        ),
+      ),
+    );
   }
 
   Positioned buildDescription(BuildContext context) {
     return Positioned(
-              top: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.15,
-              // left: MediaQuery.of(context).size.height * 0.021,
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: FutureBuilder<Weather5Days>(
-                  future: futureWeatherWeek,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var tom =
-                          "${snapshot.data!
-                          .commonList?[0]["weather"][0]["description"]}";
-                      return Text(
-                        tom,
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          '${snapshot.error}${snapshot.data?.commonList}');
-                    }
-
-                    return Container();
-                  },
-                ),
-              ),
-            );
-  }
-
-  Padding buildTemperature(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-          top: MediaQuery
-              .of(context)
-              .size
-              .height * 0.035),
+      top: MediaQuery.of(context).size.height * 0.15,
+      // left: MediaQuery.of(context).size.height * 0.021,
       child: Align(
         alignment: Alignment.topLeft,
         child: FutureBuilder<Weather5Days>(
@@ -500,8 +408,36 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var tom =
-                  "${snapshot.data?.commonList?[0]["main"]["temp"]
-                  ?.toInt()}\u2103";
+                  "${snapshot.data!.commonList?[0]["weather"][0]["description"]}";
+              return Text(
+                tom,
+                style: GoogleFonts.roboto(
+                  fontSize: 18,
+                  color: Colors.black45,
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}${snapshot.data?.commonList}');
+            }
+
+            return Container();
+          },
+        ),
+      ),
+    );
+  }
+
+  Padding buildTemperature(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.035),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: FutureBuilder<Weather5Days>(
+          future: futureWeatherWeek,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var tom =
+                  "${snapshot.data?.commonList?[0]["main"]["temp"]?.toInt()}\u2103";
               return Text(
                 tom,
                 style: GoogleFonts.openSans(
@@ -510,8 +446,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Text(
-                  '${snapshot.error}${snapshot.data?.commonList}');
+              return Text('${snapshot.error}${snapshot.data?.commonList}');
             }
 
             return Container();
@@ -522,42 +457,40 @@ class _HomePageState extends State<HomePage> {
   }
 
   VideoPlayerController controllerVideo(AsyncSnapshot<Weather5Days> snapshot) {
-    return snapshot.data!.commonList![0]
-                        ["weather"][0]["description"] ==
-                            "clear sky"
-                            ? getController("assets/sunny_day.mp4")
-                            : snapshot.data!.commonList![0]
-                        ["weather"][0]["description"] ==
-                            "few clouds"
-                            ? getController("assets/sunny.mp4")
-                            : snapshot.data!.commonList![0]
-                        ["weather"][0]["description"] ==
-                            "scattered clouds"
-                            ? getController("assets/windy_cloud.mp4")
-                            : snapshot.data!.commonList![0]
-                        ["weather"][0]["description"] ==
-                            "broken clouds"
-                            ? getController("assets/windy_cloud.mp4")
-                            : snapshot.data!.commonList![0]
-                        ["weather"][0]["description"] ==
+    return snapshot.data!.commonList![0]["weather"][0]["description"] ==
+            "clear sky"
+        ? getController("assets/sunny_day.mp4")
+        : snapshot.data!.commonList![0]["weather"][0]["description"] ==
+                "few clouds"
+            ? getController("assets/sunny.mp4")
+            : snapshot.data!.commonList![0]["weather"][0]["description"] ==
+                    "scattered clouds"
+                ? getController("assets/windy_cloud.mp4")
+                : snapshot.data!.commonList![0]["weather"][0]["description"] ==
+                        "broken clouds"
+                    ? getController("assets/windy_cloud.mp4")
+                    : snapshot.data!.commonList![0]["weather"][0]
+                                ["description"] ==
                             "shower rain"
-                            ? getController("assets/rainy_day.mp4")
-                            : snapshot.data!.commonList![0]
-                        ["weather"][0]["description"] ==
-                            "light rain"
+                        ? getController("assets/rainy_day.mp4")
+                        : snapshot.data!.commonList![0]["weather"][0]
+                                    ["description"] ==
+                                "light rain"
                             ? getController("assets/cloudy_rain.mp4")
-                            : snapshot.data!.commonList![0]
-                        ["weather"][0]["description"] ==
-                            "thunderstorm"
-                            ? getController("assets/thunder_rain.mp4")
-                            : snapshot.data!.commonList![0]
-                        ["weather"][0]["description"] ==
-                            "snow"
-                            ? getController("assets/snowfall.mp4")
-                            : snapshot.data!.commonList![0]
-                        ["weather"][0]["description"] == "overcast clouds"
-                            ? getController("assets/windy_cloud.mp4")
-                            : getController("assets/warm_wind.mp4");
+                            : snapshot.data!.commonList![0]["weather"][0]
+                                        ["description"] ==
+                                    "thunderstorm"
+                                ? getController("assets/thunder_rain.mp4")
+                                : snapshot.data!.commonList![0]["weather"][0]
+                                            ["description"] ==
+                                        "snow"
+                                    ? getController("assets/snowfall.mp4")
+                                    : snapshot.data!.commonList![0]["weather"]
+                                                [0]["description"] ==
+                                            "overcast clouds"
+                                        ? getController(
+                                            "assets/windy_cloud.mp4")
+                                        : getController("assets/warm_wind.mp4");
   }
 
   SingleChildScrollView buildBottomWeatherWidget(BuildContext context) {
@@ -572,22 +505,19 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 setState(() {
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
                   loadingToday = true;
-                  loadingNew=true;
+                  loadingNew = true;
 
-                  dateWeekName =
-                      DateFormat('EEEE').format(weekDaysName(1));
+                  dateWeekName = DateFormat('EEEE').format(weekDaysName(1));
                   numDay = 8;
                   changeIndex();
                 });
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                      const MainPage()),
+                  MaterialPageRoute(builder: (context) => const MainPage()),
                 );
               },
               child: Column(
@@ -596,17 +526,11 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![8]
-                        ["weather"][0]["description"];
+                        description = snapshot.data!.commonList![8]["weather"]
+                            [0]["description"];
 
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[8]["dt_txt"]
-                            .toString()
-                            .substring(5, 7)}.${snapshot.data
-                            ?.commonList?[8]["dt_txt"]
-                            .toString()
-                            .substring(8, 11)}";
+                            "${snapshot.data?.commonList?[8]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[8]["dt_txt"].toString().substring(8, 11)}";
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
@@ -616,8 +540,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -627,9 +550,12 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
-                            "01n"||snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
-                            "01d") {
+                        if (snapshot.data!.commonList?[8]["weather"][0]
+                                    ["icon"] ==
+                                "01n" ||
+                            snapshot.data!.commonList?[8]["weather"][0]
+                                    ["icon"] ==
+                                "01d") {
                           return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
@@ -638,22 +564,18 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.black45,
                             ),
                           );
-                        }
-                        else {
+                        } else {
                           return ImageIcon(
                             size: 60,
                             NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[8]["weather"][0]["icon"]}@2x.png',
+                              'http://openweathermap.org/img/wn/${snapshot.data!.commonList?[8]["weather"][0]["icon"]}@2x.png',
                             ),
                             color: Colors.black45,
                           );
                         }
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -671,9 +593,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[8]["main"]["temp"]
-                            ?.toInt()}\u2103";
+                            "${snapshot.data?.commonList?[8]["main"]["temp"]?.toInt()}\u2103";
                         return Text(
                           tom,
                           style: GoogleFonts.fredoka(
@@ -683,8 +603,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -699,24 +618,19 @@ class _HomePageState extends State<HomePage> {
             child: GestureDetector(
               onTap: () {
                 setState(() {
-
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
-                  loadingNew=true;
+                  loadingNew = true;
                   loadingToday = true;
-                  dateWeekName =
-                      DateFormat('EEEE').format(weekDaysName(2));
+                  dateWeekName = DateFormat('EEEE').format(weekDaysName(2));
                   numDay = 16;
                   changeIndex();
                 });
 
-
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                      const MainPage()),
+                  MaterialPageRoute(builder: (context) => const MainPage()),
                 );
               },
               child: Column(
@@ -725,16 +639,10 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![16]
-                        ["weather"][0]["description"];
+                        description = snapshot.data!.commonList![16]["weather"]
+                            [0]["description"];
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[16]["dt_txt"]
-                            .toString()
-                            .substring(5, 7)}.${snapshot.data
-                            ?.commonList?[16]["dt_txt"]
-                            .toString()
-                            .substring(8, 11)}";
+                            "${snapshot.data?.commonList?[16]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[16]["dt_txt"].toString().substring(8, 11)}";
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
@@ -744,8 +652,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -755,10 +662,12 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-
-                        if (snapshot.data!.commonList?[16]["weather"][0]["icon"] ==
-                            "01n"||snapshot.data!.commonList?[16]["weather"][0]["icon"] ==
-                            "01d") {
+                        if (snapshot.data!.commonList?[16]["weather"][0]
+                                    ["icon"] ==
+                                "01n" ||
+                            snapshot.data!.commonList?[16]["weather"][0]
+                                    ["icon"] ==
+                                "01d") {
                           return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
@@ -767,22 +676,18 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.black45,
                             ),
                           );
-                        }
-                        else {
+                        } else {
                           return ImageIcon(
                             size: 60,
                             NetworkImage(
-                              'http://openweathermap.org/img/wn/${snapshot
-                                  .data!
-                                  .commonList?[16]["weather"][0]["icon"]}@2x.png',
+                              'http://openweathermap.org/img/wn/${snapshot.data!.commonList?[16]["weather"][0]["icon"]}@2x.png',
                             ),
                             color: Colors.black45,
                           );
                         }
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -800,9 +705,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[16]["main"]["temp"]
-                            ?.toInt()}\u2103";
+                            "${snapshot.data?.commonList?[16]["main"]["temp"]?.toInt()}\u2103";
                         return Text(
                           tom,
                           style: GoogleFonts.fredoka(
@@ -812,8 +715,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -829,22 +731,19 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 setState(() {
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
-                  loadingNew=true;
+                  loadingNew = true;
                   loadingToday = true;
 
-                  dateWeekName =
-                      DateFormat('EEEE').format(weekDaysName(3));
+                  dateWeekName = DateFormat('EEEE').format(weekDaysName(3));
                   numDay = 24;
                   changeIndex();
                 });
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                      const MainPage()),
+                  MaterialPageRoute(builder: (context) => const MainPage()),
                 );
               },
               child: Column(
@@ -853,16 +752,10 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![24]
-                        ["weather"][0]["description"];
+                        description = snapshot.data!.commonList![24]["weather"]
+                            [0]["description"];
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[24]["dt_txt"]
-                            .toString()
-                            .substring(5, 7)}.${snapshot.data
-                            ?.commonList?[24]["dt_txt"]
-                            .toString()
-                            .substring(8, 11)}";
+                            "${snapshot.data?.commonList?[24]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[24]["dt_txt"].toString().substring(8, 11)}";
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
@@ -872,8 +765,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -883,7 +775,12 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[24]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[24]["weather"][0]["icon"]=="01d"){
+                        if (snapshot.data!.commonList?[24]["weather"][0]
+                                    ["icon"] ==
+                                "01n" ||
+                            snapshot.data!.commonList?[24]["weather"][0]
+                                    ["icon"] ==
+                                "01d") {
                           return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
@@ -892,21 +789,18 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.black45,
                             ),
                           );
+                        } else {
+                          return ImageIcon(
+                            size: 60,
+                            NetworkImage(
+                              'http://openweathermap.org/img/wn/${snapshot.data!.commonList?[24]["weather"][0]["icon"]}@2x.png',
+                            ),
+                            color: Colors.black45,
+                          );
                         }
-                        else{
-                        return ImageIcon(
-                          size: 60,
-                          NetworkImage(
-                            'http://openweathermap.org/img/wn/${snapshot
-                                .data!
-                                .commonList?[24]["weather"][0]["icon"]}@2x.png',
-                          ),
-                          color: Colors.black45,
-                        );}
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -924,9 +818,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[24]["main"]["temp"]
-                            ?.toInt()}\u2103";
+                            "${snapshot.data?.commonList?[24]["main"]["temp"]?.toInt()}\u2103";
                         return Text(
                           tom,
                           style: GoogleFonts.fredoka(
@@ -936,8 +828,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -953,21 +844,18 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 setState(() {
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
-                  loadingNew=true;
+                  loadingNew = true;
                   loadingToday = true;
-                  dateWeekName =
-                      DateFormat('EEEE').format(weekDaysName(4));
+                  dateWeekName = DateFormat('EEEE').format(weekDaysName(4));
                   numDay = 32;
                   changeIndex();
                 });
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                      const MainPage()),
+                  MaterialPageRoute(builder: (context) => const MainPage()),
                 );
               },
               child: Column(
@@ -976,16 +864,10 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![32]
-                        ["weather"][0]["description"];
+                        description = snapshot.data!.commonList![32]["weather"]
+                            [0]["description"];
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[32]["dt_txt"]
-                            .toString()
-                            .substring(5, 7)}.${snapshot.data
-                            ?.commonList?[32]["dt_txt"]
-                            .toString()
-                            .substring(8, 11)}";
+                            "${snapshot.data?.commonList?[32]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[32]["dt_txt"].toString().substring(8, 11)}";
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
@@ -995,8 +877,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -1006,7 +887,12 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[32]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[32]["weather"][0]["icon"]=="01d"){
+                        if (snapshot.data!.commonList?[32]["weather"][0]
+                                    ["icon"] ==
+                                "01n" ||
+                            snapshot.data!.commonList?[32]["weather"][0]
+                                    ["icon"] ==
+                                "01d") {
                           return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
@@ -1015,21 +901,18 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.black45,
                             ),
                           );
+                        } else {
+                          return ImageIcon(
+                            size: 60,
+                            NetworkImage(
+                              'http://openweathermap.org/img/wn/${snapshot.data!.commonList?[32]["weather"][0]["icon"]}@2x.png',
+                            ),
+                            color: Colors.black45,
+                          );
                         }
-                        else{
-                        return ImageIcon(
-                          size: 60,
-                          NetworkImage(
-                            'http://openweathermap.org/img/wn/${snapshot
-                                .data!
-                                .commonList?[32]["weather"][0]["icon"]}@2x.png',
-                          ),
-                          color: Colors.black45,
-                        );}
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -1047,9 +930,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[32]["main"]["temp"]
-                            ?.toInt()}\u2103";
+                            "${snapshot.data?.commonList?[32]["main"]["temp"]?.toInt()}\u2103";
                         return Text(
                           tom,
                           style: GoogleFonts.fredoka(
@@ -1059,8 +940,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -1076,11 +956,10 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 setState(() {
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
-                  loadingNew=true;
-                  dateWeekName =
-                      DateFormat('EEEE').format(weekDaysName(5));
+                  loadingNew = true;
+                  dateWeekName = DateFormat('EEEE').format(weekDaysName(5));
                   numDay = 39;
                   changeIndex();
                   loadingToday = true;
@@ -1088,9 +967,7 @@ class _HomePageState extends State<HomePage> {
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                      const MainPage()),
+                  MaterialPageRoute(builder: (context) => const MainPage()),
                 );
               },
               child: Column(
@@ -1099,16 +976,10 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![39]
-                        ["weather"][0]["description"];
+                        description = snapshot.data!.commonList![39]["weather"]
+                            [0]["description"];
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[39]["dt_txt"]
-                            .toString()
-                            .substring(5, 7)}.${snapshot.data
-                            ?.commonList?[39]["dt_txt"]
-                            .toString()
-                            .substring(8, 11)}";
+                            "${snapshot.data?.commonList?[39]["dt_txt"].toString().substring(5, 7)}.${snapshot.data?.commonList?[39]["dt_txt"].toString().substring(8, 11)}";
                         return Text(
                           tom,
                           style: GoogleFonts.roboto(
@@ -1118,8 +989,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -1129,7 +999,12 @@ class _HomePageState extends State<HomePage> {
                     future: futureWeatherWeek,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[39]["weather"][0]["icon"]=="01n"||snapshot.data!.commonList?[39]["weather"][0]["icon"]=="01d"){
+                        if (snapshot.data!.commonList?[39]["weather"][0]
+                                    ["icon"] ==
+                                "01n" ||
+                            snapshot.data!.commonList?[39]["weather"][0]
+                                    ["icon"] ==
+                                "01d") {
                           return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
@@ -1138,21 +1013,18 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.black45,
                             ),
                           );
+                        } else {
+                          return ImageIcon(
+                            size: 60,
+                            NetworkImage(
+                              'http://openweathermap.org/img/wn/${snapshot.data!.commonList?[39]["weather"][0]["icon"]}@2x.png',
+                            ),
+                            color: Colors.black45,
+                          );
                         }
-                        else{
-                        return ImageIcon(
-                          size: 60,
-                          NetworkImage(
-                            'http://openweathermap.org/img/wn/${snapshot
-                                .data!
-                                .commonList?[39]["weather"][0]["icon"]}@2x.png',
-                          ),
-                          color: Colors.black45,
-                        );}
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -1170,9 +1042,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         var tom =
-                            "${snapshot.data
-                            ?.commonList?[39]["main"]["temp"]
-                            ?.toInt()}\u2103";
+                            "${snapshot.data?.commonList?[39]["main"]["temp"]?.toInt()}\u2103";
                         return Text(
                           tom,
                           style: GoogleFonts.fredoka(
@@ -1182,8 +1052,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       } else if (snapshot.hasError) {
                         return Text(
-                            '${snapshot.error}${snapshot.data
-                                ?.commonList}');
+                            '${snapshot.error}${snapshot.data?.commonList}');
                       }
 
                       return Container();
@@ -1197,7 +1066,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-
 }
-

@@ -96,8 +96,23 @@ class _HomePageTodayState extends State<HomePageToday> {
     textEditingController.dispose();
   }
 
-  void ShowAutoComplete(){
+  Future<String> showGoogleAutoComplete() async {
 
+    Prediction? p = await PlacesAutocomplete.show(
+        offset: 0,
+        radius: 1000,
+        strictbounds: false,
+        region: "pl",
+        language: "en",
+        context: context,
+        mode: Mode.overlay,
+        apiKey: kGoogleApiKey,
+        components: [Component(Component.country, "pl")],
+        types: ["(cities)"],
+        hint: "Search City",
+        startText: city == null || city == "" ? "" : city
+    );
+    return p!.description!;
   }
 
   // Future<void> _handlePressButton() async {
@@ -234,57 +249,80 @@ class _HomePageTodayState extends State<HomePageToday> {
                           // width: MediaQuery.of(context).size.width*0.9,
                           height: MediaQuery.of(context).size.width * 0.13,
                           color: Colors.white,
-                          child: GestureDetector(
-                            onTap: ()async{
+                          child: TextFormField(
+                            readOnly: true,
+                            onTap: () async {
 
-                            },
-                            child: TextField(
-                              textAlignVertical: TextAlignVertical.bottom,
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                        width: 0.5, color: Colors.black45),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color:
-                                            Colors.indigoAccent.withOpacity(0.7)),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  focusColor:
-                                      Colors.indigoAccent.withOpacity(0.7),
-                                  hintText: "Find your city",
-                                  hintStyle: GoogleFonts.roboto(
-                                    fontSize: 16,
-                                    color: Colors.black.withOpacity(0.3),
-                                  )),
-                              controller: textEditingController,
-                              onSubmitted: (String value) {
+                              city = await showGoogleAutoComplete();
+                              print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+                              print(city);
 
-                                setState(() async {
-                                  loadingToday=true;
-                                  city = value;
-                                  await checkCityName();
-                                  if (rightCity==true){
-                                    Navigator.push(
+                              setState(() async {
+                                    loadingToday=true;
+
+                                    await checkCityName();
+                                    if (rightCity==true){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => const MainPage()),
+                                        );
+                                    }
+                                    else{
+                                      city = "";
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => const MainPage()),
                                       );
-                                  }
-                                  else{
-                                    city = "";
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const MainPage()),
-                                    );
-                                  }
-                                });
-                              },
-                            ),
+                                    }
+                                  });
+                            },
+                            textAlignVertical: TextAlignVertical.bottom,
+                            decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 0.5, color: Colors.black45),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1,
+                                      color:
+                                          Colors.indigoAccent.withOpacity(0.7)),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                focusColor:
+                                    Colors.indigoAccent.withOpacity(0.7),
+                                hintText: "Find your city",
+                                hintStyle: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  color: Colors.black.withOpacity(0.3),
+                                )),
+                            controller: textEditingController,
+                            // onSubmitted: (String value) {
+                            //
+                            //   setState(() async {
+                            //     loadingToday=true;
+                            //     city = value;
+                            //     await checkCityName();
+                            //     if (rightCity==true){
+                            //       Navigator.push(
+                            //           context,
+                            //           MaterialPageRoute(
+                            //               builder: (context) => const MainPage()),
+                            //         );
+                            //     }
+                            //     else{
+                            //       city = "";
+                            //       Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) => const MainPage()),
+                            //       );
+                            //     }
+                            //   });
+                            // },
                           ),
                         ),
                       ),

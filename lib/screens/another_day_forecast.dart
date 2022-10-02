@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:forecast/screens/today_forecast.dart';
 import 'package:forecast/widgets/icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 import '../api/weather_week_api.dart';
@@ -29,6 +31,9 @@ bool loadingNew = true;
 class _AnotherDayForecastState extends State<AnotherDayForecast> {
   late Future<Weather5Days> futureWeatherWeek;
 
+  var uuid= const Uuid();
+  Uuid _sessionToken = const Uuid();
+  List<dynamic>_placeList = [];
   late VideoPlayerController _controller;
 
   VideoPlayerController getController(String path) {
@@ -62,6 +67,10 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
     getController("assets/clouds.mp4");
     textEditingController = TextEditingController();
 
+    textEditingController.addListener(() {
+      _onChanged();
+    });
+
     Timer(const Duration(seconds: 3), () => dataLoadFunction());
     setState(() {
       description = '';
@@ -76,6 +85,14 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
     setState(() => index = random.nextInt(5));
   }
 
+  void _onChanged() {
+    if (_sessionToken == null) {
+      setState(() {
+        _sessionToken = uuid.v4() as Uuid;
+      });
+    }
+    getSuggestion(textEditingController.text);
+  }
 
 
   weekDaysName(int dayCount) {
@@ -83,6 +100,20 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
     return dateWeek;
   }
 
+  void getSuggestion(String input) async {
+    String kPLACESAPIKEY = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
+    String type = "(cities)";
+    String baseURL ="https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    String request = "$baseURL?input=$input&key=$kPLACESAPIKEY&sessiontoken=$_sessionToken";
+    var response = await http.get(Uri.parse(request));
+    if (response.statusCode == 200) {
+      setState(() {
+        _placeList = json.decode(response.body)['predictions'];
+      });
+    } else {
+      throw Exception('Failed to load predictions');
+    }
+  }
   @override
   void dispose() {
     super.dispose();
@@ -346,6 +377,111 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                         .size
                         .height * 0.7),
                 child: buildBottomWeather(context),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    // width: MediaQuery.of(context).size.width*0.9,
+                    // height: MediaQuery.of(context).size.width*0.13,
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        TextField(
+                          textAlignVertical: TextAlignVertical.bottom,
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: 0.5, color: Colors.black45),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              focusColor: Colors.indigoAccent.withOpacity(0.7),
+                              hintText: "Find your city",
+                              hintStyle: GoogleFonts.roboto(
+                                fontSize: 16,
+                                color: Colors.black.withOpacity(0.3),
+                              )
+                          ),
+                          controller: textEditingController,
+                          // onSubmitted: (String value) async {
+                          //   setState(() async {
+                          //     loadingNew=true;
+                          //     city = value;
+                          //     await checkCityName();
+                          //     if (rightCity==true){
+                          //       Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //             builder: (context) => const MainPage()),
+                          //       );
+                          //     }
+                          //     else{
+                          //       city = "";
+                          //       Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //             builder: (context) => const MainPage()),
+                          //       );
+                          //     }
+                          //   });
+                          //   city = value;
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) =>
+                          //         const MainPage()),
+                          //   );
+                          // },
+                        ),
+                        ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: _placeList.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              color: Colors.white,
+                              child: ListTile(
+                                title: GestureDetector(
+                                  onTap: ()async {
+                                    print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
+                                    print(_placeList[index]["description"]);
+                                    city = await _placeList[index]["description"];
+
+                                    loadingToday=true;
+                                    await checkCityName();
+                                    if (rightCity==true){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const MainPage()),
+                                      );
+                                    }
+                                    else{
+                                      city = "";
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const MainPage()),
+                                      );
+                                    }
+
+                                  },
+                                  child: Card(
+                                      color: Colors.white,
+                                      child: Text(_placeList[index]["description"])),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ]),
       )

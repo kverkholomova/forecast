@@ -1,15 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
-import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:forecast/screens/main_page.dart';
 import 'package:forecast/widgets/icons.dart';
 import 'package:forecast/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_webservice/directions.dart';
-import 'package:google_maps_webservice/src/places.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 import '../api/weather_week_api.dart';
@@ -17,23 +15,29 @@ import '../utils/location_functionality.dart';
 import 'home_page.dart';
 import 'package:http/http.dart' as http;
 
-const kGoogleApiKey = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
-final homeScaffoldKey = GlobalKey<ScaffoldState>();
-final searchScaffoldKey = GlobalKey<ScaffoldState>();
+import 'main_page.dart';
+
+
 class HomePageToday extends StatefulWidget {
   const HomePageToday({Key? key}) : super(key: key);
 
   @override
   State<HomePageToday> createState() => _HomePageTodayState();
 }
-
+const kGoogleApiKey = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
 String city = '';
 bool hourly = true;
 bool loadingToday = true;
 
 class _HomePageTodayState extends State<HomePageToday> {
   late TextEditingController textEditingController;
+
+  final homeScaffoldKey = GlobalKey<ScaffoldState>();
+  final searchScaffoldKey = GlobalKey<ScaffoldState>();
   late Future<Weather5Days> futureWeatherWeek;
+  var uuid= const Uuid();
+  Uuid _sessionToken = const Uuid();
+  List<dynamic>_placeList = [];
   Random random = Random();
   DateTime dateWeek = DateTime.now();
 
@@ -73,6 +77,7 @@ class _HomePageTodayState extends State<HomePageToday> {
   @override
   void initState() {
     super.initState();
+
     futureWeatherWeek = fetchWeatherForWeek();
     Timer(const Duration(seconds: 4), () {
       dataLoadFunction();
@@ -80,12 +85,23 @@ class _HomePageTodayState extends State<HomePageToday> {
     });
     textEditingController = TextEditingController();
 
+    textEditingController.addListener(() {
+      _onChanged();
+    });
     setState(() {
       serviceEn();
       permissGranted();
     });
   }
 
+  void _onChanged() {
+    if (_sessionToken == null) {
+      setState(() {
+        _sessionToken = uuid.v4() as Uuid;
+      });
+    }
+    getSuggestion(textEditingController.text);
+  }
   @override
   void dispose() {
     super.dispose();
@@ -93,24 +109,39 @@ class _HomePageTodayState extends State<HomePageToday> {
     textEditingController.dispose();
   }
 
-  Future<String> showGoogleAutoComplete() async {
+  // Future<String> showGoogleAutoComplete() async {
+  //
+  //   Prediction? p = await PlacesAutocomplete.show(
+  //
+  //       offset: 0,
+  //       radius: 1000,
+  //       strictbounds: false,
+  //       region: "pl",
+  //       language: "en",
+  //       context: context,
+  //       mode: Mode.overlay,
+  //       apiKey: kGoogleApiKey,
+  //       components: [Component(Component.country, "pl")],
+  //       types: ["(cities)"],
+  //       hint: "Search City",
+  //       startText: city == null || city == "" ? "" : city,
+  //   );
+  //   return p!.description!;
+  // }
 
-    Prediction? p = await PlacesAutocomplete.show(
-
-        offset: 0,
-        radius: 1000,
-        strictbounds: false,
-        region: "pl",
-        language: "en",
-        context: context,
-        mode: Mode.overlay,
-        apiKey: kGoogleApiKey,
-        components: [Component(Component.country, "pl")],
-        types: ["(cities)"],
-        hint: "Search City",
-        startText: city == null || city == "" ? "" : city,
-    );
-    return p!.description!;
+  void getSuggestion(String input) async {
+    String kPLACESAPIKEY = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
+    String type = "(cities)";
+    String baseURL ="https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    String request = "$baseURL?input=$input&key=$kPLACESAPIKEY&sessiontoken=$_sessionToken";
+    var response = await http.get(Uri.parse(request));
+    if (response.statusCode == 200) {
+    setState(() {
+    _placeList = json.decode(response.body)['predictions'];
+    });
+    } else {
+    throw Exception('Failed to load predictions');
+    }
   }
 
   @override
@@ -125,6 +156,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 physics: const NeverScrollableScrollPhysics(),
                 child: Stack(
                   children: [
+
                     Padding(
                       padding: EdgeInsets.only(
                         top: MediaQuery.of(context).size.height * 0.27,
@@ -208,71 +240,116 @@ class _HomePageTodayState extends State<HomePageToday> {
                         ],
                       ),
                     ),
+
                     Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.7),
+                      child: buildBottomWeatherWidget(context),
+                    ),Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.width * 0.02),
                       child: Align(
                         alignment: Alignment.topCenter,
                         child: Container(
                           // width: MediaQuery.of(context).size.width*0.9,
-                          height: MediaQuery.of(context).size.width * 0.13,
+                          // height: MediaQuery.of(context).size.width * 0.2,
                           color: Colors.white,
-                          child: TextFormField(
-                            readOnly: true,
-                            onTap: () async {
-
-                              city = await showGoogleAutoComplete();
-                              setState(() async {
-                                    loadingToday=true;
-
-                                    await checkCityName();
-                                    if (rightCity==true){
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => const MainPage()),
-                                        );
-                                    }
-                                    else{
-                                      city = "";
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const MainPage()),
-                                      );
-                                    }
-                                  });
-                            },
-                            textAlignVertical: TextAlignVertical.bottom,
-                            decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 0.5, color: Colors.black45),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color:
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextFormField(
+                                // readOnly: true,
+                                // onTap: () async {
+                                //
+                                //   // city = await showGoogleAutoComplete();
+                                //   // setState(() async {
+                                //   //       loadingToday=true;
+                                //   //       await checkCityName();
+                                //   //       if (rightCity==true){
+                                //   //         Navigator.push(
+                                //   //             context,
+                                //   //             MaterialPageRoute(
+                                //   //                 builder: (context) => const MainPage()),
+                                //   //           );
+                                //   //       }
+                                //   //       else{
+                                //   //         city = "";
+                                //   //         Navigator.push(
+                                //   //           context,
+                                //   //           MaterialPageRoute(
+                                //   //               builder: (context) => const MainPage()),
+                                //   //         );
+                                //   //       }
+                                //   //     });
+                                // },
+                                textAlignVertical: TextAlignVertical.bottom,
+                                decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 0.5, color: Colors.black45),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color:
                                           Colors.indigoAccent.withOpacity(0.7)),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                focusColor:
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusColor:
                                     Colors.indigoAccent.withOpacity(0.7),
-                                hintText: "Find your city",
-                                hintStyle: GoogleFonts.roboto(
-                                  fontSize: 16,
-                                  color: Colors.black.withOpacity(0.3),
-                                )),
-                            controller: textEditingController,
+                                    hintText: "Find your city",
+                                    hintStyle: GoogleFonts.roboto(
+                                      fontSize: 16,
+                                      color: Colors.black.withOpacity(0.3),
+                                    )),
+                                controller: textEditingController,
+                              ),
+                              ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: _placeList.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    color: Colors.white,
+                                    child: ListTile(
+                                      title: GestureDetector(
+                                        onTap: ()async {
+                                          print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
+                                          print(_placeList[index]["description"]);
+                                          city = await _placeList[index]["description"];
+
+                                            loadingToday=true;
+                                            await checkCityName();
+                                            if (rightCity==true){
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => const MainPage()),
+                                              );
+                                            }
+                                            else{
+                                              city = "";
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => const MainPage()),
+                                              );
+                                            }
+
+                                        },
+                                        child: Card(
+                                            color: Colors.white,
+                                            child: Text(_placeList[index]["description"])),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.7),
-                      child: buildBottomWeatherWidget(context),
                     ),
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'package:forecast/screens/main_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
 import 'package:forecast/screens/another_day_forecast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 import '../api/weather_week_api.dart';
@@ -34,6 +36,9 @@ bool today = true;
 class _HomePageState extends State<HomePage> {
   late Future<Weather5Days> futureWeatherWeek;
   Random random = Random();
+  var uuid= const Uuid();
+  Uuid _sessionToken = const Uuid();
+  List<dynamic>_placeList = [];
 
   weekDaysName(int dayCount) {
     DateTime dateWeek = DateTime.now().add(Duration(days: dayCount));
@@ -79,14 +84,39 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     futureWeatherWeek = fetchWeatherForWeek();
     Timer(const Duration(seconds: 4), () => dataLoadFunction());
-
+    textEditingController = TextEditingController();
+    textEditingController.addListener(() {
+      _onChanged();
+    });
     setState(() {
-      textEditingController = TextEditingController();
+
       serviceEn();
       permissGranted();
     });
   }
 
+  void _onChanged() {
+    if (_sessionToken == null) {
+      setState(() {
+        _sessionToken = uuid.v4() as Uuid;
+      });
+    }
+    getSuggestion(textEditingController.text);
+  }
+  void getSuggestion(String input) async {
+    String kPLACESAPIKEY = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
+    String type = "(cities)";
+    String baseURL ="https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    String request = "$baseURL?input=$input&key=$kPLACESAPIKEY&sessiontoken=$_sessionToken";
+    var response = await http.get(Uri.parse(request));
+    if (response.statusCode == 200) {
+      setState(() {
+        _placeList = json.decode(response.body)['predictions'];
+      });
+    } else {
+      throw Exception('Failed to load predictions');
+    }
+  }
   @override
   void dispose() {
     super.dispose();
@@ -200,6 +230,12 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
+
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.7),
+                      child: buildBottomWeatherWidget(context),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.width * 0.02),
@@ -207,60 +243,101 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.topCenter,
                         child: Container(
                           // width: MediaQuery.of(context).size.width*0.9,
-                          height: MediaQuery.of(context).size.width * 0.13,
+                          // height: MediaQuery.of(context).size.width * 0.13,
                           color: Colors.white,
-                          child: TextField(
-                            textAlignVertical: TextAlignVertical.bottom,
-                            decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 0.5, color: Colors.black45),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color:
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextField(
+                                textAlignVertical: TextAlignVertical.bottom,
+                                decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 0.5, color: Colors.black45),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color:
                                           Colors.indigoAccent.withOpacity(0.7)),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                focusColor:
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusColor:
                                     Colors.indigoAccent.withOpacity(0.7),
-                                hintText: "Find your city",
-                                hintStyle: GoogleFonts.roboto(
-                                  fontSize: 16,
-                                  color: Colors.black.withOpacity(0.3),
-                                )),
-                            controller: textEditingController,
-                            onSubmitted: (String value) async {
-                              setState(() async {
-                                loading = true;
-                                city = value;
-                                await checkCityName();
-                                if (rightCity == true) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const MainPage()),
+                                    hintText: "Find your city",
+                                    hintStyle: GoogleFonts.roboto(
+                                      fontSize: 16,
+                                      color: Colors.black.withOpacity(0.3),
+                                    )),
+                                controller: textEditingController,
+                                // onSubmitted: (String value) async {
+                                //   setState(() async {
+                                //     loading = true;
+                                //     city = value;
+                                //     await checkCityName();
+                                //     if (rightCity == true) {
+                                //       Navigator.push(
+                                //         context,
+                                //         MaterialPageRoute(
+                                //             builder: (context) => const MainPage()),
+                                //       );
+                                //     } else {
+                                //       city = "";
+                                //       Navigator.push(
+                                //         context,
+                                //         MaterialPageRoute(
+                                //             builder: (context) => const MainPage()),
+                                //       );
+                                //     }
+                                //   });
+                                // },
+                              ),
+                              ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: _placeList.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    color: Colors.white,
+                                    child: ListTile(
+                                      title: GestureDetector(
+                                        onTap: ()async {
+                                          print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
+                                          print(_placeList[index]["description"]);
+                                          city = await _placeList[index]["description"];
+
+                                          loadingToday=true;
+                                          await checkCityName();
+                                          if (rightCity==true){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const MainPage()),
+                                            );
+                                          }
+                                          else{
+                                            city = "";
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const MainPage()),
+                                            );
+                                          }
+
+                                        },
+                                        child: Card(
+                                            color: Colors.white,
+                                            child: Text(_placeList[index]["description"])),
+                                      ),
+                                    ),
                                   );
-                                } else {
-                                  city = "";
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const MainPage()),
-                                  );
-                                }
-                              });
-                            },
+                                },
+                              )
+                            ],
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.7),
-                      child: buildBottomWeatherWidget(context),
                     ),
                   ],
                 ),

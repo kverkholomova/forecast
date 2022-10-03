@@ -39,8 +39,8 @@ class _OfflineScreenState extends State<OfflineScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-                width: 40,
-                height: 40,
+                width: 140,
+                height: 140,
                 child: Image.asset("assets/sad.jpg")),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),

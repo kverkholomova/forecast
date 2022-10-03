@@ -345,7 +345,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                                               padding: const EdgeInsets.only(right: 7),
                                               child: Icon(Icons.location_on_outlined),
                                             ),
-                                          Text(_placeList[index]["description"]),
+                                          Expanded(child: Text(_placeList[index]["description"])),
                                         ],
                                       ),
                                     ),

@@ -473,7 +473,15 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                     }
 
                                   },
-                                  child: Text(_placeList[index]["description"]),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 7),
+                                        child: Icon(Icons.location_on_outlined),
+                                      ),
+                                      Expanded(child: Text(_placeList[index]["description"])),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );

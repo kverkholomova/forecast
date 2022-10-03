@@ -339,7 +339,15 @@ class _HomePageTodayState extends State<HomePageToday> {
                                           }
 
                                       },
-                                      child: Text(_placeList[index]["description"]),
+                                      child: Row(
+                                        children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 7),
+                                              child: Icon(Icons.location_on_outlined),
+                                            ),
+                                          Text(_placeList[index]["description"]),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },

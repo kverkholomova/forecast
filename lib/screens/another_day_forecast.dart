@@ -407,35 +407,35 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                               )
                           ),
                           controller: textEditingController,
-                          // onSubmitted: (String value) async {
-                          //   setState(() async {
-                          //     loadingNew=true;
-                          //     city = value;
-                          //     await checkCityName();
-                          //     if (rightCity==true){
-                          //       Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: (context) => const MainPage()),
-                          //       );
-                          //     }
-                          //     else{
-                          //       city = "";
-                          //       Navigator.push(
-                          //         context,
-                          //         MaterialPageRoute(
-                          //             builder: (context) => const MainPage()),
-                          //       );
-                          //     }
-                          //   });
-                          //   city = value;
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) =>
-                          //         const MainPage()),
-                          //   );
-                          // },
+                          onSubmitted: (String value) async {
+                            setState(() async {
+                              loadingNew=true;
+                              city = value;
+                              await checkCityName();
+                              if (rightCity==true){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const MainPage()),
+                                );
+                              }
+                              else{
+                                city = "";
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const MainPage()),
+                                );
+                              }
+                            });
+                            city = value;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  const MainPage()),
+                            );
+                          },
                         ),
                         ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),

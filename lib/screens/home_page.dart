@@ -271,27 +271,27 @@ class _HomePageState extends State<HomePage> {
                                       color: Colors.black.withOpacity(0.3),
                                     )),
                                 controller: textEditingController,
-                                // onSubmitted: (String value) async {
-                                //   setState(() async {
-                                //     loading = true;
-                                //     city = value;
-                                //     await checkCityName();
-                                //     if (rightCity == true) {
-                                //       Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //             builder: (context) => const MainPage()),
-                                //       );
-                                //     } else {
-                                //       city = "";
-                                //       Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //             builder: (context) => const MainPage()),
-                                //       );
-                                //     }
-                                //   });
-                                // },
+                                onSubmitted: (String value) async {
+                                  setState(() async {
+                                    loading = true;
+                                    city = value;
+                                    await checkCityName();
+                                    if (rightCity == true) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const MainPage()),
+                                      );
+                                    } else {
+                                      city = "";
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const MainPage()),
+                                      );
+                                    }
+                                  });
+                                },
                               ),
                               ListView.builder(
                                 physics: const NeverScrollableScrollPhysics(),

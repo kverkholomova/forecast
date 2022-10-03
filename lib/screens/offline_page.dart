@@ -35,38 +35,27 @@ class _OfflineScreenState extends State<OfflineScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-        ),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 200),
-            child: Column(
-              children: [
-                SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Image.asset("assets/sad.jpg")),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text("Sorry, but you are offline",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.roboto(
-                        fontSize: 22,
-                        color: Colors.black.withOpacity(0.5),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+                width: 40,
+                height: 40,
+                child: Image.asset("assets/sad.jpg")),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text("Sorry, but you are offline",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.roboto(
+                    fontSize: 22,
+                    color: Colors.black.withOpacity(0.5),
 
-                      ),),
-                  ),
-                ),
-              ],
+                  ),),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

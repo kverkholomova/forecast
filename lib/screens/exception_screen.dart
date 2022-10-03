@@ -36,6 +36,7 @@ class _ExceptionScreenState extends State<ExceptionScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
@@ -51,34 +52,27 @@ class _ExceptionScreenState extends State<ExceptionScreen> {
             }, icon: const Icon(Icons.close, color: Colors.black45,))
           ],
         ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 200),
-          child: Column(
-            children: [
-              SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Image.asset("assets/sad.jpg")),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text("Sorry, but the name of a city is not appropriate",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.roboto(
-                      fontSize: 22,
-                      color: Colors.black.withOpacity(0.5),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+              width: 40,
+              height: 40,
+              child: Image.asset("assets/sad.jpg")),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text("Sorry, but the name of a city is not appropriate",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.roboto(
+                  fontSize: 22,
+                  color: Colors.black.withOpacity(0.5),
 
-                    ),),
-                ),
-              ),
-            ],
+                ),),
+            ),
           ),
-        ),
+        ],
       ),
       ),
     );

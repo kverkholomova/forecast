@@ -339,8 +339,12 @@ class _HomePageTodayState extends State<HomePageToday> {
 
                                         },
                                         child: Card(
+                                          elevation: 0,
                                             color: Colors.white,
-                                            child: Text(_placeList[index]["description"])),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 13),
+                                              child: Text(_placeList[index]["description"]),
+                                            )),
                                       ),
                                     ),
                                   );

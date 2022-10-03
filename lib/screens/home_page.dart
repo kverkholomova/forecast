@@ -328,7 +328,10 @@ class _HomePageState extends State<HomePage> {
                                         },
                                         child: Card(
                                             color: Colors.white,
-                                            child: Text(_placeList[index]["description"])),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(top: 13),
+                                              child: Text(_placeList[index]["description"]),
+                                            )),
                                       ),
                                     ),
                                   );

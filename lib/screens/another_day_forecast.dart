@@ -472,7 +472,10 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                   },
                                   child: Card(
                                       color: Colors.white,
-                                      child: Text(_placeList[index]["description"])),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 13),
+                                        child: Text(_placeList[index]["description"]),
+                                      )),
                                 ),
                               ),
                             );

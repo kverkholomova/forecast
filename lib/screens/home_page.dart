@@ -301,6 +301,9 @@ class _HomePageState extends State<HomePage> {
                                   return Container(
                                     color: Colors.white,
                                     child: ListTile(
+                                      contentPadding: EdgeInsets.only(top: 8, left: 5),
+                                      minLeadingWidth: 10,
+                                      horizontalTitleGap: 5,
                                       title: GestureDetector(
                                         onTap: ()async {
                                           print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
@@ -326,12 +329,7 @@ class _HomePageState extends State<HomePage> {
                                           }
 
                                         },
-                                        child: Card(
-                                            color: Colors.white,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(top: 13),
-                                              child: Text(_placeList[index]["description"]),
-                                            )),
+                                        child: Text(_placeList[index]["description"]),
                                       ),
                                     ),
                                   );

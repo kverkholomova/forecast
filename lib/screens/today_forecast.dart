@@ -310,42 +310,36 @@ class _HomePageTodayState extends State<HomePageToday> {
                                 shrinkWrap: true,
                                 itemCount: _placeList.length,
                                 itemBuilder: (context, index) {
-                                  return Container(
-                                    color: Colors.white,
-                                    child: ListTile(
-                                      title: GestureDetector(
-                                        onTap: ()async {
-                                          print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
-                                          print(_placeList[index]["description"]);
-                                          city = await _placeList[index]["description"];
+                                  return ListTile(
+                                    contentPadding: EdgeInsets.only(top: 8, left: 5),
+                                    minLeadingWidth: 10,
+                                    horizontalTitleGap: 5,
+                                    title: GestureDetector(
+                                      onTap: ()async {
+                                        print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
+                                        print(_placeList[index]["description"]);
+                                        city = await _placeList[index]["description"];
 
-                                            loadingToday=true;
-                                            await checkCityName();
-                                            if (rightCity==true){
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => const MainPage()),
-                                              );
-                                            }
-                                            else{
-                                              city = "";
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => const MainPage()),
-                                              );
-                                            }
+                                          loadingToday=true;
+                                          await checkCityName();
+                                          if (rightCity==true){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const MainPage()),
+                                            );
+                                          }
+                                          else{
+                                            city = "";
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const MainPage()),
+                                            );
+                                          }
 
-                                        },
-                                        child: Card(
-                                          elevation: 0,
-                                            color: Colors.white,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(top: 13),
-                                              child: Text(_placeList[index]["description"]),
-                                            )),
-                                      ),
+                                      },
+                                      child: Text(_placeList[index]["description"]),
                                     ),
                                   );
                                 },

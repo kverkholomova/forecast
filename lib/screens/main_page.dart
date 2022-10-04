@@ -40,6 +40,14 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     super.dispose();
   }
 
+  Future refresh() async{
+    fetchWeatherForWeek();
+    setState(() {
+
+      print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return !rightCity?const ExceptionScreen():DefaultTabController(

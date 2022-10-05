@@ -1,12 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/api/weather_week_api.dart';
 import 'package:forecast/screens/another_day_forecast.dart';
 import 'package:forecast/screens/exception_screen.dart';
 import 'package:forecast/screens/home_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+
+Stream<FileResponse>? fileStream;
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -18,13 +22,19 @@ class MainPage extends StatefulWidget {
 late TabController controllerTab;
 int selectedIndex = 0;
 class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
-
+  void _downloadFile() {
+    setState(() {
+      fileStream = DefaultCacheManager().getFileStream(url!, withProgress: true);
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
+    fetchWeatherForWeek();
+    _downloadFile();
     // Create TabController for getting the index of current tab
     controllerTab = today&&hourly?TabController(length: 2, vsync: this,initialIndex: 0):today&&!hourly?TabController(length: 2, vsync: this, initialIndex: 1):TabController(length: 2, vsync: this, initialIndex: 1);
     controllerTab.addListener(() {

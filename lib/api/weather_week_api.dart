@@ -34,7 +34,7 @@ bool rightCity = true;
 //   });
 //   return list;
 // }
-String url = '';
+late String url;
 Future<Weather5Days> fetchWeatherForWeek() async {
   var currentLocationData = await location.getLocation();
   url = city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric';

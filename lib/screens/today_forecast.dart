@@ -30,12 +30,8 @@ bool loadingToday = true;
 class _HomePageTodayState extends State<HomePageToday> {
   late TextEditingController textEditingController;
 
-  Stream<FileResponse>? fileStream;
-  void _downloadFile() {
-    setState(() {
-      fileStream = DefaultCacheManager().getFileStream(url, withProgress: true);
-    });
-  }
+
+
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final searchScaffoldKey = GlobalKey<ScaffoldState>();
   late Future<Weather5Days> futureWeatherWeek;
@@ -139,7 +135,7 @@ class _HomePageTodayState extends State<HomePageToday> {
 
   @override
   Widget build(BuildContext context) {
-    _downloadFile();
+
     print("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
     print(fileStream);
     StreamBuilder<FileResponse>(
@@ -164,7 +160,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 floatingActionButton: FloatingActionButton(
                   onPressed: () async {
                     setState(() => print('Downloading...'));
-                    var fetchedFile = await DefaultCacheManager().getSingleFile(url);
+                    var fetchedFile = await DefaultCacheManager().getSingleFile(url!);
                     setState(() => StreamBuilder<FileResponse>(
                       stream: fileStream,
                       builder: (context, snapshot) {

@@ -139,10 +139,11 @@ class _HomePageTodayState extends State<HomePageToday> {
     print(fileStream);
     StreamBuilder<FileResponse>(
       stream: fileStream,
-      builder: (context, snapshot) {
+      builder: (_, snapshot) {
         if (snapshot.hasData) {
+          FileInfo fileInfo = snapshot.data as FileInfo;
           print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
-          print(snapshot.data);
+          print(fileInfo.file.toString());
           return Text("${snapshot.connectionState}");
         } else if (snapshot.hasError) {
           return const Text("Error found");
@@ -261,13 +262,13 @@ class _HomePageTodayState extends State<HomePageToday> {
                             setState(() => print('Downloading...'));
                             var fetchedFile = await DefaultCacheManager().getSingleFile(url!);
                             setState(() {
-                              print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+                              print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLYYYYYYY");
                               StreamBuilder<FileResponse>(
                                 stream: fileStream,
-                                builder: (context, snapshot) {
-                                  print(
-                                      "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
-                                  print(snapshot.data);
+                                builder: (_, snapshot) {
+                                  FileInfo fileInfo = snapshot.data as FileInfo;
+                                  print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
+                                  print(fileInfo.file.toString());
                                   if (snapshot.hasData) {
                                     return Text("${snapshot.data}");
                                   } else if (snapshot.hasError) {
@@ -348,8 +349,6 @@ class _HomePageTodayState extends State<HomePageToday> {
                                       horizontalTitleGap: 5,
                                       title: GestureDetector(
                                         onTap: ()async {
-                                          print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
-                                          print(_placeList[index]["description"]);
                                           city = await _placeList[index]["description"];
 
                                             loadingToday=true;

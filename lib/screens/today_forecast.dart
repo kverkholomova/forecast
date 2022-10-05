@@ -128,7 +128,6 @@ class _HomePageTodayState extends State<HomePageToday> {
     MyApp();
     fetchWeatherForWeek();
     setState(() {
-
       print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
     });
   }
@@ -144,7 +143,7 @@ class _HomePageTodayState extends State<HomePageToday> {
         if (snapshot.hasData) {
           print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
           print(snapshot.data);
-          return Text("${snapshot.data}");
+          return Text("${snapshot.connectionState}");
         } else if (snapshot.hasError) {
           return const Text("Error found");
         }
@@ -157,25 +156,6 @@ class _HomePageTodayState extends State<HomePageToday> {
             child: RefreshIndicator(
               onRefresh: refresh,
               child: Scaffold(
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () async {
-                    setState(() => print('Downloading...'));
-                    var fetchedFile = await DefaultCacheManager().getSingleFile(url!);
-                    setState(() => StreamBuilder<FileResponse>(
-                      stream: fileStream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
-                          print(snapshot.data);
-                          return Text("${snapshot.data}");
-                        } else if (snapshot.hasError) {
-                          return const Text("Error found");
-                        }
-                        return Container();
-                      },
-                    ));
-                  },
-                ),
                 key: homeScaffoldKey,
                 backgroundColor: Colors.white,
                 body: SingleChildScrollView(
@@ -271,13 +251,42 @@ class _HomePageTodayState extends State<HomePageToday> {
                             top: MediaQuery.of(context).size.height * 0.7),
                         child: buildBottomWeatherWidget(context),
                       ),
+                      Padding(padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.03),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
+                          onPressed: ()async {
+                            print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+                            setState(() => print('Downloading...'));
+                            var fetchedFile = await DefaultCacheManager().getSingleFile(url!);
+                            setState(() {
+                              print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+                              StreamBuilder<FileResponse>(
+                                stream: fileStream,
+                                builder: (context, snapshot) {
+                                  print(
+                                      "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
+                                  print(snapshot.data);
+                                  if (snapshot.hasData) {
+                                    return Text("${snapshot.data}");
+                                  } else if (snapshot.hasError) {
+                                    return const Text("Error found");
+                                  }
+                                  return Container();
+                                },
+                              );
+                            });
+                          },),
+                      ),
+                      ),
                       Padding(
                         padding: EdgeInsets.only(
                             top: MediaQuery.of(context).size.width * 0.02),
                         child: Align(
-                          alignment: Alignment.topCenter,
+                          alignment: Alignment.topLeft,
                           child: Container(
-                            // width: MediaQuery.of(context).size.width*0.9,
+                            width: MediaQuery.of(context).size.width*0.77,
                             // height: MediaQuery.of(context).size.width * 0.2,
                             color: Colors.white,
                             child: Column(

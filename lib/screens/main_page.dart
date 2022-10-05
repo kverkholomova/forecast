@@ -33,15 +33,16 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     // TODO: implement initState
     super.initState();
 
-    fetchWeatherForWeek();
-    _downloadFile();
+
+
     // Create TabController for getting the index of current tab
     controllerTab = today&&hourly?TabController(length: 2, vsync: this,initialIndex: 0):today&&!hourly?TabController(length: 2, vsync: this, initialIndex: 1):TabController(length: 2, vsync: this, initialIndex: 1);
     controllerTab.addListener(() {
       setState(() {
-
+        fetchWeatherForWeek();
         selectedIndex = controllerTab.index;
       });
+      _downloadFile();
     });
   }
 

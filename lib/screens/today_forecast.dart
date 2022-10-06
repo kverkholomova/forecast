@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/app.dart';
+import 'package:forecast/widgets/cache_manager.dart';
 import 'package:forecast/widgets/icons.dart';
 import 'package:forecast/widgets/loader.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +79,7 @@ class _HomePageTodayState extends State<HomePageToday> {
   void initState() {
     super.initState();
 
-    futureWeatherWeek = fetchWeatherForWeek();
+    futureWeatherWeek = fetchCache();
     Timer(const Duration(seconds: 4), () {
       dataLoadFunction();
 

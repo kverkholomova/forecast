@@ -11,7 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 
 Stream<FileResponse>? fileStream;
-
+Future<FileInfo?> fileInfoFuture= DefaultCacheManager().getFileFromCache(url!);
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -32,9 +32,6 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
-
     // Create TabController for getting the index of current tab
     controllerTab = today&&hourly?TabController(length: 2, vsync: this,initialIndex: 0):today&&!hourly?TabController(length: 2, vsync: this, initialIndex: 1):TabController(length: 2, vsync: this, initialIndex: 1);
     controllerTab.addListener(() {
@@ -43,6 +40,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
         selectedIndex = controllerTab.index;
       });
       _downloadFile();
+      fileInfoFuture= DefaultCacheManager().getFileFromCache(url);
     });
   }
 

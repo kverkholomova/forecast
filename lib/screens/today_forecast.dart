@@ -88,6 +88,7 @@ class _HomePageTodayState extends State<HomePageToday> {
     textEditingController.addListener(() {
       _onChanged();
     });
+
     setState(() {
       serviceEn();
       permissGranted();
@@ -137,20 +138,21 @@ class _HomePageTodayState extends State<HomePageToday> {
 
     print("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
     print(fileStream);
-    StreamBuilder<FileResponse>(
-      stream: fileStream,
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          FileInfo fileInfo = snapshot.data as FileInfo;
-          print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
-          print(fileInfo.file.toString());
-          return Text("${snapshot.connectionState}");
-        } else if (snapshot.hasError) {
-          return const Text("Error found");
-        }
-        return Container();
-      },
-    );
+
+    // StreamBuilder<FileResponse>(
+    //   stream: fileStream,
+    //   builder: (_, snapshot) {
+    //     if (snapshot.hasData) {
+    //       FileInfo fileInfo = snapshot.data as FileInfo;
+    //       print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
+    //       print(fileInfo.file.toString());
+    //       return Text("${snapshot.connectionState}");
+    //     } else if (snapshot.hasError) {
+    //       return const Text("Error found");
+    //     }
+    //     return Container();
+    //   },
+    // );
     return loadingToday
         ? const Loader()
         : SafeArea(
@@ -258,26 +260,57 @@ class _HomePageTodayState extends State<HomePageToday> {
                         alignment: Alignment.topRight,
                         child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
                           onPressed: ()async {
-                            print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                            setState(() => print('Downloading...'));
-                            var fetchedFile = await DefaultCacheManager().getSingleFile(url!);
-                            setState(() {
-                              print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLYYYYYYY");
-                              StreamBuilder<FileResponse>(
-                                stream: fileStream,
-                                builder: (_, snapshot) {
+                            if(fileInfoFuture!=null){
+                              FutureBuilder(
+                                future: fileInfoFuture,
+                                builder: (context, snapshot) {
                                   FileInfo fileInfo = snapshot.data as FileInfo;
-                                  print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
-                                  print(fileInfo.file.toString());
                                   if (snapshot.hasData) {
-                                    return Text("${snapshot.data}");
-                                  } else if (snapshot.hasError) {
-                                    return const Text("Error found");
-                                  }
-                                  return Container();
-                                },
+                                    print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                                    print("Original Url:${fileInfo.originalUrl}");
+                                            return Text("${snapshot.data}");
+                                          } else if (snapshot.hasError) {
+                                            return const Text("Error found");
+                                          }
+                                          return Container();
+                                        },
+                                //   return snapshot.hasData
+                                //       ? Column(
+                                //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                //     children: [
+                                //       Image.file(fileInfo.file),
+                                //       Text("Original Url:${fileInfo.originalUrl}"),
+                                //       Text("Valid Till:${fileInfo.validTill}"),
+                                //       Text("File address:${fileInfo.file}"),
+                                //       Text("File source:${fileInfo.source}"),
+                                //       Text("Hash code:${fileInfo.hashCode}"),
+                                //       Text("Hash code:${fileInfo.runtimeType}"),
+                                //     ],
+                                //   )
+                                //       : Center(child: Text("Fetching..."));
+                                // },
                               );
-                            });
+                            }
+                            // print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+                            // setState(() => print('Downloading...'));
+                            // var fetchedFile = await DefaultCacheManager().getSingleFile(url!);
+                            // setState(() {
+                            //   print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLYYYYYYY");
+                            //   StreamBuilder<FileResponse>(
+                            //     stream: fileStream,
+                            //     builder: (_, snapshot) {
+                            //       FileInfo fileInfo = snapshot.data as FileInfo;
+                            //       print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
+                            //       print(fileInfo.file.toString());
+                            //       if (snapshot.hasData) {
+                            //         return Text("${snapshot.data}");
+                            //       } else if (snapshot.hasError) {
+                            //         return const Text("Error found");
+                            //       }
+                            //       return Container();
+                            //     },
+                            //   );
+                            // });
                           },),
                       ),
                       ),

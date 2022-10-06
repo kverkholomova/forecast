@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           Widget child,
           ) {
         final bool connected = connectivity != ConnectivityResult.none;
-        fetchWeatherForWeek();
+        // fetchWeatherForWeek();
         return connected ? MainPage() :OfflineScreen();
       },
       child: Container(),

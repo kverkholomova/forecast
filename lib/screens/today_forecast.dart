@@ -16,17 +16,17 @@ import '../utils/location_functionality.dart';
 import 'home_page.dart';
 import 'package:http/http.dart' as http;
 import 'main_page.dart';
-
+const kGoogleApiKey = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
+String city = '';
+bool hourly = true;
+bool loadingToday = true;
 class HomePageToday extends StatefulWidget {
   const HomePageToday({Key? key}) : super(key: key);
 
   @override
   State<HomePageToday> createState() => _HomePageTodayState();
 }
-const kGoogleApiKey = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
-String city = '';
-bool hourly = true;
-bool loadingToday = true;
+
 class _HomePageTodayState extends State<HomePageToday> {
   late TextEditingController textEditingController;
 
@@ -260,20 +260,22 @@ class _HomePageTodayState extends State<HomePageToday> {
                         alignment: Alignment.topRight,
                         child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
                           onPressed: ()async {
-                            if(fileInfoFuture!=null){
-                              FutureBuilder(
-                                future: fileInfoFuture,
-                                builder: (context, snapshot) {
-                                  FileInfo fileInfo = snapshot.data as FileInfo;
-                                  if (snapshot.hasData) {
-                                    print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                                    print("Original Url:${fileInfo.originalUrl}");
-                                            return Text("${snapshot.data}");
-                                          } else if (snapshot.hasError) {
-                                            return const Text("Error found");
-                                          }
-                                          return Container();
-                                        },
+                            DefaultCacheManager().emptyCache();
+
+                            // if(fileInfoFuture!=null){
+                            //   FutureBuilder(
+                            //     future: fileInfoFuture,
+                            //     builder: (context, snapshot) {
+                            //       FileInfo fileInfo = snapshot.data as FileInfo;
+                            //       if (snapshot.hasData) {
+                            //         print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                            //         print("Original Url:${fileInfo.originalUrl}");
+                            //                 return Text("${snapshot.data}");
+                            //               } else if (snapshot.hasError) {
+                            //                 return const Text("Error found");
+                            //               }
+                            //               return Container();
+                            //             },
                                 //   return snapshot.hasData
                                 //       ? Column(
                                 //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -289,8 +291,8 @@ class _HomePageTodayState extends State<HomePageToday> {
                                 //   )
                                 //       : Center(child: Text("Fetching..."));
                                 // },
-                              );
-                            }
+                            //   );
+                            // }
                             // print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
                             // setState(() => print('Downloading...'));
                             // var fetchedFile = await DefaultCacheManager().getSingleFile(url!);

@@ -9,9 +9,11 @@ import 'package:forecast/screens/home_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../widgets/cache_manager.dart';
 
+// Stream<FileResponse> fileStream = DefaultCacheManager().getFileStream(url);
 Stream<FileResponse>? fileStream;
-Future<FileInfo?> fileInfoFuture= DefaultCacheManager().getFileFromCache(url!);
+// Future<FileInfo?> fileInfoFuture= DefaultCacheManager().getFileFromCache('https://avatars1.githubusercontent.com/u/41328571?s=280&v=4');
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -38,9 +40,12 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       setState(() {
         fetchWeatherForWeek();
         selectedIndex = controllerTab.index;
+        _downloadFile();
+
       });
-      _downloadFile();
-      fileInfoFuture= DefaultCacheManager().getFileFromCache(url);
+print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+print(url);
+
     });
   }
 
@@ -89,7 +94,8 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
           child: TabBarView(
             controller: controllerTab,
             children: [
-              HomePageToday(),
+              DefaultCacheManager().getFileFromCache(url!=null?url.toString():'http://api.openweathermap.org/data/2.5/forecast?q=Slupsk&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric') == null? UploadCacheMemoryData(): FetchCacheMemoryData(),
+              // HomePageToday(),
               today?const HomePage():const AnotherDayForecast(),
             ],
           ),

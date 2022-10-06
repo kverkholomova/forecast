@@ -15,26 +15,7 @@ import 'package:dio/dio.dart';
 
 bool rightCity = true;
 
-// Future<List<Map<String, dynamic>>> fetchapiCach() async {
-//   // await APICacheDBHelper.deleteAll(APICacheDBModel.table);
-//
-//   var lists = new List<int>.generate(10, (i) => i + 1);
-//   lists.forEach((element) async {
-//     var cacheData2 = await APICacheManager().addCacheData(new APICacheDBModel(
-//       syncData: '{"name":"lava$element"}',
-//       key: "$element",
-//     ));
-//   });
-//
-//   List<Map<String,dynamic>> list = await APICacheDBHelper.query(APICacheDBModel.table);
-//   // await APICacheDBHelper.rawQuery("select * from ${APICacheDBModel.table}");
-//   // print(list);
-//   list.forEach((element) {
-//     print(element);
-//   });
-//   return list;
-// }
-late String url;
+String? url;
 Future<Weather5Days> fetchWeatherForWeek() async {
   var currentLocationData = await location.getLocation();
   url = city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric';

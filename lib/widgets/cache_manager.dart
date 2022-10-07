@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/api/weather_week_api.dart';
@@ -28,7 +25,6 @@ class UploadCacheMemoryData extends StatelessWidget {
             Text("Valid Till:${fileInfo.validTill}"),
             Text("File address:${fileInfo.file}"),
             Text("File source:${fileInfo.source}"),
-            Text("Hash code:${fileInfo.hashCode}"),
             Text("Type:${fileInfo.runtimeType}"),
           ],
         )
@@ -77,7 +73,6 @@ class _FetchCacheMemoryDataState extends State<FetchCacheMemoryData> {
               Text("Valid Till:${fileInfo.validTill}"),
               Text("File address:${fileInfo.file}"),
               Text("File source:${fileInfo.source}"),
-              Text("Hash code:${fileInfo.hashCode}"),
               Text("Hash code:${fileInfo.runtimeType}"),
             ],
           );

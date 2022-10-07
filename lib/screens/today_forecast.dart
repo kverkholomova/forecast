@@ -261,7 +261,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                         alignment: Alignment.topRight,
                         child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
                           onPressed: ()async {
-                            // DefaultCacheManager().emptyCache();
+                            DefaultCacheManager().emptyCache();
                             print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                             print(await HttpProvider().getData(url));
 

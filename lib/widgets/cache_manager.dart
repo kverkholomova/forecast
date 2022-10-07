@@ -99,13 +99,39 @@ class HttpProvider {
       var res = await file.readAsLines();
       print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
       // (res.map((e) => print(e)));
-      print("OOOOOOOOOOOOOOOOOOOO");
+
+      print(res[0][1]);
       var mapElements = res as List<String>;
-      mapElements.map((e) => print(mapElements.indexOf(e)));
+      print("OOOOOOOOOOOOOOOOOOOO");
+      print(mapElements[0]);
+      // var key = mapElements.keys.firstWhere((k) => mapElements[k] == 'Bag', orElse: () => null);
+
+      // print('The key for value "Bag" : ${key}');
+      // mapElements.map((e) => print(mapElements.indexOf(e)));
       return Response(res[0], 200);
     }
     return Response("null", 404);
   }
+  //
+  // Future<FileFetcherResponse?> _myHttpGetter(String? url,
+  //     ) async {
+  //   HttpFileFetcherResponse response;
+  //   // Do things with headers, the url or whatever.
+  //   try {
+  //     var res = await http.get(Uri.parse(url!));
+  //     // add a custom response header
+  //     // to regulate the caching time
+  //     // when the server doesn't provide cache-control
+  //     res.headers.addAll({'cache-control': 'private, max-age=120'});
+  //     response = HttpFileFetcherResponse(res);
+  //     print("IIIIIIIIIIIIIIIIIIIIIIIIIII");
+  //     print(response);
+  //     return response;
+  //   } on SocketException {
+  //     print('No internet connection');
+  //   }
+  //
+  // }
 }
 
 

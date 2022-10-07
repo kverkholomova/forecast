@@ -264,6 +264,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                             // DefaultCacheManager().emptyCache();
                             print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                             print(await HttpProvider().getData(url));
+
                             // print("BBBBBBBBBBBBBBBBBBBBBBBBBBBOOOOOOOOOOOOOOO");
                             // print(HttpProvider().getData(url).toString().substring(0,10));
                             // FutureBuilder(

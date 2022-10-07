@@ -96,7 +96,7 @@ class HttpProvider {
   Future<Response> getData(String? url) async {
     var file = await DefaultCacheManager().getSingleFile(url!);
     if (file != null && await file.exists()) {
-      var res = await file.readAsString();
+      var res = await file.readAsLines();
       print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
       print(res);
       return Response(res, 200);

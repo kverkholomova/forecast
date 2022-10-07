@@ -79,7 +79,7 @@ class _HomePageTodayState extends State<HomePageToday> {
   void initState() {
     super.initState();
 
-    futureWeatherWeek = fetchCache();
+    futureWeatherWeek = fetchWeatherForWeek();
     Timer(const Duration(seconds: 4), () {
       dataLoadFunction();
 
@@ -261,8 +261,27 @@ class _HomePageTodayState extends State<HomePageToday> {
                         alignment: Alignment.topRight,
                         child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
                           onPressed: ()async {
-                            DefaultCacheManager().emptyCache();
-
+                            // DefaultCacheManager().emptyCache();
+                            print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                            print(await HttpProvider().getData(url));
+                            // print("BBBBBBBBBBBBBBBBBBBBBBBBBBBOOOOOOOOOOOOOOO");
+                            // print(HttpProvider().getData(url).toString().substring(0,10));
+                            // FutureBuilder(
+                            //         future: HttpProvider().getData(url),
+                            //         builder: (context, snapshot) {
+                            //           // FileInfo fileInfo = snapshot.data as FileInfo;
+                            //           if (snapshot.hasData) {
+                            //
+                            //             // print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                            //             // print("Original Url:${fileInfo.originalUrl}");
+                            //                     return Text("${snapshot.data}");
+                            //                   } else if (snapshot.hasError) {
+                            //                     return const Text("Error found");
+                            //                   }
+                            //                   return Container();
+                            //                 },
+                            //
+                            //       );
                             // if(fileInfoFuture!=null){
                             //   FutureBuilder(
                             //     future: fileInfoFuture,
@@ -439,7 +458,8 @@ class _HomePageTodayState extends State<HomePageToday> {
       ),
       child: Align(
         alignment: Alignment.topCenter,
-        child: FutureBuilder<Weather5Days>(
+        child:
+        FutureBuilder<Weather5Days>(
           future: futureWeatherWeek,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -459,6 +479,26 @@ class _HomePageTodayState extends State<HomePageToday> {
             return Container();
           },
         ),
+        // FutureBuilder<Weather5Days>(
+        //   future: futureWeatherWeek,
+        //   builder: (context, snapshot) {
+        //     if (snapshot.hasData) {
+        //       var tom =
+        //           "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
+        //       return Text(
+        //         tom,
+        //         style: GoogleFonts.roboto(
+        //           fontSize: 13,
+        //           color: Colors.black45,
+        //         ),
+        //       );
+        //     } else if (snapshot.hasError) {
+        //       return Text('${snapshot.error}${snapshot.data?.commonList}');
+        //     }
+        //
+        //     return Container();
+        //   },
+        // ),
       ),
     );
   }

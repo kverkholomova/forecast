@@ -98,8 +98,11 @@ class HttpProvider {
     if (file != null && await file.exists()) {
       var res = await file.readAsLines();
       print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-      print(res);
-      return Response(res, 200);
+      // (res.map((e) => print(e)));
+      print("OOOOOOOOOOOOOOOOOOOO");
+      var mapElements = res as List<String>;
+      mapElements.map((e) => print(mapElements.indexOf(e)));
+      return Response(res[0], 200);
     }
     return Response("null", 404);
   }

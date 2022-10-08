@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/api/weather_week_api.dart';
@@ -88,24 +90,29 @@ class _FetchCacheMemoryDataState extends State<FetchCacheMemoryData> {
 
 
 class HttpProvider {
-  Future<Response> getData(String? url) async {
+  Future<Weather5Days> getData(String? url) async {
     var file = await DefaultCacheManager().getSingleFile(url!);
     if (file != null && await file.exists()) {
-      var res = await file.readAsLines();
+
+      file.openRead();
+      print(file);
+      var res = await file.readAsString();
+      final body = jsonDecode(res);
       print("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
       // (res.map((e) => print(e)));
-
-      print(res[0][1]);
-      var mapElements = res as List<String>;
+      print(res);
+      // print(res[0][2]);
+      print(body['list'][1]["main"]["temp"]);
+      // var mapElements = res as List<String>;
       print("OOOOOOOOOOOOOOOOOOOO");
-      print(mapElements[0]);
+      // print(mapElements[0]);
       // var key = mapElements.keys.firstWhere((k) => mapElements[k] == 'Bag', orElse: () => null);
 
       // print('The key for value "Bag" : ${key}');
       // mapElements.map((e) => print(mapElements.indexOf(e)));
-      return Response(res[0], 200);
+      return Weather5Days.fromJson(jsonDecode(res));
     }
-    return Response("null", 404);
+    throw Exception('Error');
   }
   //
   // Future<FileFetcherResponse?> _myHttpGetter(String? url,

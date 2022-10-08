@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/app.dart';
 import 'package:forecast/widgets/cache_manager.dart';
@@ -178,7 +179,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                               width: MediaQuery.of(context).size.width * 0.9,
                               height: MediaQuery.of(context).size.width * 0.9,
                               child: FutureBuilder<Weather5Days>(
-                                future: futureWeatherWeek,
+                                future: HttpProvider().getData(url),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return VideoPlayer(controllerVideo(snapshot));
@@ -263,7 +264,34 @@ class _HomePageTodayState extends State<HomePageToday> {
                           onPressed: ()async {
                             DefaultCacheManager().emptyCache();
                             print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                            print(await HttpProvider().getData(url));
+                            FutureBuilder<Weather5Days>(
+                              future: HttpProvider().getData(url),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  // var tom = "${snapshot.data?['list'][1]["main"]["temp"]}"
+                                    var tom =  "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
+                                    print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+                                    print(tom);
+                                  return Text(
+                                    tom,
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 13,
+                                      color: Colors.black45,
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text('Error');
+                                }
+
+                                return Container();
+                              },
+                            );
+                            // var dot =await HttpProvider().getData(url);
+                            // print("HHHHHHHHHHHHHHHHHHHHHHHHHH");
+                            // print(dot);
+                            // String value = jsonDecode(await HttpProvider().getData(url));
+
+
 
                             // print("BBBBBBBBBBBBBBBBBBBBBBBBBBBOOOOOOOOOOOOOOO");
                             // print(HttpProvider().getData(url).toString().substring(0,10));
@@ -461,7 +489,7 @@ class _HomePageTodayState extends State<HomePageToday> {
         alignment: Alignment.topCenter,
         child:
         FutureBuilder<Weather5Days>(
-          future: futureWeatherWeek,
+          future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var tom =
@@ -512,7 +540,7 @@ class _HomePageTodayState extends State<HomePageToday> {
       child: Align(
         alignment: Alignment.topLeft,
         child: FutureBuilder<Weather5Days>(
-          future: futureWeatherWeek,
+          future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var tom = "${snapshot.data?.city?.name}";
@@ -546,7 +574,7 @@ class _HomePageTodayState extends State<HomePageToday> {
       child: Align(
         alignment: Alignment.topRight,
         child: FutureBuilder<Weather5Days>(
-          future: futureWeatherWeek,
+          future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var tom = "${snapshot.data?.commonList?[0]["wind"]["speed"]}";
@@ -579,7 +607,7 @@ class _HomePageTodayState extends State<HomePageToday> {
       child: Align(
         alignment: Alignment.topRight,
         child: FutureBuilder<Weather5Days>(
-          future: futureWeatherWeek,
+          future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var tom =
@@ -608,7 +636,7 @@ class _HomePageTodayState extends State<HomePageToday> {
       child: Align(
         alignment: Alignment.topLeft,
         child: FutureBuilder<Weather5Days>(
-          future: futureWeatherWeek,
+          future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var tom =
@@ -637,7 +665,7 @@ class _HomePageTodayState extends State<HomePageToday> {
       child: Align(
         alignment: Alignment.topLeft,
         child: FutureBuilder<Weather5Days>(
-          future: futureWeatherWeek,
+          future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var tom =
@@ -711,7 +739,7 @@ class _HomePageTodayState extends State<HomePageToday> {
           Column(
             children: [
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -732,7 +760,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.commonList?[1]["weather"][0]["icon"] ==
@@ -766,7 +794,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -791,7 +819,7 @@ class _HomePageTodayState extends State<HomePageToday> {
           Column(
             children: [
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -812,7 +840,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.commonList?[2]["weather"][0]["icon"] ==
@@ -844,7 +872,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -869,7 +897,7 @@ class _HomePageTodayState extends State<HomePageToday> {
           Column(
             children: [
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -890,7 +918,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.commonList?[3]["weather"][0]["icon"] ==
@@ -922,7 +950,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -947,7 +975,7 @@ class _HomePageTodayState extends State<HomePageToday> {
           Column(
             children: [
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     description = snapshot.data!.commonList![32]["weather"][0]
@@ -970,7 +998,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.commonList?[4]["weather"][0]["icon"] ==
@@ -1002,7 +1030,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -1027,7 +1055,7 @@ class _HomePageTodayState extends State<HomePageToday> {
           Column(
             children: [
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     description = snapshot.data!.commonList![39]["weather"][0]
@@ -1050,7 +1078,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.commonList?[5]["weather"][0]["icon"] ==
@@ -1082,7 +1110,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -1107,7 +1135,7 @@ class _HomePageTodayState extends State<HomePageToday> {
           Column(
             children: [
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -1128,7 +1156,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.commonList?[6]["weather"][0]["icon"] ==
@@ -1160,7 +1188,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -1185,7 +1213,7 @@ class _HomePageTodayState extends State<HomePageToday> {
           Column(
             children: [
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -1206,7 +1234,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.commonList?[7]["weather"][0]["icon"] ==
@@ -1238,7 +1266,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -1263,7 +1291,7 @@ class _HomePageTodayState extends State<HomePageToday> {
           Column(
             children: [
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =
@@ -1284,7 +1312,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
@@ -1320,7 +1348,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                 },
               ),
               FutureBuilder<Weather5Days>(
-                future: futureWeatherWeek,
+                future: HttpProvider().getData(url),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     var tom =

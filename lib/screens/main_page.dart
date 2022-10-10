@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/api/weather_week_api.dart';
@@ -7,6 +8,7 @@ import 'package:forecast/screens/another_day_forecast.dart';
 import 'package:forecast/screens/exception_screen.dart';
 import 'package:forecast/screens/home_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
+import 'package:forecast/widgets/indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../app.dart';
@@ -14,6 +16,7 @@ import '../widgets/cache_manager.dart';
 
 // Stream<FileResponse> fileStream = DefaultCacheManager().getFileStream(url);
 Stream<FileResponse>? fileStream;
+
 // Future<FileInfo?> fileInfoFuture= DefaultCacheManager().getFileFromCache('https://avatars1.githubusercontent.com/u/41328571?s=280&v=4');
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -21,13 +24,17 @@ class MainPage extends StatefulWidget {
   @override
   State<MainPage> createState() => _MainPageState();
 }
+
 // late TabController _controllerTab;
 late TabController controllerTab;
 int selectedIndex = 0;
-class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
+
+class _MainPageState extends State<MainPage>
+    with SingleTickerProviderStateMixin {
   void _downloadFile() {
     setState(() {
-      fileStream = DefaultCacheManager().getFileStream(url!, withProgress: true);
+      fileStream =
+          DefaultCacheManager().getFileStream(url!, withProgress: true);
     });
   }
 
@@ -36,17 +43,19 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     // TODO: implement initState
     super.initState();
     // Create TabController for getting the index of current tab
-    controllerTab = today&&hourly?TabController(length: 2, vsync: this,initialIndex: 0):today&&!hourly?TabController(length: 2, vsync: this, initialIndex: 1):TabController(length: 2, vsync: this, initialIndex: 1);
+    controllerTab = today && hourly
+        ? TabController(length: 2, vsync: this, initialIndex: 0)
+        : today && !hourly
+            ? TabController(length: 2, vsync: this, initialIndex: 1)
+            : TabController(length: 2, vsync: this, initialIndex: 1);
     controllerTab.addListener(() {
       setState(() {
         // fetchWeatherForWeek();
         selectedIndex = controllerTab.index;
         _downloadFile();
-
       });
-print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-print(url);
-
+      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+      print(url);
     });
   }
 
@@ -55,7 +64,7 @@ print(url);
     super.dispose();
   }
 
-  Future refresh() async{
+  Future refresh() async {
     DefaultCacheManager().emptyCache();
     MyApp();
     HttpProvider().getData(url);
@@ -66,52 +75,84 @@ print(url);
 
   @override
   Widget build(BuildContext context) {
-    return !rightCity?const ExceptionScreen():DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        bottomNavigationBar: Container(
-          color: Colors.white,
-          child: TabBar(
-            // overlayColor: Colors.white,
-            controller: controllerTab,
-            unselectedLabelColor: Colors.black45,
-            labelColor: Colors.indigoAccent.withOpacity(0.6),
-            indicatorColor: Colors.indigoAccent,
-            tabs: [
-              Tab(icon: Text("Today", style: GoogleFonts.roboto(
-                fontSize: 18,
-                // color: Colors.indigoAccent.withOpacity(0.7),
-              ),)),
-              Tab(icon: Text("5 Days", style: GoogleFonts.roboto(
-                fontSize: 18,
-                // color: Colors.indigoAccent.withOpacity(0.7),
-              ),)),
-            ],
-          ),
-        ),
-
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            controller: controllerTab,
-            children: [
-              // DefaultCacheManager().getFileFromCache(url!=null?url.toString():'http://api.openweathermap.org/data/2.5/forecast?q=Slupsk&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric') == null? UploadCacheMemoryData(): FetchCacheMemoryData(),
-              RefreshIndicator(
-                  onRefresh: refresh,
-                  child: HomePageToday()
+    return !rightCity
+        ? const ExceptionScreen()
+        : DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              bottomNavigationBar: Container(
+                color: Colors.white,
+                child: TabBar(
+                  // overlayColor: Colors.white,
+                  controller: controllerTab,
+                  unselectedLabelColor: Colors.black45,
+                  labelColor: Colors.indigoAccent.withOpacity(0.6),
+                  indicatorColor: Colors.indigoAccent,
+                  tabs: [
+                    Tab(
+                        icon: Text(
+                      "Today",
+                      style: GoogleFonts.roboto(
+                        fontSize: 18,
+                        // color: Colors.indigoAccent.withOpacity(0.7),
+                      ),
+                    )),
+                    Tab(
+                        icon: Text(
+                      "5 Days",
+                      style: GoogleFonts.roboto(
+                        fontSize: 18,
+                        // color: Colors.indigoAccent.withOpacity(0.7),
+                      ),
+                    )),
+                  ],
+                ),
               ),
-              today?RefreshIndicator(
-                  onRefresh: refresh,
-                  child: const HomePage())
-                  :RefreshIndicator(
-                  onRefresh: refresh,
-                  child: const AnotherDayForecast()),
-            ],
-          ),
-        ),
-      ),
-    );
+              body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: controllerTab,
+                  children: [
+                    // DefaultCacheManager().getFileFromCache(url!=null?url.toString():'http://api.openweathermap.org/data/2.5/forecast?q=Slupsk&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric') == null? UploadCacheMemoryData(): FetchCacheMemoryData(),
+
+                    CustomRefreshIndicator(
+                        child: HomePageToday(),
+                        onRefresh: refresh,
+                        builder: (
+                          BuildContext context,
+                          Widget child,
+                          IndicatorController controller,
+                        ) {
+                          return CheckMarkIndicator(child: HomePageToday());
+                        }),
+
+                    today
+                        ? CustomRefreshIndicator(
+                            onRefresh: refresh,
+                            child: const HomePage(),
+                            builder: (
+                              BuildContext context,
+                              Widget child,
+                              IndicatorController controller,
+                            ) {
+                              return CheckMarkIndicator(child: HomePage());
+                            })
+                        : CustomRefreshIndicator(
+                            onRefresh: refresh,
+                            child: const AnotherDayForecast(),
+                            builder: (
+                              BuildContext context,
+                              Widget child,
+                              IndicatorController controller,
+                            ) {
+                              return CheckMarkIndicator(child: AnotherDayForecast());
+                            }),
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }

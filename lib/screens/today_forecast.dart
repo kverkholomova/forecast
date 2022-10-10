@@ -128,8 +128,9 @@ class _HomePageTodayState extends State<HomePageToday> {
   }
 
   Future refresh() async{
+    DefaultCacheManager().emptyCache();
     MyApp();
-    fetchWeatherForWeek();
+    HttpProvider().getData(url);
     setState(() {
       print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
     });
@@ -137,24 +138,6 @@ class _HomePageTodayState extends State<HomePageToday> {
 
   @override
   Widget build(BuildContext context) {
-
-    print("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
-    print(fileStream);
-
-    // StreamBuilder<FileResponse>(
-    //   stream: fileStream,
-    //   builder: (_, snapshot) {
-    //     if (snapshot.hasData) {
-    //       FileInfo fileInfo = snapshot.data as FileInfo;
-    //       print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
-    //       print(fileInfo.file.toString());
-    //       return Text("${snapshot.connectionState}");
-    //     } else if (snapshot.hasError) {
-    //       return const Text("Error found");
-    //     }
-    //     return Container();
-    //   },
-    // );
     return loadingToday
         ? const Loader()
         : SafeArea(

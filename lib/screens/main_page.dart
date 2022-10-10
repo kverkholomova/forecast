@@ -54,13 +54,7 @@ print(url);
     super.dispose();
   }
 
-  Future refresh() async{
-    fetchWeatherForWeek();
-    setState(() {
 
-      print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

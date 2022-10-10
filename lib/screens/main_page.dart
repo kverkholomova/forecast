@@ -9,6 +9,7 @@ import 'package:forecast/screens/home_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../app.dart';
 import '../widgets/cache_manager.dart';
 
 // Stream<FileResponse> fileStream = DefaultCacheManager().getFileStream(url);
@@ -54,7 +55,14 @@ print(url);
     super.dispose();
   }
 
-
+  Future refresh() async{
+    DefaultCacheManager().emptyCache();
+    MyApp();
+    HttpProvider().getData(url);
+    setState(() {
+      print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLJJJJJJJ");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +94,13 @@ print(url);
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             controller: controllerTab,
             children: [
               // DefaultCacheManager().getFileFromCache(url!=null?url.toString():'http://api.openweathermap.org/data/2.5/forecast?q=Slupsk&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric') == null? UploadCacheMemoryData(): FetchCacheMemoryData(),
-              HomePageToday(),
+              RefreshIndicator(
+                  onRefresh: refresh,
+                  child: HomePageToday()),
               today?const HomePage():const AnotherDayForecast(),
             ],
           ),

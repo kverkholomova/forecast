@@ -127,336 +127,334 @@ class _HomePageTodayState extends State<HomePageToday> {
     }
   }
 
-  Future refresh() async{
-    DefaultCacheManager().emptyCache();
-    MyApp();
-    HttpProvider().getData(url);
-    setState(() {
-      print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
-    });
-  }
+  // Future refresh() async{
+  //   DefaultCacheManager().emptyCache();
+  //   const MyApp();
+  //   HttpProvider().getData(url);
+  //   setState(() {
+  //     print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return loadingToday
         ? const Loader()
         : SafeArea(
-            child: RefreshIndicator(
-              onRefresh: refresh,
-              child: Scaffold(
-                key: homeScaffoldKey,
-                backgroundColor: Colors.white,
-                body: SingleChildScrollView(
-                  physics: ScrollPhysics(),
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.27,
+            child: Scaffold(
+              key: homeScaffoldKey,
+              backgroundColor: Colors.white,
+              body: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.27,
+                      ),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FittedBox(
+                          fit: BoxFit.cover,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: MediaQuery.of(context).size.width * 0.9,
+                            child: FutureBuilder<Weather5Days>(
+                              future: HttpProvider().getData(url),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return VideoPlayer(controllerVideo(snapshot));
+                                } else if (snapshot.hasError) {
+                                  return const Text("Error found");
+                                }
+                                return Container();
+                              },
+                            ),
+                          ),
                         ),
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: FittedBox(
-                            fit: BoxFit.cover,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.11,
+                        // bottom: MediaQuery.of(context).size.height * 0.02,
+                      ),
+                      child: Stack(
+                        children: [
+                          buildTemperature(context),
+                          buildDescription(context),
+                          Align(
+                            alignment: Alignment.topRight,
                             child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.width * 0.9,
-                              child: FutureBuilder<Weather5Days>(
-                                future: HttpProvider().getData(url),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return VideoPlayer(controllerVideo(snapshot));
-                                  } else if (snapshot.hasError) {
-                                    return const Text("Error found");
-                                  }
-                                  return Container();
+                              width: 100,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const HumidityIcon(),
+                                  buildHumidity(context),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: SizedBox(
+                              width: 100,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const WindSpeedIcon(),
+                                  buildWindSpeed(context),
+                                  const WindKmH(),
+                                ],
+                              ),
+                            ),
+                          ),
+                          buildCityName(context),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.19,
+                            ),
+                            child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  DateFormat('EEEE').format(weekDaysName(0)),
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 24,
+                                    color: Colors.indigoAccent.withOpacity(0.7),
+                                  ),
+                                )),
+                          ),
+                          buildDate(context),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.7),
+                      child: buildBottomWeatherWidget(context),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.width * 0.03),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
+                        onPressed: ()async {
+                          DefaultCacheManager().emptyCache();
+                          MyApp();
+                          HttpProvider().getData(url);
+                          // FutureBuilder<Weather5Days>(
+                          //   future: HttpProvider().getData(url),
+                          //   builder: (context, snapshot) {
+                          //     if (snapshot.hasData) {
+                          //       // var tom = "${snapshot.data?['list'][1]["main"]["temp"]}"
+                          //         var tom =  "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
+                          //         print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+                          //         print(tom);
+                          //       return Text(
+                          //         tom,
+                          //         style: GoogleFonts.roboto(
+                          //           fontSize: 13,
+                          //           color: Colors.black45,
+                          //         ),
+                          //       );
+                          //     } else if (snapshot.hasError) {
+                          //       return Text('Error');
+                          //     }
+                          //
+                          //     return Container();
+                          //   },
+                          // );
+                          // var dot =await HttpProvider().getData(url);
+                          // print("HHHHHHHHHHHHHHHHHHHHHHHHHH");
+                          // print(dot);
+                          // String value = jsonDecode(await HttpProvider().getData(url));
+
+
+
+                          // print("BBBBBBBBBBBBBBBBBBBBBBBBBBBOOOOOOOOOOOOOOO");
+                          // print(HttpProvider().getData(url).toString().substring(0,10));
+                          // FutureBuilder(
+                          //         future: HttpProvider().getData(url),
+                          //         builder: (context, snapshot) {
+                          //           // FileInfo fileInfo = snapshot.data as FileInfo;
+                          //           if (snapshot.hasData) {
+                          //
+                          //             // print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                          //             // print("Original Url:${fileInfo.originalUrl}");
+                          //                     return Text("${snapshot.data}");
+                          //                   } else if (snapshot.hasError) {
+                          //                     return const Text("Error found");
+                          //                   }
+                          //                   return Container();
+                          //                 },
+                          //
+                          //       );
+                          // if(fileInfoFuture!=null){
+                          //   FutureBuilder(
+                          //     future: fileInfoFuture,
+                          //     builder: (context, snapshot) {
+                          //       FileInfo fileInfo = snapshot.data as FileInfo;
+                          //       if (snapshot.hasData) {
+                          //         print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+                          //         print("Original Url:${fileInfo.originalUrl}");
+                          //                 return Text("${snapshot.data}");
+                          //               } else if (snapshot.hasError) {
+                          //                 return const Text("Error found");
+                          //               }
+                          //               return Container();
+                          //             },
+                              //   return snapshot.hasData
+                              //       ? Column(
+                              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              //     children: [
+                              //       Image.file(fileInfo.file),
+                              //       Text("Original Url:${fileInfo.originalUrl}"),
+                              //       Text("Valid Till:${fileInfo.validTill}"),
+                              //       Text("File address:${fileInfo.file}"),
+                              //       Text("File source:${fileInfo.source}"),
+                              //       Text("Hash code:${fileInfo.hashCode}"),
+                              //       Text("Hash code:${fileInfo.runtimeType}"),
+                              //     ],
+                              //   )
+                              //       : Center(child: Text("Fetching..."));
+                              // },
+                          //   );
+                          // }
+                          // print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+                          // setState(() => print('Downloading...'));
+                          // var fetchedFile = await DefaultCacheManager().getSingleFile(url!);
+                          // setState(() {
+                          //   print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLYYYYYYY");
+                          //   StreamBuilder<FileResponse>(
+                          //     stream: fileStream,
+                          //     builder: (_, snapshot) {
+                          //       FileInfo fileInfo = snapshot.data as FileInfo;
+                          //       print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
+                          //       print(fileInfo.file.toString());
+                          //       if (snapshot.hasData) {
+                          //         return Text("${snapshot.data}");
+                          //       } else if (snapshot.hasError) {
+                          //         return const Text("Error found");
+                          //       }
+                          //       return Container();
+                          //     },
+                          //   );
+                          // });
+                        },),
+                    ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.02),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.77,
+                          // height: MediaQuery.of(context).size.width * 0.2,
+                          color: Colors.white,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextField(
+                                textAlignVertical: TextAlignVertical.bottom,
+                                decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 0.5, color: Colors.black45),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color:
+                                          Colors.indigoAccent.withOpacity(0.7)),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusColor:
+                                    Colors.indigoAccent.withOpacity(0.7),
+                                    hintText: "Find your city",
+                                    hintStyle: GoogleFonts.roboto(
+                                      fontSize: 16,
+                                      color: Colors.black.withOpacity(0.3),
+                                    )),
+                                controller: textEditingController,
+                              onSubmitted: (String value) async {
+                                  setState(() async {
+                                    loading = true;
+                                    city = value;
+                                    await checkCityName();
+                                    if (rightCity == true) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const MainPage()),
+                                      );
+                                    } else {
+                                      city = "";
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const MainPage()),
+                                      );
+                                    }
+                                  });
                                 },
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.11,
-                          // bottom: MediaQuery.of(context).size.height * 0.02,
-                        ),
-                        child: Stack(
-                          children: [
-                            buildTemperature(context),
-                            buildDescription(context),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: SizedBox(
-                                width: 100,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const HumidityIcon(),
-                                    buildHumidity(context),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: SizedBox(
-                                width: 100,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const WindSpeedIcon(),
-                                    buildWindSpeed(context),
-                                    const WindKmH(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            buildCityName(context),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 0.19,
-                              ),
-                              child: Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Text(
-                                    DateFormat('EEEE').format(weekDaysName(0)),
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 24,
-                                      color: Colors.indigoAccent.withOpacity(0.7),
+                              ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: _placeList.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    contentPadding: const EdgeInsets.only(top: 8, left: 5),
+                                    minLeadingWidth: 10,
+                                    horizontalTitleGap: 5,
+                                    title: GestureDetector(
+                                      onTap: ()async {
+                                        city = await _placeList[index]["description"];
+
+                                          loadingToday=true;
+                                          await checkCityName();
+                                          if (rightCity==true){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const MainPage()),
+                                            );
+                                          }
+                                          else{
+                                            city = "";
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const MainPage()),
+                                            );
+                                          }
+
+                                      },
+                                      child: Row(
+                                        children: [
+                                            const Padding(
+                                              padding: EdgeInsets.only(right: 7),
+                                              child: Icon(Icons.location_on_outlined),
+                                            ),
+                                          Expanded(child: Text(_placeList[index]["description"])),
+                                        ],
+                                      ),
                                     ),
-                                  )),
-                            ),
-                            buildDate(context),
-                          ],
-                        ),
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.7),
-                        child: buildBottomWeatherWidget(context),
-                      ),
-                      Padding(padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width * 0.03),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
-                          onPressed: ()async {
-                            DefaultCacheManager().emptyCache();
-                            print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                            // FutureBuilder<Weather5Days>(
-                            //   future: HttpProvider().getData(url),
-                            //   builder: (context, snapshot) {
-                            //     if (snapshot.hasData) {
-                            //       // var tom = "${snapshot.data?['list'][1]["main"]["temp"]}"
-                            //         var tom =  "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
-                            //         print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-                            //         print(tom);
-                            //       return Text(
-                            //         tom,
-                            //         style: GoogleFonts.roboto(
-                            //           fontSize: 13,
-                            //           color: Colors.black45,
-                            //         ),
-                            //       );
-                            //     } else if (snapshot.hasError) {
-                            //       return Text('Error');
-                            //     }
-                            //
-                            //     return Container();
-                            //   },
-                            // );
-                            // var dot =await HttpProvider().getData(url);
-                            // print("HHHHHHHHHHHHHHHHHHHHHHHHHH");
-                            // print(dot);
-                            // String value = jsonDecode(await HttpProvider().getData(url));
-
-
-
-                            // print("BBBBBBBBBBBBBBBBBBBBBBBBBBBOOOOOOOOOOOOOOO");
-                            // print(HttpProvider().getData(url).toString().substring(0,10));
-                            // FutureBuilder(
-                            //         future: HttpProvider().getData(url),
-                            //         builder: (context, snapshot) {
-                            //           // FileInfo fileInfo = snapshot.data as FileInfo;
-                            //           if (snapshot.hasData) {
-                            //
-                            //             // print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                            //             // print("Original Url:${fileInfo.originalUrl}");
-                            //                     return Text("${snapshot.data}");
-                            //                   } else if (snapshot.hasError) {
-                            //                     return const Text("Error found");
-                            //                   }
-                            //                   return Container();
-                            //                 },
-                            //
-                            //       );
-                            // if(fileInfoFuture!=null){
-                            //   FutureBuilder(
-                            //     future: fileInfoFuture,
-                            //     builder: (context, snapshot) {
-                            //       FileInfo fileInfo = snapshot.data as FileInfo;
-                            //       if (snapshot.hasData) {
-                            //         print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                            //         print("Original Url:${fileInfo.originalUrl}");
-                            //                 return Text("${snapshot.data}");
-                            //               } else if (snapshot.hasError) {
-                            //                 return const Text("Error found");
-                            //               }
-                            //               return Container();
-                            //             },
-                                //   return snapshot.hasData
-                                //       ? Column(
-                                //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                //     children: [
-                                //       Image.file(fileInfo.file),
-                                //       Text("Original Url:${fileInfo.originalUrl}"),
-                                //       Text("Valid Till:${fileInfo.validTill}"),
-                                //       Text("File address:${fileInfo.file}"),
-                                //       Text("File source:${fileInfo.source}"),
-                                //       Text("Hash code:${fileInfo.hashCode}"),
-                                //       Text("Hash code:${fileInfo.runtimeType}"),
-                                //     ],
-                                //   )
-                                //       : Center(child: Text("Fetching..."));
-                                // },
-                            //   );
-                            // }
-                            // print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                            // setState(() => print('Downloading...'));
-                            // var fetchedFile = await DefaultCacheManager().getSingleFile(url!);
-                            // setState(() {
-                            //   print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLYYYYYYY");
-                            //   StreamBuilder<FileResponse>(
-                            //     stream: fileStream,
-                            //     builder: (_, snapshot) {
-                            //       FileInfo fileInfo = snapshot.data as FileInfo;
-                            //       print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
-                            //       print(fileInfo.file.toString());
-                            //       if (snapshot.hasData) {
-                            //         return Text("${snapshot.data}");
-                            //       } else if (snapshot.hasError) {
-                            //         return const Text("Error found");
-                            //       }
-                            //       return Container();
-                            //     },
-                            //   );
-                            // });
-                          },),
-                      ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.width * 0.02),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width*0.77,
-                            // height: MediaQuery.of(context).size.width * 0.2,
-                            color: Colors.white,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextField(
-                                  textAlignVertical: TextAlignVertical.bottom,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 0.5, color: Colors.black45),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color:
-                                            Colors.indigoAccent.withOpacity(0.7)),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      focusColor:
-                                      Colors.indigoAccent.withOpacity(0.7),
-                                      hintText: "Find your city",
-                                      hintStyle: GoogleFonts.roboto(
-                                        fontSize: 16,
-                                        color: Colors.black.withOpacity(0.3),
-                                      )),
-                                  controller: textEditingController,
-                                onSubmitted: (String value) async {
-                                    setState(() async {
-                                      loading = true;
-                                      city = value;
-                                      await checkCityName();
-                                      if (rightCity == true) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => const MainPage()),
-                                        );
-                                      } else {
-                                        city = "";
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => const MainPage()),
-                                        );
-                                      }
-                                    });
-                                  },
-                                ),
-                                ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: _placeList.length,
-                                  itemBuilder: (context, index) {
-                                    return ListTile(
-                                      contentPadding: EdgeInsets.only(top: 8, left: 5),
-                                      minLeadingWidth: 10,
-                                      horizontalTitleGap: 5,
-                                      title: GestureDetector(
-                                        onTap: ()async {
-                                          city = await _placeList[index]["description"];
-
-                                            loadingToday=true;
-                                            await checkCityName();
-                                            if (rightCity==true){
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => const MainPage()),
-                                              );
-                                            }
-                                            else{
-                                              city = "";
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => const MainPage()),
-                                              );
-                                            }
-
-                                        },
-                                        child: Row(
-                                          children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(right: 7),
-                                                child: Icon(Icons.location_on_outlined),
-                                              ),
-                                            Expanded(child: Text(_placeList[index]["description"])),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                )
-                              ],
-                            ),
+                                  );
+                                },
+                              )
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

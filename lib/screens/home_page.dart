@@ -126,253 +126,250 @@ class _HomePageState extends State<HomePage> {
     _controller.dispose();
     textEditingController.dispose();
   }
-  Future refresh() async{
-    DefaultCacheManager().emptyCache();
-    MyApp();
-    HttpProvider().getData(url);
-    setState(() {
-      print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
-    });
-  }
+  // Future refresh() async{
+  //   DefaultCacheManager().emptyCache();
+  //   MyApp();
+  //   HttpProvider().getData(url);
+  //   setState(() {
+  //     print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return loading
         ? const Loader()
         : SafeArea(
-            child: RefreshIndicator(
-              onRefresh: refresh,
-              child: Scaffold(
-                backgroundColor: Colors.white,
-                body: SingleChildScrollView(
-                  physics: ScrollPhysics(),
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height <= 684
-                              ? MediaQuery.of(context).size.height * 0.27
-                              : MediaQuery.of(context).size.height * 0.27,
-                        ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 1,
-                              height: MediaQuery.of(context).size.height <= 684
-                                  ? MediaQuery.of(context).size.height * 0.57
-                                  : MediaQuery.of(context).size.height * 0.5,
-                              child: FutureBuilder<Weather5Days>(
-                                future: HttpProvider().getData(url),
-                                builder: (context, snapshot) {
-                                  print(
-                                      "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-                                  print(MediaQuery.of(context).size.height);
-                                  print(MediaQuery.of(context).size.height <= 684
-                                      ? MediaQuery.of(context).size.height * 0.44
-                                      : MediaQuery.of(context).size.height * 0.5);
-                                  if (snapshot.hasData) {
-                                    return VideoPlayer(controllerVideo(snapshot));
-                                  } else if (snapshot.hasError) {
-                                    return Text('${snapshot.error}');
-                                  }
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              body: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height <= 684
+                            ? MediaQuery.of(context).size.height * 0.27
+                            : MediaQuery.of(context).size.height * 0.27,
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 1,
+                            height: MediaQuery.of(context).size.height <= 684
+                                ? MediaQuery.of(context).size.height * 0.57
+                                : MediaQuery.of(context).size.height * 0.5,
+                            child: FutureBuilder<Weather5Days>(
+                              future: HttpProvider().getData(url),
+                              builder: (context, snapshot) {
+                                print(
+                                    "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+                                print(MediaQuery.of(context).size.height);
+                                print(MediaQuery.of(context).size.height <= 684
+                                    ? MediaQuery.of(context).size.height * 0.44
+                                    : MediaQuery.of(context).size.height * 0.5);
+                                if (snapshot.hasData) {
+                                  return VideoPlayer(controllerVideo(snapshot));
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
 
-                                  // By default, show a loading spinner.
-                                  return Container();
+                                // By default, show a loading spinner.
+                                return Container();
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.11,
+                        // bottom: MediaQuery.of(context).size.height * 0.02,
+                      ),
+                      child: Stack(
+                        children: [
+                          buildTemperature(context),
+                          buildDescription(context),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: SizedBox(
+                              width: 100,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const HumidityIcon(),
+                                  buildHumidity(context),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: SizedBox(
+                              width: 100,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const WindSpeedIcon(),
+                                  buildWindSpeed(context),
+                                  const WindKmH(),
+                                ],
+                              ),
+                            ),
+                          ),
+                          buildCityName(context),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.19,
+                            ),
+                            child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  DateFormat('EEEE').format(weekDaysName(0)),
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 26,
+                                    color: Colors.indigoAccent.withOpacity(0.7),
+                                  ),
+                                )),
+                          ),
+                          buildDate(context),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.7),
+                      child: buildBottomWeatherWidget(context),
+                    ),
+                    Padding(padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.width * 0.03),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
+                          onPressed: ()async {
+                            DefaultCacheManager().emptyCache();
+                        },),
+                        ),
+                        ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.02),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.77,
+                          // height: MediaQuery.of(context).size.width * 0.13,
+                          color: Colors.white,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextField(
+                                textAlignVertical: TextAlignVertical.bottom,
+                                decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 0.5, color: Colors.black45),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color:
+                                          Colors.indigoAccent.withOpacity(0.7)),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    focusColor:
+                                    Colors.indigoAccent.withOpacity(0.7),
+                                    hintText: "Find your city",
+                                    hintStyle: GoogleFonts.roboto(
+                                      fontSize: 16,
+                                      color: Colors.black.withOpacity(0.3),
+                                    )),
+                                controller: textEditingController,
+                                onSubmitted: (String value) async {
+                                  setState(() async {
+                                    loading = true;
+                                    city = value;
+                                    await checkCityName();
+                                    if (rightCity == true) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const MainPage()),
+                                      );
+                                    } else {
+                                      city = "";
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const MainPage()),
+                                      );
+                                    }
+                                  });
                                 },
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.11,
-                          // bottom: MediaQuery.of(context).size.height * 0.02,
-                        ),
-                        child: Stack(
-                          children: [
-                            buildTemperature(context),
-                            buildDescription(context),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: SizedBox(
-                                width: 100,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const HumidityIcon(),
-                                    buildHumidity(context),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: SizedBox(
-                                width: 100,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const WindSpeedIcon(),
-                                    buildWindSpeed(context),
-                                    const WindKmH(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            buildCityName(context),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 0.19,
-                              ),
-                              child: Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Text(
-                                    DateFormat('EEEE').format(weekDaysName(0)),
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 26,
-                                      color: Colors.indigoAccent.withOpacity(0.7),
-                                    ),
-                                  )),
-                            ),
-                            buildDate(context),
-                          ],
-                        ),
-                      ),
+                              ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: _placeList.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    color: Colors.white,
+                                    child: ListTile(
+                                      contentPadding: EdgeInsets.only(top: 8, left: 5),
+                                      minLeadingWidth: 10,
+                                      horizontalTitleGap: 5,
+                                      title: GestureDetector(
+                                        onTap: ()async {
+                                          print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
+                                          print(_placeList[index]["description"]);
+                                          city = await _placeList[index]["description"];
 
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.7),
-                        child: buildBottomWeatherWidget(context),
-                      ),
-                      Padding(padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width * 0.03),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
-                            onPressed: ()async {
-                              DefaultCacheManager().emptyCache();
-                          },),
-                          ),
-                          ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.width * 0.02),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width*0.77,
-                            // height: MediaQuery.of(context).size.width * 0.13,
-                            color: Colors.white,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextField(
-                                  textAlignVertical: TextAlignVertical.bottom,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 0.5, color: Colors.black45),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color:
-                                            Colors.indigoAccent.withOpacity(0.7)),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      focusColor:
-                                      Colors.indigoAccent.withOpacity(0.7),
-                                      hintText: "Find your city",
-                                      hintStyle: GoogleFonts.roboto(
-                                        fontSize: 16,
-                                        color: Colors.black.withOpacity(0.3),
-                                      )),
-                                  controller: textEditingController,
-                                  onSubmitted: (String value) async {
-                                    setState(() async {
-                                      loading = true;
-                                      city = value;
-                                      await checkCityName();
-                                      if (rightCity == true) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => const MainPage()),
-                                        );
-                                      } else {
-                                        city = "";
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => const MainPage()),
-                                        );
-                                      }
-                                    });
-                                  },
-                                ),
-                                ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: _placeList.length,
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      color: Colors.white,
-                                      child: ListTile(
-                                        contentPadding: EdgeInsets.only(top: 8, left: 5),
-                                        minLeadingWidth: 10,
-                                        horizontalTitleGap: 5,
-                                        title: GestureDetector(
-                                          onTap: ()async {
-                                            print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
-                                            print(_placeList[index]["description"]);
-                                            city = await _placeList[index]["description"];
+                                          loadingToday=true;
+                                          await checkCityName();
+                                          if (rightCity==true){
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const MainPage()),
+                                            );
+                                          }
+                                          else{
+                                            city = "";
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const MainPage()),
+                                            );
+                                          }
 
-                                            loadingToday=true;
-                                            await checkCityName();
-                                            if (rightCity==true){
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => const MainPage()),
-                                              );
-                                            }
-                                            else{
-                                              city = "";
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => const MainPage()),
-                                              );
-                                            }
-
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(right: 7),
-                                                child: Icon(Icons.location_on_outlined),
-                                              ),
-                                              Expanded(child: Text(_placeList[index]["description"])),
-                                            ],
-                                          ),
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 7),
+                                              child: Icon(Icons.location_on_outlined),
+                                            ),
+                                            Expanded(child: Text(_placeList[index]["description"])),
+                                          ],
                                         ),
                                       ),
-                                    );
-                                  },
-                                )
-                              ],
-                            ),
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

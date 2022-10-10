@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/models/weather_week_model.dart';
 import 'package:forecast/screens/home_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
@@ -311,66 +312,76 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
               ],
             ),
         ),
-              Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
+              Padding(padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.width * 0.03),
                 child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    // width: MediaQuery.of(context).size.width*0.9,
-                    height: MediaQuery.of(context).size.width*0.13,
-                    color: Colors.white,
-                    child: TextField(
-                      textAlignVertical: TextAlignVertical.bottom,
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 0.5, color: Colors.black45),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          focusColor: Colors.indigoAccent.withOpacity(0.7),
-                          hintText: "Find your city",
-                          hintStyle: GoogleFonts.roboto(
-                            fontSize: 16,
-                            color: Colors.black.withOpacity(0.3),
-                          )
-                      ),
-                      controller: textEditingController,
-                      onSubmitted: (String value) async {
-                        setState(() async {
-                          loadingNew=true;
-                          city = value;
-                          await checkCityName();
-                          if (rightCity==true){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MainPage()),
-                            );
-                          }
-                          else{
-                            city = "";
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MainPage()),
-                            );
-                          }
-                        });
-                        city = value;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                              const MainPage()),
-                        );
-                      },
-                    ),
-                  ),
+                  alignment: Alignment.topRight,
+                  child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
+                    onPressed: ()async {
+                      DefaultCacheManager().emptyCache();
+                    },),
                 ),
               ),
+              // Padding(
+              //   padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
+              //   child: Align(
+              //     alignment: Alignment.topCenter,
+              //     child: Container(
+              //       // width: MediaQuery.of(context).size.width*0.9,
+              //       height: MediaQuery.of(context).size.width*0.13,
+              //       color: Colors.white,
+              //       child: TextField(
+              //         textAlignVertical: TextAlignVertical.bottom,
+              //         decoration: InputDecoration(
+              //             enabledBorder: OutlineInputBorder(
+              //               borderSide: const BorderSide(width: 0.5, color: Colors.black45),
+              //               borderRadius: BorderRadius.circular(15),
+              //             ),
+              //             focusedBorder: OutlineInputBorder(
+              //               borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
+              //               borderRadius: BorderRadius.circular(15),
+              //             ),
+              //             focusColor: Colors.indigoAccent.withOpacity(0.7),
+              //             hintText: "Find your city",
+              //             hintStyle: GoogleFonts.roboto(
+              //               fontSize: 16,
+              //               color: Colors.black.withOpacity(0.3),
+              //             )
+              //         ),
+              //         controller: textEditingController,
+              //         onSubmitted: (String value) async {
+              //           setState(() async {
+              //             loadingNew=true;
+              //             city = value;
+              //             await checkCityName();
+              //             if (rightCity==true){
+              //               Navigator.push(
+              //                 context,
+              //                 MaterialPageRoute(
+              //                     builder: (context) => const MainPage()),
+              //               );
+              //             }
+              //             else{
+              //               city = "";
+              //               Navigator.push(
+              //                 context,
+              //                 MaterialPageRoute(
+              //                     builder: (context) => const MainPage()),
+              //               );
+              //             }
+              //           });
+              //           city = value;
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) =>
+              //                 const MainPage()),
+              //           );
+              //         },
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Padding(
                 padding: EdgeInsets.only(
                     top: MediaQuery
@@ -382,9 +393,9 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
               Padding(
                 padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
                 child: Align(
-                  alignment: Alignment.topCenter,
+                  alignment: Alignment.topLeft,
                   child: Container(
-                    // width: MediaQuery.of(context).size.width*0.9,
+                    width: MediaQuery.of(context).size.width*0.77,
                     // height: MediaQuery.of(context).size.width*0.13,
                     color: Colors.white,
                     child: Column(

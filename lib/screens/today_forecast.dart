@@ -264,28 +264,28 @@ class _HomePageTodayState extends State<HomePageToday> {
                           onPressed: ()async {
                             DefaultCacheManager().emptyCache();
                             print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                            FutureBuilder<Weather5Days>(
-                              future: HttpProvider().getData(url),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  // var tom = "${snapshot.data?['list'][1]["main"]["temp"]}"
-                                    var tom =  "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
-                                    print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-                                    print(tom);
-                                  return Text(
-                                    tom,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 13,
-                                      color: Colors.black45,
-                                    ),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Text('Error');
-                                }
-
-                                return Container();
-                              },
-                            );
+                            // FutureBuilder<Weather5Days>(
+                            //   future: HttpProvider().getData(url),
+                            //   builder: (context, snapshot) {
+                            //     if (snapshot.hasData) {
+                            //       // var tom = "${snapshot.data?['list'][1]["main"]["temp"]}"
+                            //         var tom =  "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
+                            //         print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+                            //         print(tom);
+                            //       return Text(
+                            //         tom,
+                            //         style: GoogleFonts.roboto(
+                            //           fontSize: 13,
+                            //           color: Colors.black45,
+                            //         ),
+                            //       );
+                            //     } else if (snapshot.hasError) {
+                            //       return Text('Error');
+                            //     }
+                            //
+                            //     return Container();
+                            //   },
+                            // );
                             // var dot =await HttpProvider().getData(url);
                             // print("HHHHHHHHHHHHHHHHHHHHHHHHHH");
                             // print(dot);

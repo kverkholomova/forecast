@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/screens/main_page.dart';
 import 'package:forecast/screens/today_forecast.dart';
 import 'package:forecast/widgets/loader.dart';
@@ -237,13 +238,23 @@ class _HomePageState extends State<HomePage> {
                           top: MediaQuery.of(context).size.height * 0.7),
                       child: buildBottomWeatherWidget(context),
                     ),
+                    Padding(padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.width * 0.03),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
+                          onPressed: ()async {
+                            DefaultCacheManager().emptyCache();
+                        },),
+                        ),
+                        ),
                     Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.width * 0.02),
                       child: Align(
-                        alignment: Alignment.topCenter,
+                        alignment: Alignment.topLeft,
                         child: Container(
-                          // width: MediaQuery.of(context).size.width*0.9,
+                          width: MediaQuery.of(context).size.width*0.77,
                           // height: MediaQuery.of(context).size.width * 0.13,
                           color: Colors.white,
                           child: Column(

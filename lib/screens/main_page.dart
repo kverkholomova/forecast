@@ -101,7 +101,12 @@ print(url);
               RefreshIndicator(
                   onRefresh: refresh,
                   child: HomePageToday()),
-              today?const HomePage():const AnotherDayForecast(),
+              today?RefreshIndicator(
+                  onRefresh: refresh,
+                  child: const HomePage())
+                  :RefreshIndicator(
+                  onRefresh: refresh,
+                  child: const AnotherDayForecast()),
             ],
           ),
         ),

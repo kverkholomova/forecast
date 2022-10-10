@@ -57,6 +57,7 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   api_cache_manager: ^1.0.2
   pull_to_refresh: ^2.0.0
+  custom_refresh_indicator: ^1.2.1
 
 
 dev_dependencies:

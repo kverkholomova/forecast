@@ -100,7 +100,8 @@ print(url);
               // DefaultCacheManager().getFileFromCache(url!=null?url.toString():'http://api.openweathermap.org/data/2.5/forecast?q=Slupsk&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric') == null? UploadCacheMemoryData(): FetchCacheMemoryData(),
               RefreshIndicator(
                   onRefresh: refresh,
-                  child: HomePageToday()),
+                  child: HomePageToday()
+              ),
               today?RefreshIndicator(
                   onRefresh: refresh,
                   child: const HomePage())

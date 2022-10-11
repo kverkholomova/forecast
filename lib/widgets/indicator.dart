@@ -16,7 +16,7 @@ class CheckMarkIndicator extends StatefulWidget {
 
 class _CheckMarkIndicatorState extends State<CheckMarkIndicator>
     with SingleTickerProviderStateMixin {
-  static const _indicatorSize = 200.0;
+
 
   /// Whether to render check mark instead of spinner
   bool _renderCompleteState = false;
@@ -26,7 +26,7 @@ class _CheckMarkIndicatorState extends State<CheckMarkIndicator>
   @override
   Widget build(BuildContext context) {
     return CustomRefreshIndicator(
-      offsetToArmed: _indicatorSize,
+      offsetToArmed: MediaQuery.of(context).size.width * 0.1,
       onRefresh: () => Future.delayed(const Duration(seconds: 2)),
       completeStateDuration: const Duration(seconds: 2),
       onStateChanged: (change) {
@@ -58,7 +58,7 @@ class _CheckMarkIndicatorState extends State<CheckMarkIndicator>
                   controller.stopDrag();
                 }
                 prevScrollDirection = controller.scrollingDirection;
-                final containerHeight = controller.value * _indicatorSize;
+                final containerHeight = controller.value * MediaQuery.of(context).size.width * 0.3;
                 return Container(
                   alignment: Alignment.center,
                   height: containerHeight,
@@ -67,7 +67,7 @@ class _CheckMarkIndicatorState extends State<CheckMarkIndicator>
                     minHeight: 40,
                     maxWidth: 50,
                     minWidth: 40,
-                    alignment: Alignment.center,
+                    alignment: Alignment.bottomCenter,
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 100),
                       alignment: Alignment.center,
@@ -103,7 +103,7 @@ class _CheckMarkIndicatorState extends State<CheckMarkIndicator>
             AnimatedBuilder(
               builder: (context, _) {
                 return Transform.translate(
-                  offset: Offset(0.0, controller.value * _indicatorSize),
+                  offset: Offset(0.0, controller.value * MediaQuery.of(context).size.width * 0.3),
                   child: child,
                 );
               },

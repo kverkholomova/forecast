@@ -1,17 +1,9 @@
 import 'dart:convert';
 
-import 'package:api_cache_manager/models/cache_db_model.dart';
-import 'package:api_cache_manager/utils/cache_db_helper.dart';
-import 'package:api_cache_manager/utils/cache_manager.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:flutter/material.dart';
-import 'package:forecast/screens/exception_screen.dart';
-
 import '../models/weather_week_model.dart';
 import '../screens/today_forecast.dart';
 import '../utils/location_functionality.dart';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
 
 bool rightCity = true;
 
@@ -19,9 +11,6 @@ String? url;
 Future<Weather5Days> fetchWeatherForWeek() async {
   var currentLocationData = await location.getLocation();
   url = city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric';
-
-  // Dio dio = Dio();
-  // dio.interceptors.add(DioCacheManager(CacheConfig(baseUrl: "city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metri")).interceptor);
 
   final response = await http
       .get(Uri.parse(city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
@@ -40,9 +29,6 @@ Future<Weather5Days> fetchWeatherForWeek() async {
     // If the server did not return a 200 OK response,
     // then throw an exception.
     rightCity = false;
-    print("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-    print(response.statusCode);
-    print(rightCity);
 
     throw Exception('Error ${response.statusCode}');
   }

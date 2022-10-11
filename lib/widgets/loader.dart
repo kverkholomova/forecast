@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../api/weather_week_api.dart';
-import '../models/weather_week_model.dart';
-import '../screens/exception_screen.dart';
-import '../screens/main_page.dart';
-
 class Loader extends StatefulWidget {
   const Loader({Key? key}) : super(key: key);
 

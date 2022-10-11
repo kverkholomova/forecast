@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:forecast/api/weather_week_api.dart';
 import 'package:forecast/screens/today_forecast.dart';
 import 'package:google_fonts/google_fonts.dart';

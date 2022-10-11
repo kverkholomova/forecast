@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +13,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../app.dart';
 import '../widgets/cache_manager.dart';
 
-// Stream<FileResponse> fileStream = DefaultCacheManager().getFileStream(url);
 Stream<FileResponse>? fileStream;
 
-// Future<FileInfo?> fileInfoFuture= DefaultCacheManager().getFileFromCache('https://avatars1.githubusercontent.com/u/41328571?s=280&v=4');
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -25,7 +22,6 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-// late TabController _controllerTab;
 late TabController controllerTab;
 int selectedIndex = 0;
 
@@ -50,12 +46,9 @@ class _MainPageState extends State<MainPage>
             : TabController(length: 2, vsync: this, initialIndex: 1);
     controllerTab.addListener(() {
       setState(() {
-        // fetchWeatherForWeek();
         selectedIndex = controllerTab.index;
         _downloadFile();
       });
-      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-      print(url);
     });
   }
 
@@ -66,11 +59,8 @@ class _MainPageState extends State<MainPage>
 
   Future refresh() async {
     DefaultCacheManager().emptyCache();
-    MyApp();
+    const MyApp();
     HttpProvider().getData(url);
-    setState(() {
-      print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLJJJJJJJ");
-    });
   }
 
   @override
@@ -112,21 +102,20 @@ class _MainPageState extends State<MainPage>
               body: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: controllerTab,
                   children: [
-                    // DefaultCacheManager().getFileFromCache(url!=null?url.toString():'http://api.openweathermap.org/data/2.5/forecast?q=Slupsk&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric') == null? UploadCacheMemoryData(): FetchCacheMemoryData(),
 
                     CustomRefreshIndicator(
-                        child: HomePageToday(),
                         onRefresh: refresh,
                         builder: (
                           BuildContext context,
                           Widget child,
                           IndicatorController controller,
                         ) {
-                          return CheckMarkIndicator(child: HomePageToday());
-                        }),
+                          return const CheckMarkIndicator(child: HomePageToday());
+                        },
+                        child: const HomePageToday()),
 
                     today
                         ? CustomRefreshIndicator(
@@ -137,7 +126,7 @@ class _MainPageState extends State<MainPage>
                               Widget child,
                               IndicatorController controller,
                             ) {
-                              return CheckMarkIndicator(child: HomePage());
+                              return const CheckMarkIndicator(child: HomePage());
                             })
                         : CustomRefreshIndicator(
                             onRefresh: refresh,
@@ -147,7 +136,7 @@ class _MainPageState extends State<MainPage>
                               Widget child,
                               IndicatorController controller,
                             ) {
-                              return CheckMarkIndicator(child: AnotherDayForecast());
+                              return const CheckMarkIndicator(child: AnotherDayForecast());
                             }),
                   ],
                 ),

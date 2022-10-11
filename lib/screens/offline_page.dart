@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:forecast/api/weather_week_api.dart';
-import 'package:forecast/screens/today_forecast.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
-import 'main_page.dart';
 
 class OfflineScreen extends StatefulWidget {
   const OfflineScreen({Key? key}) : super(key: key);

@@ -14,7 +14,6 @@ import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 import '../api/weather_week_api.dart';
-import '../app.dart';
 import '../utils/location_functionality.dart';
 import '../widgets/cache_manager.dart';
 import '../widgets/icons.dart';
@@ -59,8 +58,7 @@ class _HomePageState extends State<HomePage> {
         'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
 
     if (responseName.statusCode != 200) {
-      print(
-          "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+
       rightCity = false;
     }
   }
@@ -126,14 +124,6 @@ class _HomePageState extends State<HomePage> {
     _controller.dispose();
     textEditingController.dispose();
   }
-  // Future refresh() async{
-  //   DefaultCacheManager().emptyCache();
-  //   MyApp();
-  //   HttpProvider().getData(url);
-  //   setState(() {
-  //     print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +133,7 @@ class _HomePageState extends State<HomePage> {
             child: Scaffold(
               backgroundColor: Colors.white,
               body: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Stack(
                   children: [
                     Padding(
@@ -164,12 +154,7 @@ class _HomePageState extends State<HomePage> {
                             child: FutureBuilder<Weather5Days>(
                               future: HttpProvider().getData(url),
                               builder: (context, snapshot) {
-                                print(
-                                    "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-                                print(MediaQuery.of(context).size.height);
-                                print(MediaQuery.of(context).size.height <= 684
-                                    ? MediaQuery.of(context).size.height * 0.44
-                                    : MediaQuery.of(context).size.height * 0.5);
+
                                 if (snapshot.hasData) {
                                   return VideoPlayer(controllerVideo(snapshot));
                                 } else if (snapshot.hasError) {
@@ -322,13 +307,12 @@ class _HomePageState extends State<HomePage> {
                                   return Container(
                                     color: Colors.white,
                                     child: ListTile(
-                                      contentPadding: EdgeInsets.only(top: 8, left: 5),
+                                      contentPadding: const EdgeInsets.only(top: 8, left: 5),
                                       minLeadingWidth: 10,
                                       horizontalTitleGap: 5,
                                       title: GestureDetector(
                                         onTap: ()async {
-                                          print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
-                                          print(_placeList[index]["description"]);
+
                                           city = await _placeList[index]["description"];
 
                                           loadingToday=true;
@@ -352,8 +336,8 @@ class _HomePageState extends State<HomePage> {
                                         },
                                         child: Row(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(right: 7),
+                                            const Padding(
+                                              padding: EdgeInsets.only(right: 7),
                                               child: Icon(Icons.location_on_outlined),
                                             ),
                                             Expanded(child: Text(_placeList[index]["description"])),

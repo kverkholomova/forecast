@@ -1,7 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline/flutter_offline.dart';
-import 'package:forecast/api/weather_week_api.dart';
 import 'package:forecast/screens/main_page.dart';
 import 'package:forecast/screens/offline_page.dart';
 
@@ -28,7 +27,7 @@ class MyApp extends StatelessWidget {
           ) {
         final bool connected = connectivity != ConnectivityResult.none;
         // fetchWeatherForWeek();
-        return connected ? MainPage() :OfflineScreen();
+        return connected ? const MainPage() :const OfflineScreen();
       },
       child: Container(),
     ),

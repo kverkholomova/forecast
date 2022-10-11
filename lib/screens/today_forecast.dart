@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/app.dart';
 import 'package:forecast/widgets/cache_manager.dart';
@@ -127,14 +126,7 @@ class _HomePageTodayState extends State<HomePageToday> {
     }
   }
 
-  // Future refresh() async{
-  //   DefaultCacheManager().emptyCache();
-  //   const MyApp();
-  //   HttpProvider().getData(url);
-  //   setState(() {
-  //     print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
-  //   });
-  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -244,106 +236,9 @@ class _HomePageTodayState extends State<HomePageToday> {
                       child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
                         onPressed: ()async {
                           DefaultCacheManager().emptyCache();
-                          MyApp();
+                          const MyApp();
                           HttpProvider().getData(url);
-                          // FutureBuilder<Weather5Days>(
-                          //   future: HttpProvider().getData(url),
-                          //   builder: (context, snapshot) {
-                          //     if (snapshot.hasData) {
-                          //       // var tom = "${snapshot.data?['list'][1]["main"]["temp"]}"
-                          //         var tom =  "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
-                          //         print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-                          //         print(tom);
-                          //       return Text(
-                          //         tom,
-                          //         style: GoogleFonts.roboto(
-                          //           fontSize: 13,
-                          //           color: Colors.black45,
-                          //         ),
-                          //       );
-                          //     } else if (snapshot.hasError) {
-                          //       return Text('Error');
-                          //     }
-                          //
-                          //     return Container();
-                          //   },
-                          // );
-                          // var dot =await HttpProvider().getData(url);
-                          // print("HHHHHHHHHHHHHHHHHHHHHHHHHH");
-                          // print(dot);
-                          // String value = jsonDecode(await HttpProvider().getData(url));
 
-
-
-                          // print("BBBBBBBBBBBBBBBBBBBBBBBBBBBOOOOOOOOOOOOOOO");
-                          // print(HttpProvider().getData(url).toString().substring(0,10));
-                          // FutureBuilder(
-                          //         future: HttpProvider().getData(url),
-                          //         builder: (context, snapshot) {
-                          //           // FileInfo fileInfo = snapshot.data as FileInfo;
-                          //           if (snapshot.hasData) {
-                          //
-                          //             // print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                          //             // print("Original Url:${fileInfo.originalUrl}");
-                          //                     return Text("${snapshot.data}");
-                          //                   } else if (snapshot.hasError) {
-                          //                     return const Text("Error found");
-                          //                   }
-                          //                   return Container();
-                          //                 },
-                          //
-                          //       );
-                          // if(fileInfoFuture!=null){
-                          //   FutureBuilder(
-                          //     future: fileInfoFuture,
-                          //     builder: (context, snapshot) {
-                          //       FileInfo fileInfo = snapshot.data as FileInfo;
-                          //       if (snapshot.hasData) {
-                          //         print("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-                          //         print("Original Url:${fileInfo.originalUrl}");
-                          //                 return Text("${snapshot.data}");
-                          //               } else if (snapshot.hasError) {
-                          //                 return const Text("Error found");
-                          //               }
-                          //               return Container();
-                          //             },
-                              //   return snapshot.hasData
-                              //       ? Column(
-                              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              //     children: [
-                              //       Image.file(fileInfo.file),
-                              //       Text("Original Url:${fileInfo.originalUrl}"),
-                              //       Text("Valid Till:${fileInfo.validTill}"),
-                              //       Text("File address:${fileInfo.file}"),
-                              //       Text("File source:${fileInfo.source}"),
-                              //       Text("Hash code:${fileInfo.hashCode}"),
-                              //       Text("Hash code:${fileInfo.runtimeType}"),
-                              //     ],
-                              //   )
-                              //       : Center(child: Text("Fetching..."));
-                              // },
-                          //   );
-                          // }
-                          // print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-                          // setState(() => print('Downloading...'));
-                          // var fetchedFile = await DefaultCacheManager().getSingleFile(url!);
-                          // setState(() {
-                          //   print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLYYYYYYY");
-                          //   StreamBuilder<FileResponse>(
-                          //     stream: fileStream,
-                          //     builder: (_, snapshot) {
-                          //       FileInfo fileInfo = snapshot.data as FileInfo;
-                          //       print("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
-                          //       print(fileInfo.file.toString());
-                          //       if (snapshot.hasData) {
-                          //         return Text("${snapshot.data}");
-                          //       } else if (snapshot.hasError) {
-                          //         return const Text("Error found");
-                          //       }
-                          //       return Container();
-                          //     },
-                          //   );
-                          // });
                         },),
                     ),
                     ),
@@ -1363,55 +1258,4 @@ class _HomePageTodayState extends State<HomePageToday> {
     });
   }
 
-  // void _removeFile() {
-  //   DefaultCacheManager().removeFile(url).then((value) {
-  //     //ignore: avoid_print
-  //     print('File removed');
-  //   }).onError((error, stackTrace) {
-  //     //ignore: avoid_print
-  //     print(error);
-  //   });
-  //   setState(() {
-  //     fileStream = null;
-  //   });
-  // }
-
-
-//   Future<void> _handlePressButton() async {
-//     Prediction? p = await PlacesAutocomplete.show(
-//       context: context,
-//       apiKey: kGoogleApiKey,
-//       language: "en",
-//       decoration: InputDecoration(
-//         hintText: 'Search',
-//         focusedBorder: OutlineInputBorder(
-//           borderRadius: BorderRadius.circular(20),
-//           borderSide: BorderSide(
-//             color: Colors.white,
-//           ),
-//         ),
-//       ),
-//       components: [Component(Component.country, "en")],
-//     );
-//
-//     displayPrediction(p!, homeScaffoldKey.currentState);
-//   }
-//
-//
-// Future<Null> displayPrediction(Prediction p, ScaffoldState? scaffold) async {
-//   if (p != null) {
-//     // get detail (lat/lng)
-//     GoogleMapsPlaces _places = GoogleMapsPlaces(
-//       apiKey: kGoogleApiKey,
-//       apiHeaders: await GoogleApiHeaders().getHeaders(),
-//     );
-//     PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId.toString());
-//     final lat = detail.result.geometry?.location.lat;
-//     final lng = detail.result.geometry?.location.lng;
-//
-//     // scaffold?.showSnackBar(
-//     //   SnackBar(content: Text("${p.description} - $lat/$lng")),
-//     // );
-//   }
-// }
 }

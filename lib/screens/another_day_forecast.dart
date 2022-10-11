@@ -14,7 +14,6 @@ import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 import '../api/weather_week_api.dart';
-import '../app.dart';
 import '../constants.dart';
 import '../utils/location_functionality.dart';
 import '../widgets/cache_manager.dart';
@@ -59,7 +58,6 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
     final responseName = await http.get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
 
     if (responseName.statusCode != 200){
-      print("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
       rightCity = false;
     }
   }
@@ -124,13 +122,6 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
     textEditingController.dispose();
   }
 
-  // Future refresh() async{
-  //   DefaultCacheManager().emptyCache();
-  //   MyApp();
-  //   HttpProvider().getData(url);
-  //   setState(() {
-  //   });
-  // }
   @override
   Widget build(BuildContext context) {
     return loadingNew
@@ -139,7 +130,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
           child: Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Stack(
             children:[
               Padding(
@@ -465,13 +456,12 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                             return Container(
                               color: Colors.white,
                               child: ListTile(
-                                contentPadding: EdgeInsets.only(top: 8, left: 5),
+                                contentPadding: const EdgeInsets.only(top: 8, left: 5),
                                 minLeadingWidth: 10,
                                 horizontalTitleGap: 5,
                                 title: GestureDetector(
                                   onTap: ()async {
-                                    print("JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ");
-                                    print(_placeList[index]["description"]);
+
                                     city = await _placeList[index]["description"];
 
                                     loadingToday=true;
@@ -495,8 +485,8 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                                   },
                                   child: Row(
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 7),
+                                      const Padding(
+                                        padding: EdgeInsets.only(right: 7),
                                         child: Icon(Icons.location_on_outlined),
                                       ),
                                       Expanded(child: Text(_placeList[index]["description"])),

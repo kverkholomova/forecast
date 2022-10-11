@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 import '../api/weather_week_api.dart';
+import '../app.dart';
 import '../utils/location_functionality.dart';
 import '../widgets/cache_manager.dart';
 import '../widgets/icons.dart';
@@ -124,7 +125,7 @@ class _HomePageState extends State<HomePage> {
     _controller.dispose();
     textEditingController.dispose();
   }
-
+  bool isPlaying = false;
   @override
   Widget build(BuildContext context) {
     return loading
@@ -236,10 +237,28 @@ class _HomePageState extends State<HomePage> {
                         top: MediaQuery.of(context).size.width * 0.03),
                       child: Align(
                         alignment: Alignment.topRight,
-                        child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          elevation: 0,
+                          child:isPlaying==false?Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),)
+                              :CircularProgressIndicator(strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation(Colors.indigoAccent.withOpacity(0.7)),),
                           onPressed: ()async {
-                            DefaultCacheManager().emptyCache();
-                        },),
+                            setState(() {
+                              isPlaying = true;
+                            });Future.delayed(
+                                Duration(milliseconds: 2000),(){
+                              setState(() {
+                                isPlaying = false;
+                                DefaultCacheManager().emptyCache();
+                                const MyApp();
+                                HttpProvider().getData(url);
+                              });
+                            }
+                            );
+
+
+                          },),
                         ),
                         ),
                     Padding(
@@ -248,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Container(
-                          width: MediaQuery.of(context).size.width*0.77,
+                          width: MediaQuery.of(context).size.width*0.75,
                           // height: MediaQuery.of(context).size.width * 0.13,
                           color: Colors.white,
                           child: Column(

@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/app.dart';
 import 'package:forecast/widgets/cache_manager.dart';
 import 'package:forecast/widgets/icons.dart';
+import 'package:forecast/widgets/indicator.dart';
 import 'package:forecast/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
@@ -28,10 +30,11 @@ class HomePageToday extends StatefulWidget {
   State<HomePageToday> createState() => _HomePageTodayState();
 }
 
-class _HomePageTodayState extends State<HomePageToday> {
+
+class _HomePageTodayState extends State<HomePageToday>
+    with SingleTickerProviderStateMixin{
+  bool isPlaying = false;
   late TextEditingController textEditingController;
-
-
 
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final searchScaffoldKey = GlobalKey<ScaffoldState>();
@@ -74,10 +77,13 @@ class _HomePageTodayState extends State<HomePageToday> {
       loadingToday = false;
     });
   }
-
+  // late final AnimationController controllerIcon = AnimationController(vsync: this, duration: Duration(seconds: 2,))..repeat();
+  late AnimationController rotationController;
+  // late AnimationController animationController;
   @override
   void initState() {
     super.initState();
+
 
     futureWeatherWeek = fetchWeatherForWeek();
     Timer(const Duration(seconds: 4), () {
@@ -85,12 +91,14 @@ class _HomePageTodayState extends State<HomePageToday> {
 
     });
     textEditingController = TextEditingController();
-
     textEditingController.addListener(() {
       _onChanged();
     });
 
     setState(() {
+      // animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 100));
+      rotationController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this, upperBound: pi*2);
+
       serviceEn();
       permissGranted();
     });
@@ -126,7 +134,11 @@ class _HomePageTodayState extends State<HomePageToday> {
     }
   }
 
+  double turns = 0.0;
 
+  void _changeRotation() {
+    setState(() => turns += 3.7);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -230,14 +242,29 @@ class _HomePageTodayState extends State<HomePageToday> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.width * 0.03),
+                        top: MediaQuery.of(context).size.width * 0.04),
                     child: Align(
                       alignment: Alignment.topRight,
-                      child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.white,
+                        elevation: 0,
+                        child:isPlaying==false?Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),)
+                        :CircularProgressIndicator(strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation(Colors.indigoAccent.withOpacity(0.7)),),
                         onPressed: ()async {
-                          DefaultCacheManager().emptyCache();
-                          const MyApp();
-                          HttpProvider().getData(url);
+                          setState(() {
+                            isPlaying = true;
+                          });Future.delayed(
+                    Duration(milliseconds: 2000),(){
+                            setState(() {
+                              isPlaying = false;
+                              DefaultCacheManager().emptyCache();
+                              const MyApp();
+                              HttpProvider().getData(url);
+                            });
+                          }
+                    );
+
 
                         },),
                     ),
@@ -248,7 +275,7 @@ class _HomePageTodayState extends State<HomePageToday> {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Container(
-                          width: MediaQuery.of(context).size.width*0.77,
+                          width: MediaQuery.of(context).size.width*0.75,
                           // height: MediaQuery.of(context).size.width * 0.2,
                           color: Colors.white,
                           child: Column(

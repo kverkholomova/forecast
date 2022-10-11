@@ -14,6 +14,7 @@ import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 import '../api/weather_week_api.dart';
+import '../app.dart';
 import '../constants.dart';
 import '../utils/location_functionality.dart';
 import '../widgets/cache_manager.dart';
@@ -32,7 +33,7 @@ bool loadingNew = true;
 
 class _AnotherDayForecastState extends State<AnotherDayForecast> {
   late Future<Weather5Days> futureWeatherWeek;
-
+bool isPlaying = false;
   var uuid= const Uuid();
   Uuid _sessionToken = const Uuid();
   List<dynamic>_placeList = [];
@@ -315,9 +316,27 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                   top: MediaQuery.of(context).size.width * 0.03),
                 child: Align(
                   alignment: Alignment.topRight,
-                  child: IconButton(icon: Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),),
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    elevation: 0,
+                    child:isPlaying==false?Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),)
+                        :CircularProgressIndicator(strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation(Colors.indigoAccent.withOpacity(0.7)),),
                     onPressed: ()async {
-                      DefaultCacheManager().emptyCache();
+                      setState(() {
+                        isPlaying = true;
+                      });Future.delayed(
+                          Duration(milliseconds: 2000),(){
+                        setState(() {
+                          isPlaying = false;
+                          DefaultCacheManager().emptyCache();
+                          const MyApp();
+                          HttpProvider().getData(url);
+                        });
+                      }
+                      );
+
+
                     },),
                 ),
               ),
@@ -394,7 +413,7 @@ class _AnotherDayForecastState extends State<AnotherDayForecast> {
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Container(
-                    width: MediaQuery.of(context).size.width*0.77,
+                    width: MediaQuery.of(context).size.width*0.75,
                     // height: MediaQuery.of(context).size.width*0.13,
                     color: Colors.white,
                     child: Column(

@@ -58,7 +58,7 @@ class _CheckMarkIndicatorState extends State<CheckMarkIndicator>
                   controller.stopDrag();
                 }
                 prevScrollDirection = controller.scrollingDirection;
-                final containerHeight = controller.value * MediaQuery.of(context).size.width * 0.3;
+                final containerHeight = controller.value * 150;
                 return Container(
                   alignment: Alignment.center,
                   height: containerHeight,
@@ -103,7 +103,7 @@ class _CheckMarkIndicatorState extends State<CheckMarkIndicator>
             AnimatedBuilder(
               builder: (context, _) {
                 return Transform.translate(
-                  offset: Offset(0.0, controller.value * MediaQuery.of(context).size.width * 0.3),
+                  offset: Offset(0.0, controller.value * 150),
                   child: child,
                 );
               },

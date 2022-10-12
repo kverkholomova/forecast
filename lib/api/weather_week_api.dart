@@ -33,3 +33,39 @@ Future<Weather5Days> fetchWeatherForWeek() async {
     throw Exception('Error');
   }
 }
+
+// Future<http.Response> fetchWeather() async {
+//   var currentLocationData = await location.getLocation();
+//
+//   final response = await http
+//       .get(Uri.parse(city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
+//
+//     return response;
+//
+// }
+
+Future<Weather5Days> fetchWeather(http.Client client) async {
+  var currentLocationData = await location.getLocation();
+  url = city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric';
+
+  final response = await http
+      .get(Uri.parse(city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
+  // .get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=Mountain%20View&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Weather5Days.fromJson(jsonDecode(response.body));
+  }
+  // } else if (response.statusCode == 404) {
+  //   // If the server did return a 200 OK response,
+  //   // then parse the JSON.;
+  // }
+  else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    rightCity = false;
+
+    throw Exception('Error');
+  }
+}

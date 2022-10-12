@@ -1,7 +1,7 @@
 
 
 import 'dart:convert';
-
+import 'dart:ui' as ui;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forecast/api/weather_week_api.dart';
 import 'package:forecast/models/weather_week_model.dart';
@@ -25,19 +25,21 @@ void main(){
       when(client
           .get(Uri.parse(city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric')))
           .thenAnswer((_) async =>
-          http.Response('{"cod": 200, "message": 0, "cnt": 40, "list": [{...}], "city": Warsaw}', 200));
+          http.Response(null!, 200));
 
-      expect(await fetchWeather(client), isA<Weather5Days>());
+      expect(await fetchWeather(client), null!);
     });
 
-    test('throws an exception if the http call completes with an error', () {
+    test('throws an exception if the http call completes with an error', () async{
       final client = MockClient();
+
+      var currentLocationData = await location.getLocation();
 
       // Use Mockito to return an unsuccessful response when it calls the
       // provided http.Client.
       when(client
-          .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1')))
-          .thenAnswer((_) async => http.Response('Not Found', 404));
+          .get(Uri.parse(city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationData.latitude}&lon=${currentLocationData.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric')))
+          .thenAnswer((_) async => http.Response('Error', 404));
 
       expect(fetchWeather(client), throwsException);
     });

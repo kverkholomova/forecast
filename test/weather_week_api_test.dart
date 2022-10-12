@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forecast/api/weather_week_api.dart';
 import 'package:forecast/models/weather_week_model.dart';
@@ -16,6 +17,7 @@ import 'weather_week_api_test.mocks.dart';
 
 @GenerateMocks([http.Client])
 void main(){
+  WidgetsFlutterBinding.ensureInitialized();
   group('fetchWeather', () {
     test('returns weather if the http call completes successfully', () async {
       final client = MockClient();

@@ -85,7 +85,7 @@ class _HomePageTodayState extends State<HomePageToday>
     super.initState();
 
 
-    futureWeatherWeek = fetchWeatherForWeek();
+    // futureWeatherWeek = fetchWeatherForWeek();
     Timer(const Duration(seconds: 4), () {
       dataLoadFunction();
 

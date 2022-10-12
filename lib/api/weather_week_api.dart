@@ -30,6 +30,6 @@ Future<Weather5Days> fetchWeatherForWeek() async {
     // then throw an exception.
     rightCity = false;
 
-    throw Exception('Error ${response.statusCode}');
+    throw Exception('Error');
   }
 }

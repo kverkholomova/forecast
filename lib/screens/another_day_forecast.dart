@@ -65,7 +65,7 @@ bool isPlaying = false;
   @override
   void initState() {
     super.initState();
-    futureWeatherWeek = fetchWeatherForWeek();
+    // futureWeatherWeek = fetchWeatherForWeek();
     getController("assets/clouds.mp4");
     textEditingController = TextEditingController();
 

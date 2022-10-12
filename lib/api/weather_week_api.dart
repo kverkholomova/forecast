@@ -19,6 +19,8 @@ Future<Weather5Days> fetchWeatherForWeek() async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
+    print("QQQQQQQQQQQQQQQQQQQQQQQ");
+    print(response.body);
     return Weather5Days.fromJson(jsonDecode(response.body));
   }
   // } else if (response.statusCode == 404) {
@@ -55,6 +57,7 @@ Future<Weather5Days> fetchWeather(http.Client client) async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
+
     return Weather5Days.fromJson(jsonDecode(response.body));
   }
   // } else if (response.statusCode == 404) {

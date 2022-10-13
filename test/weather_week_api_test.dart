@@ -12,15 +12,15 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
 
 import 'weather_week_api_test.mocks.dart';
-var currentLocationDataT = location.getLocation();
+// var currentLocationDataT = location.getLocation();
 @GenerateMocks([http.Client])
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   late Uri? url;
-  var currentLocationDataT = await location.getLocation();
-  var currentLocationDataF = await location.getLocation();
+  // var currentLocationDataT = await location.getLocation();
+  // var currentLocationDataF = await location.getLocation();
   setUp(() async {
-    url = Uri.parse(city!=""?'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric':'http://api.openweathermap.org/data/2.5/forecast?lat=${currentLocationDataT.latitude}&lon=${currentLocationDataT.longitude}&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric');
+    url = Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=Slupsk&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric');
   });
 
   tearDown(() async {
@@ -36,7 +36,7 @@ Future<void> main() async {
           .get(url))
           .thenAnswer((_) async =>
           http.Response(null!, 200));
-      expect(await fetchWeather(client), isA<Weather5Days>);
+      expect(await fetchWeather(client), null!);
     });
 
     test('throws an exception if the http call completes with an error', () async{

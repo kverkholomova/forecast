@@ -19,7 +19,7 @@ void main(){
     });
     test('returns weather data if the http call completes successfully and is not null', () async {
       var apiResult = await http.get(url!);
-      expect(apiResult.body.isNotEmpty, true);
+      expect(apiResult.body.toString().trim(), isNot(''));
 
     });
   });

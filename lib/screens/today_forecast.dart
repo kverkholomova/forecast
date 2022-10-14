@@ -63,9 +63,12 @@ class _HomePageTodayState extends State<HomePageToday>
   }
   late VideoPlayerController _controller;
 
+
   VideoPlayerController getController(String path) {
     _controller = VideoPlayerController.asset(path)
       ..initialize().then((_) {
+
+        _controller.setVolume(0);
         _controller.play();
         _controller.setLooping(true);
       });
@@ -166,6 +169,7 @@ class _HomePageTodayState extends State<HomePageToday>
                             child: FutureBuilder<Weather5Days>(
                               future: HttpProvider().getData(url),
                               builder: (context, snapshot) {
+                                controllerVideo(snapshot).setVolume(0);
                                 if (snapshot.hasData) {
                                   return VideoPlayer(controllerVideo(snapshot));
                                 } else if (snapshot.hasError) {

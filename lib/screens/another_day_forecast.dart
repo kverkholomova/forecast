@@ -40,7 +40,7 @@ bool isPlaying = false;
   late VideoPlayerController _controller;
 
   VideoPlayerController getController(String path) {
-    _controller = VideoPlayerController.asset(path)
+    _controller = VideoPlayerController.asset(path,videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
@@ -164,7 +164,12 @@ bool isPlaying = false;
                           future: HttpProvider().getData(url),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              return VideoPlayer(controllerVideo(snapshot));
+
+                              if (snapshot.data?.commonList?[numDay]
+                              ["weather"][0]["description"] == null){
+                                return CircularProgressIndicator();
+                              } else{
+                              return VideoPlayer(controllerVideo(snapshot));}
                             } else if (snapshot.hasError) {
                               return Text('${snapshot.error}');
                             }
@@ -176,7 +181,6 @@ bool isPlaying = false;
                     ),
                   ),
               ),
-
               Padding(
             padding: EdgeInsets.only(
               top: MediaQuery
@@ -312,7 +316,8 @@ bool isPlaying = false;
               ],
             ),
         ),
-              Padding(padding: EdgeInsets.only(
+              Padding(
+                padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.width * 0.03),
                 child: Align(
                   alignment: Alignment.topRight,

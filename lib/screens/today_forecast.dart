@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -64,8 +65,17 @@ class _HomePageTodayState extends State<HomePageToday>
   late VideoPlayerController _controller;
 
 
-  VideoPlayerController getController(String path) {
-    _controller = VideoPlayerController.asset(path)
+  VideoPlayerController getController(var path) {
+    _controller =
+    //     VideoPlayerController.file(
+    //   path,
+    //   videoPlayerOptions: VideoPlayerOptions(
+    //     mixWithOthers: true,
+    //   )
+    //
+    // );
+
+    VideoPlayerController.asset(path,videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
       ..initialize().then((_) {
 
         _controller.setVolume(0);
@@ -169,9 +179,14 @@ class _HomePageTodayState extends State<HomePageToday>
                             child: FutureBuilder<Weather5Days>(
                               future: HttpProvider().getData(url),
                               builder: (context, snapshot) {
-                                controllerVideo(snapshot).setVolume(0);
                                 if (snapshot.hasData) {
-                                  return VideoPlayer(controllerVideo(snapshot));
+                                  if (snapshot.data?.commonList?[0]
+                                  ["weather"][0]["description"] == null){
+                                    return CircularProgressIndicator();
+                                  } else{
+                                    return VideoPlayer(controllerVideo(snapshot));
+                                  }
+
                                 } else if (snapshot.hasError) {
                                   return const Text("Error found");
                                 }
@@ -399,8 +414,12 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom =
-                  "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
+              var tom;
+              if (snapshot.data?.commonList?[0]["dt_txt"] == null){
+                tom = '';
+              } else{
+                tom = "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
+              }
               return Text(
                 tom,
                 style: GoogleFonts.roboto(
@@ -450,7 +469,14 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom = "${snapshot.data?.city?.name}";
+              var tom;
+              if (snapshot.data?.city?.name == null){
+                tom = '';
+              }
+              else{
+                tom = "${snapshot.data?.city?.name}";
+              }
+
               return Text(
                 tom,
                 style: GoogleFonts.roboto(
@@ -473,10 +499,6 @@ class _HomePageTodayState extends State<HomePageToday>
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * 0.01,
-        // right: MediaQuery
-        //     .of(context)
-        //     .size
-        //     .height * 0.057
       ),
       child: Align(
         alignment: Alignment.topRight,
@@ -484,7 +506,13 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom = "${snapshot.data?.commonList?[0]["wind"]["speed"]}";
+              var tom;
+              if (snapshot.data?.commonList?[0]["wind"]["speed"] == null){
+                tom='';
+              }
+              else{
+                tom = "${snapshot.data?.commonList?[0]["wind"]["speed"]}";
+              }
               return Text(
                 tom,
                 style: GoogleFonts.roboto(
@@ -517,8 +545,14 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom =
-                  "${snapshot.data?.commonList?[0]["main"]["humidity"]} %";
+              var tom;
+              if(snapshot.data?.commonList?[0]["main"]["humidity"] == null){
+                tom = '';
+              }else{
+                tom =
+                "${snapshot.data?.commonList?[0]["main"]["humidity"]} %";
+              }
+
               return Text(
                 tom,
                 style: GoogleFonts.roboto(
@@ -546,8 +580,15 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom =
-                  "${snapshot.data!.commonList?[0]["weather"][0]["description"]}";
+              var tom;
+              if(snapshot.data!.commonList?[0]["weather"][0]["description"]==null){
+                tom ='';
+              }
+              else{
+                tom =
+                "${snapshot.data!.commonList?[0]["weather"][0]["description"]}";
+              }
+
               return Text(
                 tom,
                 style: GoogleFonts.roboto(
@@ -575,8 +616,13 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom =
-                  "${snapshot.data?.commonList?[0]["main"]["temp"]?.toInt()}\u2103";
+              var tom;
+              if (snapshot.data?.commonList?[0]["main"]["temp"]==null){
+                tom = '';
+              }else{
+                tom =
+                "${snapshot.data?.commonList?[0]["main"]["temp"]?.toInt()}\u2103";
+              }
               return Text(
                 tom,
                 style: GoogleFonts.openSans(
@@ -625,12 +671,6 @@ class _HomePageTodayState extends State<HomePageToday>
                                         "snow"
                                     ? getController("assets/snowfall.mp4")
                                     : snapshot.data!.commonList![0]
-                                                // ["weather"][0]["description"].contains("rain")
-                                                //     ? getController("assets/rainy_day.mp4")
-                                                //     : snapshot.data!.commonList![0]
-                                                // ["weather"][0]["description"].contains("sun")
-                                                //     ? getController("assets/sunny.mp4")
-                                                //     : snapshot.data!.commonList![0]
                                                 ["weather"][0]["description"] ==
                                             "overcast clouds"
                                         ? getController(

@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
   late TextEditingController textEditingController;
 
   VideoPlayerController getController(String path) {
-    _controller = VideoPlayerController.asset(path)
+    _controller = VideoPlayerController.asset(path,videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
@@ -155,9 +155,12 @@ class _HomePageState extends State<HomePage> {
                             child: FutureBuilder<Weather5Days>(
                               future: HttpProvider().getData(url),
                               builder: (context, snapshot) {
-
                                 if (snapshot.hasData) {
-                                  return VideoPlayer(controllerVideo(snapshot));
+                                  if (snapshot.data?.commonList?[0]
+                                  ["weather"][0]["description"] == null){
+                                    return CircularProgressIndicator();
+                                  } else{
+                                  return VideoPlayer(controllerVideo(snapshot));}
                                 } else if (snapshot.hasError) {
                                   return Text('${snapshot.error}');
                                 }
@@ -227,13 +230,13 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-
                     Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.height * 0.7),
                       child: buildBottomWeatherWidget(context),
                     ),
-                    Padding(padding: EdgeInsets.only(
+                    Padding(
+                      padding: EdgeInsets.only(
                         top: MediaQuery.of(context).size.width * 0.03),
                       child: Align(
                         alignment: Alignment.topRight,

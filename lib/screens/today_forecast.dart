@@ -57,94 +57,8 @@ class _HomePageTodayState extends State<HomePageToday>
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Stack(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.27,
-                      ),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: FittedBox(
-                          fit: BoxFit.cover,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            height: MediaQuery.of(context).size.width * 0.9,
-                            child: FutureBuilder<Weather5Days>(
-                              future: HttpProvider().getData(url),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  if (snapshot.data?.commonList?[0]
-                                  ["weather"][0]["description"] == null){
-                                    return const CircularProgressIndicator();
-                                  } else{
-                                    return VideoPlayer(controllerVideo(snapshot));
-                                  }
-
-                                } else if (snapshot.hasError) {
-                                  return const Text("Error found");
-                                }
-                                return Container();
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * 0.11,
-                      ),
-                      child: Stack(
-                        children: [
-                          buildTemperature(context),
-                          buildDescription(context),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: SizedBox(
-                              width: 100,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const HumidityIcon(),
-                                  buildHumidity(context),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: SizedBox(
-                              width: 100,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const WindSpeedIcon(),
-                                  buildWindSpeed(context),
-                                  const WindKmH(),
-                                ],
-                              ),
-                            ),
-                          ),
-                          buildCityName(context),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height * 0.19,
-                            ),
-                            child: Align(
-                                alignment: Alignment.topCenter,
-                                child: Text(
-                                  DateFormat('EEEE').format(weekDaysName(0)),
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 24,
-                                    color: Colors.indigoAccent.withOpacity(0.7),
-                                  ),
-                                )),
-                          ),
-                          buildDate(context),
-                        ],
-                      ),
-                    ),
+                    buildVideo(context),
+                    buildWeatherData(context),
                     Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.height * 0.7),
@@ -263,6 +177,100 @@ class _HomePageTodayState extends State<HomePageToday>
               ),
             ),
           );
+  }
+
+  Padding buildWeatherData(BuildContext context) {
+    return Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.11,
+                    ),
+                    child: Stack(
+                      children: [
+                        buildTemperature(context),
+                        buildDescription(context),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: SizedBox(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                const HumidityIcon(),
+                                buildHumidity(context),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: SizedBox(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                const WindSpeedIcon(),
+                                buildWindSpeed(context),
+                                const WindKmH(),
+                              ],
+                            ),
+                          ),
+                        ),
+                        buildCityName(context),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.19,
+                          ),
+                          child: Align(
+                              alignment: Alignment.topCenter,
+                              child: Text(
+                                DateFormat('EEEE').format(weekDaysName(0)),
+                                style: GoogleFonts.roboto(
+                                  fontSize: 24,
+                                  color: Colors.indigoAccent.withOpacity(0.7),
+                                ),
+                              )),
+                        ),
+                        buildDate(context),
+                      ],
+                    ),
+                  );
+  }
+
+  Padding buildVideo(BuildContext context) {
+    return Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.27,
+                    ),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          height: MediaQuery.of(context).size.width * 0.9,
+                          child: FutureBuilder<Weather5Days>(
+                            future: HttpProvider().getData(url),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                if (snapshot.data?.commonList?[0]
+                                ["weather"][0]["description"] == null){
+                                  return const CircularProgressIndicator();
+                                } else{
+                                  return VideoPlayer(controllerVideo(snapshot));
+                                }
+
+                              } else if (snapshot.hasError) {
+                                return const Text("Error found");
+                              }
+                              return Container();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
   }
 
   Padding buildButtonToRefresh(BuildContext context) {

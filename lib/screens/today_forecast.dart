@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:forecast/app.dart';
 import 'package:forecast/widgets/cache_manager.dart';
 import 'package:forecast/widgets/icons.dart';
-import 'package:forecast/widgets/indicator.dart';
 import 'package:forecast/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:forecast/models/weather_week_model.dart';
@@ -36,7 +33,6 @@ class _HomePageTodayState extends State<HomePageToday>
     with SingleTickerProviderStateMixin{
   bool isPlaying = false;
   late TextEditingController textEditingController;
-
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final searchScaffoldKey = GlobalKey<ScaffoldState>();
   late Future<Weather5Days> futureWeatherWeek;
@@ -45,113 +41,9 @@ class _HomePageTodayState extends State<HomePageToday>
   List<dynamic>_placeList = [];
   Random random = Random();
   DateTime dateWeek = DateTime.now();
-
-  weekDaysName(int dayCount) {
-    dateWeek = dateWeek.add(Duration(days: dayCount));
-    return dateWeek;
-  }
-
-  void changeIndex() {
-    setState(() => index = random.nextInt(5));
-  }
-
-  checkCityName()async{
-    final responseName = await http.get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
-
-    if (responseName.statusCode != 200){
-      rightCity = false;
-    }
-  }
   late VideoPlayerController _controller;
-
-
-  VideoPlayerController getController(var path) {
-    _controller =
-    //     VideoPlayerController.file(
-    //   path,
-    //   videoPlayerOptions: VideoPlayerOptions(
-    //     mixWithOthers: true,
-    //   )
-    //
-    // );
-
-    VideoPlayerController.asset(path,videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
-      ..initialize().then((_) {
-
-        _controller.setVolume(0);
-        _controller.play();
-        _controller.setLooping(true);
-      });
-    return _controller;
-  }
-
-  dataLoadFunction() async {
-    setState(() {
-      loadingToday = false;
-    });
-  }
-  // late final AnimationController controllerIcon = AnimationController(vsync: this, duration: Duration(seconds: 2,))..repeat();
   late AnimationController rotationController;
-  // late AnimationController animationController;
-  @override
-  void initState() {
-    super.initState();
-
-
-    // futureWeatherWeek = fetchWeatherForWeek();
-    Timer(const Duration(seconds: 4), () {
-      dataLoadFunction();
-
-    });
-    textEditingController = TextEditingController();
-    textEditingController.addListener(() {
-      _onChanged();
-    });
-
-    setState(() {
-      // animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 100));
-      rotationController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this, upperBound: pi*2);
-
-      serviceEn();
-      permissGranted();
-    });
-  }
-
-  void _onChanged() {
-    if (_sessionToken == null) {
-      setState(() {
-        _sessionToken = uuid.v4() as Uuid;
-      });
-    }
-    getSuggestion(textEditingController.text);
-  }
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-    textEditingController.dispose();
-  }
-
-  void getSuggestion(String input) async {
-    String kPLACESAPIKEY = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
-    String type = "(cities)";
-    String baseURL ="https://maps.googleapis.com/maps/api/place/autocomplete/json";
-    String request = "$baseURL?input=$input&key=$kPLACESAPIKEY&sessiontoken=$_sessionToken";
-    var response = await http.get(Uri.parse(request));
-    if (response.statusCode == 200) {
-    setState(() {
-    _placeList = json.decode(response.body)['predictions'];
-    });
-    } else {
-    throw Exception('Failed to load predictions');
-    }
-  }
-
   double turns = 0.0;
-
-  void _changeRotation() {
-    setState(() => turns += 3.7);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +74,7 @@ class _HomePageTodayState extends State<HomePageToday>
                                 if (snapshot.hasData) {
                                   if (snapshot.data?.commonList?[0]
                                   ["weather"][0]["description"] == null){
-                                    return CircularProgressIndicator();
+                                    return const CircularProgressIndicator();
                                   } else{
                                     return VideoPlayer(controllerVideo(snapshot));
                                   }
@@ -200,7 +92,6 @@ class _HomePageTodayState extends State<HomePageToday>
                     Padding(
                       padding: EdgeInsets.only(
                         top: MediaQuery.of(context).size.height * 0.11,
-                        // bottom: MediaQuery.of(context).size.height * 0.02,
                       ),
                       child: Stack(
                         children: [
@@ -259,35 +150,7 @@ class _HomePageTodayState extends State<HomePageToday>
                           top: MediaQuery.of(context).size.height * 0.7),
                       child: buildBottomWeatherWidget(context),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.width * 0.04),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.white,
-                        elevation: 0,
-                        child:isPlaying==false?Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),)
-                        :CircularProgressIndicator(strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation(Colors.indigoAccent.withOpacity(0.7)),),
-                        onPressed: ()async {
-                          setState(() {
-                            isPlaying = true;
-                          });Future.delayed(
-                    Duration(milliseconds: 2000),(){
-                            setState(() {
-                              isPlaying = false;
-                              DefaultCacheManager().emptyCache();
-                              const MyApp();
-                              HttpProvider().getData(url);
-                            });
-                          }
-                    );
-
-
-                        },),
-                    ),
-                    ),
+                    buildButtonToRefresh(context),
                     Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.width * 0.02),
@@ -295,7 +158,6 @@ class _HomePageTodayState extends State<HomePageToday>
                         alignment: Alignment.topLeft,
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.75,
-                          // height: MediaQuery.of(context).size.width * 0.2,
                           color: Colors.white,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -328,21 +190,21 @@ class _HomePageTodayState extends State<HomePageToday>
                                     loading = true;
                                     city = value;
                                     await checkCityName();
-                                    if (rightCity == true) {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const MainPage()),
-                                      );
-                                    } else {
-                                      city = "";
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const MainPage()),
-                                      );
-                                    }
                                   });
+                                  if (rightCity == true) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const MainPage()),
+                                    );
+                                  } else {
+                                    city = "";
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const MainPage()),
+                                    );
+                                  }
                                 },
                               ),
                               ListView.builder(
@@ -355,11 +217,12 @@ class _HomePageTodayState extends State<HomePageToday>
                                     minLeadingWidth: 10,
                                     horizontalTitleGap: 5,
                                     title: GestureDetector(
-                                      onTap: ()async {
-                                        city = await _placeList[index]["description"];
-
-                                          loadingToday=true;
-                                          await checkCityName();
+                                      onTap: () {
+                                        setState(() async{
+                                            city = await _placeList[index]["description"];
+                                            loadingToday=true;
+                                            await checkCityName();
+                                        });
                                           if (rightCity==true){
                                             Navigator.push(
                                               context,
@@ -402,6 +265,116 @@ class _HomePageTodayState extends State<HomePageToday>
           );
   }
 
+  Padding buildButtonToRefresh(BuildContext context) {
+    return Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.width * 0.04),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                      child:isPlaying==false?Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),)
+                      :CircularProgressIndicator(strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation(Colors.indigoAccent.withOpacity(0.7)),),
+                      onPressed: ()async {
+                        setState(() {
+                          isPlaying = true;
+                        });Future.delayed(
+                  const Duration(milliseconds: 2000),(){
+                          setState(() {
+                            isPlaying = false;
+                            DefaultCacheManager().emptyCache();
+                            const MyApp();
+                            HttpProvider().getData(url);
+                          });
+                        }
+                  );
+                      },),
+                  ),
+                  );
+  }
+
+  weekDaysName(int dayCount) {
+    dateWeek = dateWeek.add(Duration(days: dayCount));
+    return dateWeek;
+  }
+
+  void changeIndex() {
+    setState(() => index = random.nextInt(5));
+  }
+
+  checkCityName()async{
+    final responseName = await http.get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
+
+    if (responseName.statusCode != 200){
+      rightCity = false;
+    }
+  }
+
+  VideoPlayerController getController(var path) {
+    _controller = VideoPlayerController.asset(path,videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
+      ..initialize().then((_) {
+        _controller.setVolume(0);
+        _controller.play();
+        _controller.setLooping(true);
+      });
+    return _controller;
+  }
+
+  dataLoadFunction() async {
+    setState(() {
+      loadingToday = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Timer(const Duration(seconds: 4), () {
+      dataLoadFunction();
+    });
+    textEditingController = TextEditingController();
+    textEditingController.addListener(() {
+      _onChanged();
+    });
+    setState(() {
+      rotationController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this, upperBound: pi*2);
+      serviceEn();
+      permissGranted();
+    });
+  }
+
+  void _onChanged() {
+    if (_sessionToken == null) {
+      setState(() {
+        _sessionToken = uuid.v4() as Uuid;
+      });
+    }
+    getSuggestion(textEditingController.text);
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+    textEditingController.dispose();
+  }
+
+  void getSuggestion(String input) async {
+    String kPLACESAPIKEY = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
+    String type = "(cities)";
+    String baseURL ="https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    String request = "$baseURL?input=$input&key=$kPLACESAPIKEY&sessiontoken=$_sessionToken";
+    var response = await http.get(Uri.parse(request));
+    if (response.statusCode == 200) {
+      setState(() {
+        _placeList = json.decode(response.body)['predictions'];
+      });
+    } else {
+      throw Exception('Failed to load predictions');
+    }
+  }
+
   Padding buildDate(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
@@ -414,7 +387,7 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom;
+              String tom;
               if (snapshot.data?.commonList?[0]["dt_txt"] == null){
                 tom = '';
               } else{
@@ -434,26 +407,6 @@ class _HomePageTodayState extends State<HomePageToday>
             return Container();
           },
         ),
-        // FutureBuilder<Weather5Days>(
-        //   future: futureWeatherWeek,
-        //   builder: (context, snapshot) {
-        //     if (snapshot.hasData) {
-        //       var tom =
-        //           "${snapshot.data?.commonList?[0]["dt_txt"].toString().substring(11, 16)}";
-        //       return Text(
-        //         tom,
-        //         style: GoogleFonts.roboto(
-        //           fontSize: 13,
-        //           color: Colors.black45,
-        //         ),
-        //       );
-        //     } else if (snapshot.hasError) {
-        //       return Text('${snapshot.error}${snapshot.data?.commonList}');
-        //     }
-        //
-        //     return Container();
-        //   },
-        // ),
       ),
     );
   }
@@ -469,7 +422,7 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom;
+              String tom;
               if (snapshot.data?.city?.name == null){
                 tom = '';
               }
@@ -506,7 +459,7 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom;
+              String tom;
               if (snapshot.data?.commonList?[0]["wind"]["speed"] == null){
                 tom='';
               }
@@ -545,7 +498,7 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom;
+              String tom;
               if(snapshot.data?.commonList?[0]["main"]["humidity"] == null){
                 tom = '';
               }else{
@@ -580,7 +533,7 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom;
+              String tom;
               if(snapshot.data!.commonList?[0]["weather"][0]["description"]==null){
                 tom ='';
               }
@@ -616,7 +569,7 @@ class _HomePageTodayState extends State<HomePageToday>
           future: HttpProvider().getData(url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              var tom;
+              String tom;
               if (snapshot.data?.commonList?[0]["main"]["temp"]==null){
                 tom = '';
               }else{
@@ -1321,12 +1274,4 @@ class _HomePageTodayState extends State<HomePageToday>
       ),
     );
   }
-
-  void _clearCache() {
-    DefaultCacheManager().emptyCache();
-    setState(() {
-      fileStream = null;
-    });
-  }
-
 }

@@ -15,10 +15,6 @@ class HumidityIcon extends StatelessWidget {
               .of(context)
               .size
               .height * 0.04,
-          // right: MediaQuery
-          //     .of(context)
-          //     .size
-          //     .height * 0.125
       ),
       child: const Align(
         alignment: Alignment.topRight,
@@ -45,10 +41,6 @@ class WindSpeedIcon extends StatelessWidget {
               .of(context)
               .size
               .height * 0.002,
-          // right: MediaQuery
-          //     .of(context)
-          //     .size
-          //     .height * 0.13
       ),
       child: const Align(
         alignment: Alignment.topRight,
@@ -75,10 +67,6 @@ class WindKmH extends StatelessWidget {
               .of(context)
               .size
               .height * 0.02,
-          // right: MediaQuery
-          //     .of(context)
-          //     .size
-          //     .height * 0.01
       ),
       child: Align(
         alignment: Alignment.topRight,

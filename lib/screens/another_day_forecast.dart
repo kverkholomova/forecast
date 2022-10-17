@@ -33,14 +33,385 @@ bool loadingNew = true;
 
 class _AnotherDayForecastState extends State<AnotherDayForecast> {
   late Future<Weather5Days> futureWeatherWeek;
-bool isPlaying = false;
-  var uuid= const Uuid();
+  bool isPlaying = false;
+  var uuid = const Uuid();
   Uuid _sessionToken = const Uuid();
   List<dynamic>_placeList = [];
   late VideoPlayerController _controller;
+  late TextEditingController textEditingController;
+  Random random = Random();
+
+  @override
+  Widget build(BuildContext context) {
+    return loadingNew
+        ? const Loader()
+        : SafeArea(
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery
+                          .of(context)
+                          .size
+                          .height <= 684 ? MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.27 : MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.27,
+                    ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 1,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.5,
+                          child: FutureBuilder<Weather5Days>(
+                            future: HttpProvider().getData(url),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                if (snapshot.data?.commonList?[numDay]
+                                ["weather"][0]["description"] == null) {
+                                  return const CircularProgressIndicator();
+                                } else {
+                                  return VideoPlayer(controllerVideo(snapshot));
+                                }
+                              } else if (snapshot.hasError) {
+                                return Text('${snapshot.error}');
+                              }
+                              return Container();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.11,
+                    ),
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height * 0.035),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: buildTemperature(),
+                          ),
+                        ),
+                        Positioned(
+                          top: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.15,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: buildDescription(),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: SizedBox(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const HumidityIcon(),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height * 0.045,
+                                      right: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .height * 0.045
+                                  ),
+                                  child: buildHumidity(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: SizedBox(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const WindSpeedIcon(),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .height * 0.01,
+                                    // right: MediaQuery
+                                    //     .of(context)
+                                    //     .size
+                                    //     .height * 0.057
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: buildWindSpeed(),
+                                  ),
+                                ),
+                                const WindKmH(),
+
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0,
+                          ),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: buildCityName(),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .height * 0.19,
+                              ),
+                              child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                    dateWeekName,
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 24,
+                                      color: colors[index],
+                                    ),
+                                  )),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .height * 0,
+                              ),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: buildDate(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  buildButtonToRefresh(context),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.7),
+                    child: buildBottomWeather(context),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.02),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.75,
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            TextField(
+                              textAlignVertical: TextAlignVertical.bottom,
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 0.5, color: Colors.black45),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 1,
+                                        color: Colors.indigoAccent.withOpacity(
+                                            0.7)),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  focusColor: Colors.indigoAccent.withOpacity(
+                                      0.7),
+                                  hintText: "Find your city",
+                                  hintStyle: GoogleFonts.roboto(
+                                    fontSize: 16,
+                                    color: Colors.black.withOpacity(0.3),
+                                  )
+                              ),
+                              controller: textEditingController,
+                              onSubmitted: (String value) async {
+                                setState(() async {
+                                  loadingNew = true;
+                                  city = value;
+                                  await checkCityName();
+                                });
+                                if (rightCity == true) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const MainPage()),
+                                  );
+                                }
+                                else {
+                                  city = "";
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const MainPage()),
+                                  );
+                                }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const MainPage()),
+                                );
+                              },
+                            ),
+                            ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: _placeList.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  color: Colors.white,
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.only(
+                                        top: 8, left: 5),
+                                    minLeadingWidth: 10,
+                                    horizontalTitleGap: 5,
+                                    title: GestureDetector(
+                                      onTap: () {
+                                        setState(() async {
+                                          city =
+                                          await _placeList[index]["description"];
+                                          loadingToday = true;
+                                          await checkCityName();
+                                        });
+                                        if (rightCity == true) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (
+                                                    context) => const MainPage()),
+                                          );
+                                        }
+                                        else {
+                                          city = "";
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (
+                                                    context) => const MainPage()),
+                                          );
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.only(right: 7),
+                                            child: Icon(
+                                                Icons.location_on_outlined),
+                                          ),
+                                          Expanded(child: Text(
+                                              _placeList[index]["description"])),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
+          )
+      ),
+    );
+  }
+
+  Padding buildButtonToRefresh(BuildContext context) {
+    return Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.03),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                      child: isPlaying == false ? Icon(
+                        Icons.refresh, size: 40,
+                        color: Colors.indigoAccent.withOpacity(0.7),)
+                          : CircularProgressIndicator(strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation(
+                            Colors.indigoAccent.withOpacity(0.7)),),
+                      onPressed: () async {
+                        setState(() {
+                          isPlaying = true;
+                        });
+                        Future.delayed(
+                            const Duration(milliseconds: 2000), () {
+                          setState(() {
+                            isPlaying = false;
+                            DefaultCacheManager().emptyCache();
+                            const MyApp();
+                            HttpProvider().getData(url);
+                          });
+                        }
+                        );
+                      },),
+                  ),
+                );
+  }
 
   VideoPlayerController getController(String path) {
-    _controller = VideoPlayerController.asset(path,videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
+    _controller = VideoPlayerController.asset(
+        path, videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true))
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
@@ -53,26 +424,24 @@ bool isPlaying = false;
       loadingNew = false;
     });
   }
-  late TextEditingController textEditingController;
 
-  checkCityName()async{
-    final responseName = await http.get(Uri.parse('http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
+  checkCityName() async {
+    final responseName = await http.get(Uri.parse(
+        'http://api.openweathermap.org/data/2.5/forecast?q=$city&cnt=40&appid=43ec70748cae1130be4146090de59761&units=metric'));
 
-    if (responseName.statusCode != 200){
+    if (responseName.statusCode != 200) {
       rightCity = false;
     }
   }
+
   @override
   void initState() {
     super.initState();
-    // futureWeatherWeek = fetchWeatherForWeek();
     getController("assets/clouds.mp4");
     textEditingController = TextEditingController();
-
     textEditingController.addListener(() {
       _onChanged();
     });
-
     Timer(const Duration(seconds: 3), () => dataLoadFunction());
     setState(() {
       description = '';
@@ -80,8 +449,6 @@ bool isPlaying = false;
       permissGranted();
     });
   }
-
-  Random random = Random();
 
   void changeIndex() {
     setState(() => index = random.nextInt(5));
@@ -96,7 +463,6 @@ bool isPlaying = false;
     getSuggestion(textEditingController.text);
   }
 
-
   weekDaysName(int dayCount) {
     DateTime dateWeek = DateTime.now().add(Duration(days: dayCount));
     return dateWeek;
@@ -105,7 +471,7 @@ bool isPlaying = false;
   void getSuggestion(String input) async {
     String kPLACESAPIKEY = "AIzaSyAQmVWIaI1Y97hjgwdyNcB5CX_kvyuzSZg";
     String type = "(cities)";
-    String baseURL ="https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    String baseURL = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
     String request = "$baseURL?input=$input&key=$kPLACESAPIKEY&sessiontoken=$_sessionToken";
     var response = await http.get(Uri.parse(request));
     if (response.statusCode == 200) {
@@ -116,6 +482,7 @@ bool isPlaying = false;
       throw Exception('Failed to load predictions');
     }
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -123,563 +490,154 @@ bool isPlaying = false;
     textEditingController.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return loadingNew
-        ? const Loader()
-        : SafeArea(
-          child: Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Stack(
-            children:[
-              Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height<=684? MediaQuery
-                      .of(context)
-                      .size
-                      .height* 0.27:MediaQuery
-                      .of(context)
-                      .size
-                      .height* 0.27,
-                ),
-                child: Align(
-                    alignment: Alignment.center,
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: SizedBox(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width *1 ,
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height *0.5,
-                        child: FutureBuilder<Weather5Days>(
-                          future: HttpProvider().getData(url),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-
-                              if (snapshot.data?.commonList?[numDay]
-                              ["weather"][0]["description"] == null){
-                                return CircularProgressIndicator();
-                              } else{
-                              return VideoPlayer(controllerVideo(snapshot));}
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            // By default, show a loading spinner.
-                            return Container();
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-              ),
-              Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.11,
-            ),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.035),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: buildTemperature(),
-                  ),
-                ),
-                Positioned(
-                  top: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.15,
-                  // left: MediaQuery.of(context).size.height * 0.021,
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: buildDescription(),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const HumidityIcon(),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .height * 0.045,
-                              right: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .height * 0.045
-                          ),
-                          child: buildHumidity(),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: SizedBox(
-                    width: 100,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const WindSpeedIcon(),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .height * 0.01,
-                              // right: MediaQuery
-                              //     .of(context)
-                              //     .size
-                              //     .height * 0.057
-                          ),
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: buildWindSpeed(),
-                          ),
-                        ),
-                        const WindKmH(),
-
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0,
-                  ),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: buildCityName(),
-                  ),
-                ),
-                Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.19,
-                      ),
-                      child: Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            dateWeekName,
-                            style: GoogleFonts.roboto(
-                              fontSize: 24,
-                              color: colors[index],
-                            ),
-                          )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0,
-                      ),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: buildDate(),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-        ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.width * 0.03),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                    child:isPlaying==false?Icon(Icons.refresh, size: 40, color: Colors.indigoAccent.withOpacity(0.7),)
-                        :CircularProgressIndicator(strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation(Colors.indigoAccent.withOpacity(0.7)),),
-                    onPressed: ()async {
-                      setState(() {
-                        isPlaying = true;
-                      });Future.delayed(
-                          Duration(milliseconds: 2000),(){
-                        setState(() {
-                          isPlaying = false;
-                          DefaultCacheManager().emptyCache();
-                          const MyApp();
-                          HttpProvider().getData(url);
-                        });
-                      }
-                      );
-
-
-                    },),
-                ),
-              ),
-              // Padding(
-              //   padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
-              //   child: Align(
-              //     alignment: Alignment.topCenter,
-              //     child: Container(
-              //       // width: MediaQuery.of(context).size.width*0.9,
-              //       height: MediaQuery.of(context).size.width*0.13,
-              //       color: Colors.white,
-              //       child: TextField(
-              //         textAlignVertical: TextAlignVertical.bottom,
-              //         decoration: InputDecoration(
-              //             enabledBorder: OutlineInputBorder(
-              //               borderSide: const BorderSide(width: 0.5, color: Colors.black45),
-              //               borderRadius: BorderRadius.circular(15),
-              //             ),
-              //             focusedBorder: OutlineInputBorder(
-              //               borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
-              //               borderRadius: BorderRadius.circular(15),
-              //             ),
-              //             focusColor: Colors.indigoAccent.withOpacity(0.7),
-              //             hintText: "Find your city",
-              //             hintStyle: GoogleFonts.roboto(
-              //               fontSize: 16,
-              //               color: Colors.black.withOpacity(0.3),
-              //             )
-              //         ),
-              //         controller: textEditingController,
-              //         onSubmitted: (String value) async {
-              //           setState(() async {
-              //             loadingNew=true;
-              //             city = value;
-              //             await checkCityName();
-              //             if (rightCity==true){
-              //               Navigator.push(
-              //                 context,
-              //                 MaterialPageRoute(
-              //                     builder: (context) => const MainPage()),
-              //               );
-              //             }
-              //             else{
-              //               city = "";
-              //               Navigator.push(
-              //                 context,
-              //                 MaterialPageRoute(
-              //                     builder: (context) => const MainPage()),
-              //               );
-              //             }
-              //           });
-              //           city = value;
-              //           Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) =>
-              //                 const MainPage()),
-              //           );
-              //         },
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.7),
-                child: buildBottomWeather(context),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.02),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width*0.75,
-                    // height: MediaQuery.of(context).size.width*0.13,
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        TextField(
-                          textAlignVertical: TextAlignVertical.bottom,
-                          decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 0.5, color: Colors.black45),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 1, color: Colors.indigoAccent.withOpacity(0.7)),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              focusColor: Colors.indigoAccent.withOpacity(0.7),
-                              hintText: "Find your city",
-                              hintStyle: GoogleFonts.roboto(
-                                fontSize: 16,
-                                color: Colors.black.withOpacity(0.3),
-                              )
-                          ),
-                          controller: textEditingController,
-                          onSubmitted: (String value) async {
-                            setState(() async {
-                              loadingNew=true;
-                              city = value;
-                              await checkCityName();
-                              if (rightCity==true){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const MainPage()),
-                                );
-                              }
-                              else{
-                                city = "";
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const MainPage()),
-                                );
-                              }
-                            });
-                            city = value;
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const MainPage()),
-                            );
-                          },
-                        ),
-                        ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _placeList.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              color: Colors.white,
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.only(top: 8, left: 5),
-                                minLeadingWidth: 10,
-                                horizontalTitleGap: 5,
-                                title: GestureDetector(
-                                  onTap: ()async {
-
-                                    city = await _placeList[index]["description"];
-
-                                    loadingToday=true;
-                                    await checkCityName();
-                                    if (rightCity==true){
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const MainPage()),
-                                      );
-                                    }
-                                    else{
-                                      city = "";
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const MainPage()),
-                                      );
-                                    }
-
-                                  },
-                                  child: Row(
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(right: 7),
-                                        child: Icon(Icons.location_on_outlined),
-                                      ),
-                                      Expanded(child: Text(_placeList[index]["description"])),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ]),
-      )
-    ),
-        );
-  }
-
   FutureBuilder<Weather5Days> buildDate() {
     return FutureBuilder<Weather5Days>(
-                  future: HttpProvider().getData(url),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var tom =
-                          "${snapshot.data?.commonList?[numDay]["dt_txt"]
-                          .toString()
-                          .substring(0, 4)}.${snapshot.data
-                          ?.commonList?[numDay]["dt_txt"]
-                          .toString()
-                          .substring(5, 7)}.${snapshot.data
-                          ?.commonList?[numDay]["dt_txt"]
-                          .toString()
-                          .substring(8, 10)}";
-                      return Text(
-                        tom,
-                        style: GoogleFonts.roboto(
-                          fontSize: 13,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          '${snapshot.error}${snapshot.data?.commonList}');
-                    }
-                    return Container();
-                  },
-                );
+      future: HttpProvider().getData(url),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var tom =
+              "${snapshot.data?.commonList?[numDay]["dt_txt"]
+              .toString()
+              .substring(0, 4)}.${snapshot.data
+              ?.commonList?[numDay]["dt_txt"]
+              .toString()
+              .substring(5, 7)}.${snapshot.data
+              ?.commonList?[numDay]["dt_txt"]
+              .toString()
+              .substring(8, 10)}";
+          return Text(
+            tom,
+            style: GoogleFonts.roboto(
+              fontSize: 13,
+              color: Colors.black45,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+              '${snapshot.error}${snapshot.data?.commonList}');
+        }
+        return Container();
+      },
+    );
   }
 
   FutureBuilder<Weather5Days> buildCityName() {
     return FutureBuilder<Weather5Days>(
-                    future: HttpProvider().getData(url),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom = "${snapshot.data?.city?.name}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 26,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data?.commonList}');
-                      }
-                      return Container();
-                    },
-                  );
+      future: HttpProvider().getData(url),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var tom = "${snapshot.data?.city?.name}";
+          return Text(
+            tom,
+            style: GoogleFonts.roboto(
+              fontSize: 26,
+              color: Colors.black45,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+              '${snapshot.error}${snapshot.data?.commonList}');
+        }
+        return Container();
+      },
+    );
   }
 
   FutureBuilder<Weather5Days> buildWindSpeed() {
     return FutureBuilder<Weather5Days>(
-                  future: HttpProvider().getData(url),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var tom =
-                          "${snapshot.data
-                          ?.commonList?[numDay]["wind"]["speed"]}";
-                      return Text(
-                        tom,
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          '${snapshot.error}${snapshot.data?.commonList}');
-                    }
-                    return Container();
-                  },
-                );
+      future: HttpProvider().getData(url),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var tom =
+              "${snapshot.data
+              ?.commonList?[numDay]["wind"]["speed"]}";
+          return Text(
+            tom,
+            style: GoogleFonts.roboto(
+              fontSize: 18,
+              color: Colors.black45,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+              '${snapshot.error}${snapshot.data?.commonList}');
+        }
+        return Container();
+      },
+    );
   }
 
   FutureBuilder<Weather5Days> buildHumidity() {
     return FutureBuilder<Weather5Days>(
-                  future: HttpProvider().getData(url),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var tom =
-                          "${snapshot.data
-                          ?.commonList?[numDay]["main"]["humidity"]} %";
-                      return Text(
-                        tom,
-                        style: GoogleFonts.roboto(
-                          fontSize: 18,
-                          color: Colors.black45,
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                          '${snapshot.error}${snapshot.data?.commonList}');
-                    }
-                    return Container();
-                  },
-                );
+      future: HttpProvider().getData(url),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var tom =
+              "${snapshot.data
+              ?.commonList?[numDay]["main"]["humidity"]} %";
+          return Text(
+            tom,
+            style: GoogleFonts.roboto(
+              fontSize: 18,
+              color: Colors.black45,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+              '${snapshot.error}${snapshot.data?.commonList}');
+        }
+        return Container();
+      },
+    );
   }
 
   FutureBuilder<Weather5Days> buildDescription() {
     return FutureBuilder<Weather5Days>(
-                    future: HttpProvider().getData(url),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data!
-                            .commonList?[numDay]["weather"][0]["description"]}";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            color: Colors.black45,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data?.commonList}');
-                      }
-                      return Container();
-                    },
-                  );
+      future: HttpProvider().getData(url),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var tom =
+              "${snapshot.data!
+              .commonList?[numDay]["weather"][0]["description"]}";
+          return Text(
+            tom,
+            style: GoogleFonts.roboto(
+              fontSize: 18,
+              color: Colors.black45,
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+              '${snapshot.error}${snapshot.data?.commonList}');
+        }
+        return Container();
+      },
+    );
   }
 
   FutureBuilder<Weather5Days> buildTemperature() {
     return FutureBuilder<Weather5Days>(
-                    future: HttpProvider().getData(url),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        var tom =
-                            "${snapshot.data
-                            ?.commonList?[numDay]["main"]["temp"]
-                            ?.toInt()}\u2103";
-                        return Text(
-                          tom,
-                          style: GoogleFonts.openSans(
-                            fontSize: 64,
-                            color: colors[index],
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(
-                            '${snapshot.error}${snapshot.data?.commonList}');
-                      }
-                      return Container();
-                    },
-                  );
+      future: HttpProvider().getData(url),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var tom =
+              "${snapshot.data
+              ?.commonList?[numDay]["main"]["temp"]
+              ?.toInt()}\u2103";
+          return Text(
+            tom,
+            style: GoogleFonts.openSans(
+              fontSize: 64,
+              color: colors[index],
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+              '${snapshot.error}${snapshot.data?.commonList}');
+        }
+        return Container();
+      },
+    );
   }
 
   VideoPlayerController controllerVideo(AsyncSnapshot<Weather5Days> snapshot) {
@@ -736,9 +694,9 @@ bool isPlaying = false;
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  hourly=false;
+                  hourly = false;
                   today = true;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
                   loadingToday = true;
                   loading = true;
@@ -756,7 +714,8 @@ bool isPlaying = false;
                     future: HttpProvider().getData(url),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![0]["weather"][0]
+                        description =
+                        snapshot.data!.commonList![0]["weather"][0]
                         ["description"];
                         iconNum =
                         snapshot.data!.commonList?[0]["weather"][0]["icon"];
@@ -787,15 +746,18 @@ bool isPlaying = false;
                     future: HttpProvider().getData(url),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[0]["weather"][0]["icon"] ==
-                            "01n"||snapshot.data!.commonList?[0]["weather"][0]["icon"] ==
+                        if (snapshot.data!
+                            .commonList?[0]["weather"][0]["icon"] ==
+                            "01n" || snapshot.data!
+                            .commonList?[0]["weather"][0]["icon"] ==
                             "01d") {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,
-                              color: numDay == 0 ? colors[index] : Colors.black45,
+                              color: numDay == 0 ? colors[index] : Colors
+                                  .black45,
                             ),
                           );
                         } else {
@@ -859,7 +821,7 @@ bool isPlaying = false;
               onTap: () {
                 setState(() {
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
                   loadingNew = true;
                   numDay = 8;
@@ -877,7 +839,8 @@ bool isPlaying = false;
                     future: HttpProvider().getData(url),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![8]["weather"][0]
+                        description =
+                        snapshot.data!.commonList![8]["weather"][0]
                         ["description"];
                         var tom =
                             "${snapshot.data?.commonList?[8]["dt_txt"]
@@ -904,15 +867,18 @@ bool isPlaying = false;
                     future: HttpProvider().getData(url),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        if (snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
-                            "01n"||snapshot.data!.commonList?[8]["weather"][0]["icon"] ==
+                        if (snapshot.data!
+                            .commonList?[8]["weather"][0]["icon"] ==
+                            "01n" || snapshot.data!
+                            .commonList?[8]["weather"][0]["icon"] ==
                             "01d") {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
                               Icons.sunny,
                               size: 45,
-                              color: numDay == 8 ? colors[index] : Colors.black45,
+                              color: numDay == 8 ? colors[index] : Colors
+                                  .black45,
                             ),
                           );
                         } else {
@@ -972,7 +938,7 @@ bool isPlaying = false;
               onTap: () {
                 setState(() {
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
                   loadingNew = true;
                   numDay = 16;
@@ -990,7 +956,8 @@ bool isPlaying = false;
                     future: HttpProvider().getData(url),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![16]["weather"][0]
+                        description =
+                        snapshot.data!.commonList![16]["weather"][0]
                         ["description"];
                         var tom =
                             "${snapshot.data?.commonList?[16]["dt_txt"]
@@ -1002,7 +969,8 @@ bool isPlaying = false;
                           tom,
                           style: GoogleFonts.roboto(
                             fontSize: 12,
-                            color: numDay == 16 ? colors[index] : Colors.black45,
+                            color: numDay == 16 ? colors[index] : Colors
+                                .black45,
                           ),
                         );
                       } else if (snapshot.hasError) {
@@ -1019,7 +987,7 @@ bool isPlaying = false;
                       if (snapshot.hasData) {
                         if (snapshot.data!
                             .commonList?[16]["weather"][0]["icon"] ==
-                            "01n"||snapshot.data!
+                            "01n" || snapshot.data!
                             .commonList?[16]["weather"][0]["icon"] ==
                             "01d") {
                           return Padding(
@@ -1038,7 +1006,8 @@ bool isPlaying = false;
                               'http://openweathermap.org/img/wn/${snapshot.data!
                                   .commonList?[16]["weather"][0]["icon"]}@2x.png',
                             ),
-                            color: numDay == 16 ? colors[index] : Colors.black45,
+                            color: numDay == 16 ? colors[index] : Colors
+                                .black45,
                           );
                         }
                       } else if (snapshot.hasError) {
@@ -1067,7 +1036,8 @@ bool isPlaying = false;
                           tom,
                           style: GoogleFonts.fredoka(
                             fontSize: 18,
-                            color: numDay == 16 ? colors[index] : Colors.black45,
+                            color: numDay == 16 ? colors[index] : Colors
+                                .black45,
                           ),
                         );
                       } else if (snapshot.hasError) {
@@ -1088,7 +1058,7 @@ bool isPlaying = false;
               onTap: () {
                 setState(() {
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
                   loadingNew = true;
                   numDay = 24;
@@ -1106,7 +1076,8 @@ bool isPlaying = false;
                     future: HttpProvider().getData(url),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![24]["weather"][0]
+                        description =
+                        snapshot.data!.commonList![24]["weather"][0]
                         ["description"];
                         var tom =
                             "${snapshot.data?.commonList?[24]["dt_txt"]
@@ -1118,7 +1089,8 @@ bool isPlaying = false;
                           tom,
                           style: GoogleFonts.roboto(
                             fontSize: 12,
-                            color: numDay == 24 ? colors[index] : Colors.black45,
+                            color: numDay == 24 ? colors[index] : Colors
+                                .black45,
                           ),
                         );
                       } else if (snapshot.hasError) {
@@ -1134,8 +1106,10 @@ bool isPlaying = false;
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!
-                            .commonList?[24]["weather"][0]["icon"] == "01n"||snapshot.data!
-                            .commonList?[24]["weather"][0]["icon"] == "01d") {
+                            .commonList?[24]["weather"][0]["icon"] == "01n" ||
+                            snapshot.data!
+                                .commonList?[24]["weather"][0]["icon"] ==
+                                "01d") {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
@@ -1154,7 +1128,8 @@ bool isPlaying = false;
                               'http://openweathermap.org/img/wn/${snapshot.data!
                                   .commonList?[24]["weather"][0]["icon"]}@2x.png',
                             ),
-                            color: numDay == 24 ? colors[index] : Colors.black45,
+                            color: numDay == 24 ? colors[index] : Colors
+                                .black45,
                           );
                         }
                       } else if (snapshot.hasError) {
@@ -1183,7 +1158,8 @@ bool isPlaying = false;
                           tom,
                           style: GoogleFonts.fredoka(
                             fontSize: 18,
-                            color: numDay == 24 ? colors[index] : Colors.black45,
+                            color: numDay == 24 ? colors[index] : Colors
+                                .black45,
                           ),
                         );
                       } else if (snapshot.hasError) {
@@ -1204,7 +1180,7 @@ bool isPlaying = false;
               onTap: () {
                 setState(() {
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
                   loadingNew = true;
                   numDay = 32;
@@ -1222,7 +1198,8 @@ bool isPlaying = false;
                     future: HttpProvider().getData(url),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![32]["weather"][0]
+                        description =
+                        snapshot.data!.commonList![32]["weather"][0]
                         ["description"];
                         var tom =
                             "${snapshot.data?.commonList?[32]["dt_txt"]
@@ -1234,7 +1211,8 @@ bool isPlaying = false;
                           tom,
                           style: GoogleFonts.roboto(
                             fontSize: 12,
-                            color: numDay == 32 ? colors[index] : Colors.black45,
+                            color: numDay == 32 ? colors[index] : Colors
+                                .black45,
                           ),
                         );
                       } else if (snapshot.hasError) {
@@ -1250,8 +1228,10 @@ bool isPlaying = false;
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!
-                            .commonList?[32]["weather"][0]["icon"] == "01n"||snapshot.data!
-                            .commonList?[32]["weather"][0]["icon"] == "01d") {
+                            .commonList?[32]["weather"][0]["icon"] == "01n" ||
+                            snapshot.data!
+                                .commonList?[32]["weather"][0]["icon"] ==
+                                "01d") {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
@@ -1270,7 +1250,8 @@ bool isPlaying = false;
                               'http://openweathermap.org/img/wn/${snapshot.data!
                                   .commonList?[32]["weather"][0]["icon"]}@2x.png',
                             ),
-                            color: numDay == 32 ? colors[index] : Colors.black45,
+                            color: numDay == 32 ? colors[index] : Colors
+                                .black45,
                           );
                         }
                       } else if (snapshot.hasError) {
@@ -1299,7 +1280,8 @@ bool isPlaying = false;
                           tom,
                           style: GoogleFonts.fredoka(
                             fontSize: 18,
-                            color: numDay == 32 ? colors[index] : Colors.black45,
+                            color: numDay == 32 ? colors[index] : Colors
+                                .black45,
                           ),
                         );
                       } else if (snapshot.hasError) {
@@ -1320,7 +1302,7 @@ bool isPlaying = false;
               onTap: () {
                 setState(() {
                   today = false;
-                  selectedIndex=1;
+                  selectedIndex = 1;
                   controllerTab.index = 1;
                   loadingNew = true;
                   numDay = 39;
@@ -1338,7 +1320,8 @@ bool isPlaying = false;
                     future: HttpProvider().getData(url),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        description = snapshot.data!.commonList![39]["weather"][0]
+                        description =
+                        snapshot.data!.commonList![39]["weather"][0]
                         ["description"];
                         var tom =
                             "${snapshot.data?.commonList?[39]["dt_txt"]
@@ -1350,7 +1333,8 @@ bool isPlaying = false;
                           tom,
                           style: GoogleFonts.roboto(
                             fontSize: 12,
-                            color: numDay == 39 ? colors[index] : Colors.black45,
+                            color: numDay == 39 ? colors[index] : Colors
+                                .black45,
                           ),
                         );
                       } else if (snapshot.hasError) {
@@ -1366,8 +1350,10 @@ bool isPlaying = false;
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!
-                            .commonList?[39]["weather"][0]["icon"] == "01n"||snapshot.data!
-                            .commonList?[39]["weather"][0]["icon"] == "01d") {
+                            .commonList?[39]["weather"][0]["icon"] == "01n" ||
+                            snapshot.data!
+                                .commonList?[39]["weather"][0]["icon"] ==
+                                "01d") {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Icon(
@@ -1386,7 +1372,8 @@ bool isPlaying = false;
                               'http://openweathermap.org/img/wn/${snapshot.data!
                                   .commonList?[39]["weather"][0]["icon"]}@2x.png',
                             ),
-                            color: numDay == 39 ? colors[index] : Colors.black45,
+                            color: numDay == 39 ? colors[index] : Colors
+                                .black45,
                           );
                         }
                       } else if (snapshot.hasError) {
@@ -1415,7 +1402,8 @@ bool isPlaying = false;
                           tom,
                           style: GoogleFonts.fredoka(
                             fontSize: 18,
-                            color: numDay == 39 ? colors[index] : Colors.black45,
+                            color: numDay == 39 ? colors[index] : Colors
+                                .black45,
                           ),
                         );
                       } else if (snapshot.hasError) {

@@ -7,7 +7,6 @@ import 'package:forecast/screens/offline_page.dart';
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,7 +25,6 @@ class MyApp extends StatelessWidget {
           Widget child,
           ) {
         final bool connected = connectivity != ConnectivityResult.none;
-        // fetchWeatherForWeek();
         return connected ? const MainPage() :const OfflineScreen();
       },
       child: Container(),

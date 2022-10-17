@@ -1,9 +1,6 @@
-
-
 import 'package:location/location.dart';
 
 var location = Location();
-
 
 Future<void> serviceEn() async{
   var serviceEnabled = await location.serviceEnabled();

@@ -44,13 +44,11 @@ class FetchCacheMemoryData extends StatefulWidget {
 
 var responceCache;
 class _FetchCacheMemoryDataState extends State<FetchCacheMemoryData> {
-// class FetchCacheMemoryData extends StatelessWidget {
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // Create TabController for getting the index of current tab
         fetchWeatherForWeek();
   }
   Future<FileInfo?> fileInfoFuture = DefaultCacheManager().getFileFromCache(url!);

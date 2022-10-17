@@ -38,7 +38,6 @@ class _MainPageState extends State<MainPage>
   void initState() {
     // TODO: implement initState
     super.initState();
-    // Create TabController for getting the index of current tab
     controllerTab = today && hourly
         ? TabController(length: 2, vsync: this, initialIndex: 0)
         : today && !hourly
